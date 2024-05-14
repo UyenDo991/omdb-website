@@ -1,4 +1,4 @@
-@import './base.css';
+/* @import './base.css';
 
 #app {
   max-width: 1280px;
@@ -32,4 +32,27 @@ a,
     grid-template-columns: 1fr 1fr;
     padding: 0 2rem;
   }
+}
+ */
+
+.scrollbox {
+  overflow: auto !important;
+}
+.scrollbox:active::-webkit-scrollbar-thumb {
+  visibility: visible;
+}
+.scrollbox:focus::-webkit-scrollbar-thumb {
+  visibility: visible;
+}
+.scrollbox:hover::-webkit-scrollbar-thumb {
+  visibility: visible;
+}
+.scrollbox::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  border-radius: 10px;
+  visibility: hidden;
+}
+.scrollbox::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
