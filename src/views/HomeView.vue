@@ -7,53 +7,120 @@ const inputSearch = ref({
   year: "",
   category: ""
 })
+const a = ref({})
 const dataList = ref([]);
+const dataListAction = ref({});
 const getData = async () => {
   /* const res = await fetch('http://www.omdbapi.com/?s=blade&y=2017&apikey=183e6416');
   const data = await res.json()
   dataList.value = [...data.Search] */
-  const res = await axios.get(`?s=${inputSearch.value.title}&y=${inputSearch.value.year}`);
+  const res = await axios.get(`now_playing`);
   console.log("res:", res);
-  dataList.value = [...res.Search]
+  dataList.value = [...res.results]
 }
+
+// async function fetchData() {
+//   try {
+//     const res_type = await axios.get(`http://www.omdbapi.com/?t=Harry&type=movie`);
+//     console.log("res_type:", res_type);
+//     dataListAction.value = [...res_type.Search]
+//   } catch (error) {
+//     console.error('Error fetching data:', error);
+//   }
+// }
+// //Goi hàm
+// fetchData();
+
 </script>
 
 <template>
-  <!-- <TheWelcome /> -->
-  <v-container fluid>
-    <v-row dense align="center" justify="space-between">
-      <v-col cols="6">
-        <v-text-field hide-details="" variant="outlined" label="Title" v-model="inputSearch.title"></v-text-field>
-      </v-col>
-      <v-col cols="6">
-        <v-btn color="primary" @click="getData">Search</v-btn>
-      </v-col>
-      <v-col cols="12" lg="4" v-for="item in dataList" :key="item.imdbID" v-if="dataList">
-        <!-- <v-card outlined :height="250">
-          <v-img :src="item.Poster"></v-img>
-          <v-card-title>{{ item.Title }}</v-card-title>
-          <v-card-text>{{ item.Year }}</v-card-text>
-        </v-card>  -->
-        <v-card color="#1F7087" class="mx-2">
-          <div class="d-flex flex-no-wrap justify-space-between">
-            <v-sheet color="transparent" width="50%">
-              <v-card-title class="text-h5">
-                {{ item.Title }}
-              </v-card-title>
-
-              <v-card-subtitle>{{ item.Year }}</v-card-subtitle>
-
-              <v-card-actions>
-                <v-btn class="ms-2" size="small" text="View" variant="outlined"></v-btn>
-              </v-card-actions>
-            </v-sheet>
-
-            <v-avatar class="ma-3" rounded="0" size="125">
-              <v-img :src="item.Poster"></v-img>
-            </v-avatar>
+  <section id="top">
+    <div class="container">
+      <div class="row top_1">
+        <div class="col-md-3">
+          <div class="top_1l pt-1">
+            <h3 class="mb-0"><a class="text-white" href="index.html"><i class="fa fa-video-camera col_red me-1"></i>
+                Planet</a></h3>
           </div>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+        </div>
+        <div class="col-md-5">
+          <div class="top_1m">
+            <div class="input-group">
+              <input type="text" class="form-control bg-black" placeholder="Search Site...">
+              <span class="input-group-btn">
+                <button class="btn btn text-white bg_red rounded-0 border-0" type="button">
+                  Search</button>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="top_1r text-end">
+            <ul class="social-network social-circle mb-0">
+              <li><a href="#" class="icoRss" title="Rss"><i class="fa fa-instagram"></i></a></li>
+              <li><a href="#" class="icoFacebook" title="Facebook"><i class="fa fa-facebook"></i></a></li>
+              <li><a href="#" class="icoTwitter" title="Twitter"><i class="fa fa-twitter"></i></a></li>
+              <li><a href="#" class="icoGoogle" title="Google +"><i class="fa fa-youtube"></i></a></li>
+              <li><a href="#" class="icoLinkedin" title="Linkedin"><i class="fa fa-linkedin"></i></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="header">
+    <nav class="navbar navbar-expand-md navbar-light" id="navbar_sticky">
+      <div class="container">
+        <a class="navbar-brand text-white fw-bold" href="index.html"><i class="fa fa-video-camera col_red me-1"></i>
+          Planet</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mb-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="about.html">About Us</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Blog
+              </a>
+              <ul class="dropdown-menu drop_1" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="blog.html">Blog</a></li>
+                <li><a class="dropdown-item border-0" href="blog_detail.html">Blog Detail</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="services.html">Services</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="team.html">Team</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Pages
+              </a>
+              <ul class="dropdown-menu drop_1" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="about.html">About Us</a></li>
+                <li><a class="dropdown-item" href="services.html">Services</a></li>
+                <li><a class="dropdown-item" href="team.html">Team</a></li>
+                <li><a class="dropdown-item border-0" href="contact.html">Contact</a></li>
+              </ul>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="contact.html">Contact Us</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </section>
 </template>

@@ -4,10 +4,33 @@
     <meta charset="UTF-8">
     <link rel="icon" href="/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/src/assets/css/bootstrap.min.css" rel="stylesheet" >
+    <link href="/src/assets/css/font-awesome.min.css" rel="stylesheet" >
+    <link href="/src/assets/css/global.css" rel="stylesheet">
+    <link href="/src/assets/css/index.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani&display=swap" rel="stylesheet">
+    <script src="/src/assets/js/bootstrap.bundle.min.js"></script>
     <title>Vite App</title>
   </head>
   <body>
     <div id="app"></div>
     <script type="module" src="/src/main.js"></script>
+    <script>
+      window.onscroll = function() {myFunction()};
+      
+      var navbar_sticky = document.getElementById("navbar_sticky");
+      var sticky = navbar_sticky.offsetTop;
+      var navbar_height = document.querySelector('.navbar').offsetHeight;
+      
+      function myFunction() {
+        if (window.pageYOffset >= sticky + navbar_height) {
+          navbar_sticky.classList.add("sticky")
+        document.body.style.paddingTop = navbar_height + 'px';
+        } else {
+          navbar_sticky.classList.remove("sticky");
+        document.body.style.paddingTop = '0'
+        }
+      }
+      </script>
   </body>
 </html>
