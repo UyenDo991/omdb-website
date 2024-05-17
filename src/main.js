@@ -8,7 +8,7 @@ import axios from 'axios'
 // Request interceptor
 axios.interceptors.request.use((config) => {
   // Modify the request config here
-  config.baseURL = "https://api.themoviedb.org/3/movie/";
+  config.baseURL = "https://api.themoviedb.org/3/";
   config.params = config.params || {};
   config.params["api_key"] = "d4be06001b5bcf74a11f39b3995179c8";
 //   console.log("config:", config);
