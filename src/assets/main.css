@@ -35,6 +35,11 @@ a,
 }
  */
 
+@import "./css/bootstrap.min.css";
+@import "./css/font-awesome.min.css";
+@import "./css/global.css";
+@import "./css/index.css";
+
 .scrollbox {
   overflow: auto !important;
 }
