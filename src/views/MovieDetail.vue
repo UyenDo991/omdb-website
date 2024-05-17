@@ -15,7 +15,6 @@ const getDetails = async (movie_id) => {
   if(videoList.results.length) {
     trailerClip.value = videoList.results.pop();
     // console.log(trailerClip.value);
-    //
   }
 }
 
