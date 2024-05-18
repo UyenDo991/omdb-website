@@ -2,7 +2,7 @@
 import { onMounted, ref } from "vue";
 import { getNowPlayling, getMovieGenres, getTvGenres } from "@/api/api";
 import { useRouter } from "vue-router";
-import {chunkArray} from "@/utils/index";
+import { chunkArray } from "@/utils/index";
 const router = useRouter();
 
 const nowPlayingList = ref([]);
@@ -19,11 +19,11 @@ onMounted(async () => {
   const res = await getNowPlayling();
   if (res && res.results.length) {
     const chunk = chunkArray(res.results, 4);
-    if(chunk.length) {
+    if (chunk.length) {
       nowPlayingList.value = [...chunk];
     }
   }
-  // console.log(nowPlayingList.value);
+  console.log(nowPlayingList.value);
 })
 </script>
 
@@ -146,17 +146,21 @@ onMounted(async () => {
       <div class="row trend_2 mt-4">
         <div id="carouselExampleCaptions1" class="carousel slide" data-bs-ride="carousel">
           <div class="carousel-indicators">
-            <button v-for="(index) in nowPlayingList" :key="index" type="button" data-bs-target="#carouselExampleCaptions1" :data-bs-slide-to="index" :class="index === 0 ? 'active' : ''" :aria-label="`Slide ${index}`"></button>
+            <button v-for="(index) in nowPlayingList" :key="index" type="button"
+              data-bs-target="#carouselExampleCaptions1" :data-bs-slide-to="index" :class="index === 0 ? 'active' : ''"
+              :aria-label="`Slide ${index}`"></button>
           </div>
           <div class="carousel-inner">
-            <div class="carousel-item active">
+            <div v-for="(item, index) in nowPlayingList" :key="index" class="carousel-item"
+              :class="index === 0 ? 'active' : ''">
               <div class="trend_2i row">
-                <div class="col-md-3 col-6">
+                <div v-for="movie in item" :key="movie.id" class="col-md-3 col-6">
                   <div class="trend_2im clearfix position-relative">
                     <div class="trend_2im1 clearfix">
                       <div class="grid">
                         <figure class="effect-jazz mb-0">
-                          <a href="#"><img src="/src/assets/images/4.jpg" class="w-100" alt="img25"></a>
+                          <a href="#"><img :src="`https://image.tmdb.org/t/p/original${movie.poster_path}`"
+                              class="w-100" alt="img25"></a>
                         </figure>
                       </div>
                     </div>
@@ -165,8 +169,8 @@ onMounted(async () => {
                     </div>
                   </div>
                   <div class="trend_2ilast bg_grey p-3 clearfix">
-                    <h5><a class="col_red" href="#">Semper</a></h5>
-                    <p class="mb-2">A father travels from Oklahoma to France to help his...</p>
+                    <h5><a class="col_red" href="#">{{ movie.original_title }}</a></h5>
+                    <p class="mb-2">{{ movie.overview }}</p>
                     <span class="col_red">
                       <i class="fa fa-star"></i>
                       <i class="fa fa-star"></i>
@@ -174,200 +178,12 @@ onMounted(async () => {
                       <i class="fa fa-star"></i>
                       <i class="fa fa-star"></i>
                     </span>
-                    <p class="mb-0">1 Views</p>
-                  </div>
-                </div>
-                <div class="col-md-3 col-6">
-                  <div class="trend_2im clearfix position-relative">
-                    <div class="trend_2im1 clearfix">
-                      <div class="grid">
-                        <figure class="effect-jazz mb-0">
-                          <a href="#"><img src="/src/assets/images/5.jpg" class="w-100" alt="img25"></a>
-                        </figure>
-                      </div>
-                    </div>
-                    <div class="trend_2im2 clearfix text-center position-absolute w-100 top-0">
-                      <span class="fs-1"><a class="col_red" href="#"><i class="fa fa-youtube-play"></i></a></span>
-                    </div>
-                  </div>
-                  <div class="trend_2ilast bg_grey p-3 clearfix">
-                    <h5><a class="col_red" href="#">Dapibus</a></h5>
-                    <p class="mb-2">A father travels from Oklahoma to France to help his...</p>
-                    <span class="col_red">
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                    </span>
-                    <p class="mb-0">1 Views</p>
-                  </div>
-                </div>
-                <div class="col-md-3 col-6">
-                  <div class="trend_2im clearfix position-relative">
-                    <div class="trend_2im1 clearfix">
-                      <div class="grid">
-                        <figure class="effect-jazz mb-0">
-                          <a href="#"><img src="/src/assets/images/6.jpg" class="w-100" alt="img25"></a>
-                        </figure>
-                      </div>
-                    </div>
-                    <div class="trend_2im2 clearfix text-center position-absolute w-100 top-0">
-                      <span class="fs-1"><a class="col_red" href="#"><i class="fa fa-youtube-play"></i></a></span>
-                    </div>
-                  </div>
-                  <div class="trend_2ilast bg_grey p-3 clearfix">
-                    <h5><a class="col_red" href="#">Ipsum</a></h5>
-                    <p class="mb-2">A father travels from Oklahoma to France to help his...</p>
-                    <span class="col_red">
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                    </span>
-                    <p class="mb-0">1 Views</p>
-                  </div>
-                </div>
-                <div class="col-md-3 col-6">
-                  <div class="trend_2im clearfix position-relative">
-                    <div class="trend_2im1 clearfix">
-                      <div class="grid">
-                        <figure class="effect-jazz mb-0">
-                          <a href="#"><img src="/src/assets/images/7.jpg" class="w-100" alt="img25"></a>
-                        </figure>
-                      </div>
-                    </div>
-                    <div class="trend_2im2 clearfix text-center position-absolute w-100 top-0">
-                      <span class="fs-1"><a class="col_red" href="#"><i class="fa fa-youtube-play"></i></a></span>
-                    </div>
-                  </div>
-                  <div class="trend_2ilast bg_grey p-3 clearfix">
-                    <h5><a class="col_red" href="#">Lorem</a></h5>
-                    <p class="mb-2">A father travels from Oklahoma to France to help his...</p>
-                    <span class="col_red">
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                    </span>
-                    <p class="mb-0">1 Views</p>
+                    <p class="mb-0">{{ movie.popularity }} Views</p>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="carousel-item">
-              <div class="trend_2i row">
-                <div class="col-md-3 col-6">
-                  <div class="trend_2im clearfix position-relative">
-                    <div class="trend_2im1 clearfix">
-                      <div class="grid">
-                        <figure class="effect-jazz mb-0">
-                          <a href="#"><img src="/src/assets/images/8.jpg" class="w-100" alt="img25"></a>
-                        </figure>
-                      </div>
-                    </div>
-                    <div class="trend_2im2 clearfix text-center position-absolute w-100 top-0">
-                      <span class="fs-1"><a class="col_red" href="#"><i class="fa fa-youtube-play"></i></a></span>
-                    </div>
-                  </div>
-                  <div class="trend_2ilast bg_grey p-3 clearfix">
-                    <h5><a class="col_red" href="#">Semper</a></h5>
-                    <p class="mb-2">A father travels from Oklahoma to France to help his...</p>
-                    <span class="col_red">
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                    </span>
-                    <p class="mb-0">1 Views</p>
-                  </div>
-                </div>
-                <div class="col-md-3 col-6">
-                  <div class="trend_2im clearfix position-relative">
-                    <div class="trend_2im1 clearfix">
-                      <div class="grid">
-                        <figure class="effect-jazz mb-0">
-                          <a href="#"><img src="/src/assets/images/9.jpg" class="w-100" alt="img25"></a>
-                        </figure>
-                      </div>
-                    </div>
-                    <div class="trend_2im2 clearfix text-center position-absolute w-100 top-0">
-                      <span class="fs-1"><a class="col_red" href="#"><i class="fa fa-youtube-play"></i></a></span>
-                    </div>
-                  </div>
-                  <div class="trend_2ilast bg_grey p-3 clearfix">
-                    <h5><a class="col_red" href="#">Dapibus</a></h5>
-                    <p class="mb-2">A father travels from Oklahoma to France to help his...</p>
-                    <span class="col_red">
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                    </span>
-                    <p class="mb-0">1 Views</p>
-                  </div>
-                </div>
-                <div class="col-md-3 col-6">
-                  <div class="trend_2im clearfix position-relative">
-                    <div class="trend_2im1 clearfix">
-                      <div class="grid">
-                        <figure class="effect-jazz mb-0">
-                          <a href="#"><img src="/src/assets/images/10.jpg" class="w-100" alt="img25"></a>
-                        </figure>
-                      </div>
-                    </div>
-                    <div class="trend_2im2 clearfix text-center position-absolute w-100 top-0">
-                      <span class="fs-1"><a class="col_red" href="#"><i class="fa fa-youtube-play"></i></a></span>
-                    </div>
-                  </div>
-                  <div class="trend_2ilast bg_grey p-3 clearfix">
-                    <h5><a class="col_red" href="#">Ipsum</a></h5>
-                    <p class="mb-2">A father travels from Oklahoma to France to help his...</p>
-                    <span class="col_red">
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                    </span>
-                    <p class="mb-0">1 Views</p>
-                  </div>
-                </div>
-                <div class="col-md-3 col-6">
-                  <div class="trend_2im clearfix position-relative">
-                    <div class="trend_2im1 clearfix">
-                      <div class="grid">
-                        <figure class="effect-jazz mb-0">
-                          <a href="#"><img src="/src/assets/images/11.jpg" class="w-100" alt="img25"></a>
-                        </figure>
-                      </div>
-                    </div>
-                    <div class="trend_2im2 clearfix text-center position-absolute w-100 top-0">
-                      <span class="fs-1"><a class="col_red" href="#"><i class="fa fa-youtube-play"></i></a></span>
-                    </div>
-                  </div>
-                  <div class="trend_2ilast bg_grey p-3 clearfix">
-                    <h5><a class="col_red" href="#">Lorem</a></h5>
-                    <p class="mb-2">A father travels from Oklahoma to France to help his...</p>
-                    <span class="col_red">
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                    </span>
-                    <p class="mb-0">1 Views</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
           </div>
-
         </div>
       </div>
     </div>
