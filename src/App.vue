@@ -3,6 +3,7 @@ import { RouterLink, RouterView } from 'vue-router'
 // import HelloWorld from './components/HelloWorld.vue'
 import TopBar from "./components/layout/TopBar.vue";
 import HeaderBar from "./components/layout/HeaderBar.vue";
+import Footer from "./components/layout/Footer.vue";
 </script>
 
 <template>
@@ -19,5 +20,5 @@ import HeaderBar from "./components/layout/HeaderBar.vue";
   <RouterView />-->
   <TopBar />
   <HeaderBar />
-  <RouterView />  
+  <RouterView />
 </template>
