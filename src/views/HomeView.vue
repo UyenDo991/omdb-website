@@ -17,11 +17,13 @@ onMounted(async () => {
   console.log("movieGenresList:", movieGenresList)
   console.log("tvGenresList:", tvGenresList) */
   const res = await getNowPlayling();
-  if (res) {
-    // const chunk = chunkArray(res.results, 4);
-    nowPlayingList.value = chunkArray(res.results, 4);
+  if (res && res.results.length) {
+    const chunk = chunkArray(res.results, 4);
+    if(chunk.length) {
+      nowPlayingList.value = [...chunk];
+    }
   }
-  console.log(nowPlayingList.value);
+  // console.log(nowPlayingList.value);
 })
 </script>
 
