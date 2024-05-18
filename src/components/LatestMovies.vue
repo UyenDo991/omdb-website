@@ -1,28 +1,11 @@
 <!-- toRefs : cập nhật props  -->
 <script setup>
-import { toRefs, defineProps, onMounted, ref } from 'vue';
-import { getNowPlayling, getMovieGenres, getTvGenres } from "@/api/api";
-import { chunkArray } from "@/utils/index";
+import { toRefs, defineProps} from 'vue';
 import { getPosterImage } from "@/utils/index";
     const props = defineProps({
         items: Array
     });
     const { items } = toRefs(props);
-    const nowPlayingList = ref([]);
-    onMounted(async () => {
-        /* const movieGenresList = await getMovieGenres();
-        const tvGenresList = await getTvGenres();
-        console.log("movieGenresList:", movieGenresList)
-        console.log("tvGenresList:", tvGenresList) */
-        const res = await getNowPlayling();
-        if (res && res.results.length) {
-            const chunk = chunkArray(res.results, 4);
-            if (chunk.length) {
-            nowPlayingList.value = [...chunk];
-            }
-        }
-        console.log(nowPlayingList.value);
-    })
 </script>
 <template>
      <section id="trend" class="pt-4 pb-5">
