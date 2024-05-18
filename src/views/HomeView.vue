@@ -3,9 +3,15 @@ import { onMounted, ref } from "vue";
 import { getNowPlayling, getMovieGenres, getTvGenres } from "@/api/api";
 import { useRouter } from "vue-router";
 import { chunkArray } from "@/utils/index";
+import { getPosterImage } from "@/utils/index";
+import LatestMovies  from "@/components/LatestMovies.vue";
+
+
 const router = useRouter();
 
 const nowPlayingList = ref([]);
+
+// const LatestMovies = LatestMovies();
 
 const viewDetail = async (movie_id) => {
   router.push(`/movies/${movie_id}`);
@@ -128,60 +134,10 @@ onMounted(async () => {
     </div>
   </section>
 
-  <section id="trend" class="pt-4 pb-5">
-    <div class="container">
-      <div class="row trend_1">
-        <div class="col-md-6 col-6">
-          <div class="trend_1l">
-            <h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i> Latest <span
-                class="col_red">Movies</span></h4>
-          </div>
-        </div>
-        <div class="col-md-6 col-6">
-          <div class="trend_1r text-end">
-            <h6 class="mb-0"><a class="button" href="#"> View All</a></h6>
-          </div>
-        </div>
-      </div>
-      <div class="row trend_2 mt-4">
-        <div id="carouselExampleCaptions1" class="carousel slide" data-bs-ride="carousel">
-          <div class="carousel-indicators">
-            <button v-for="(item, index) in nowPlayingList" :key="index" type="button" data-bs-target="#carouselExampleCaptions1" :data-bs-slide-to="index" :class="index === 0 ? 'active' : ''" :aria-label="`Slide ${index}`"></button>
-          </div>
-          <div class="carousel-inner">
-            <div v-for="(item, index) in nowPlayingList" :key="index" :class="index === 0 ? 'carousel-item active' : 'carousel-item'">
-              <div class="trend_2i row">
-                <div v-for="movie in item" :key="movie.id" class="col-md-3 col-6">
-                  <div class="trend_2im clearfix position-relative">
-                    <div class="trend_2im1 clearfix">
-                      <div class="grid">
-                        <figure class="effect-jazz mb-0">
-                          <a href="#"><img :src="`https://image.tmdb.org/t/p/original${movie.poster_path}`" class="w-100" alt="img25"></a>
-                        </figure>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="trend_2ilast bg_grey p-3 clearfix" style="height: 174px;">
-                    <h5><a class="col_red" href="#">{{ movie.original_title }}</a></h5>
-                    <p class="mb-2 text-truncate">{{ movie.overview }}</p>
-                    <span class="col_red">
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                    </span>
-                    <p class="mb-0">{{ movie.popularity }} Views</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
+  <!-- Latest Movie -->
+  <LatestMovies :items="nowPlayingList" />
+  
+  <!-- Latest Movie -->
   <section id="upcome" class="pt-4 pb-5">
     <div class="container">
       <div class="row trend_1">
