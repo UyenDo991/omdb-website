@@ -2,7 +2,7 @@
 import { onMounted, ref } from "vue";
 import { getNowPlayling, getMovieGenres, getTvGenres } from "@/api/api";
 import { useRouter } from "vue-router";
-
+import {chunkArray} from "@/utils/index";
 const router = useRouter();
 
 const nowPlayingList = ref([]);
@@ -20,7 +20,9 @@ onMounted(async () => {
   if (res) {
     nowPlayingList.value = [...res.results]
   }
-  console.log(nowPlayingList.value);
+  // console.log(nowPlayingList.value);
+  const chunk = chunkArray(nowPlayingList.value, 4);
+  console.log(chunk)
 })
 </script>
 
