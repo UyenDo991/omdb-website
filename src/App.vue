@@ -21,4 +21,5 @@ import Footer from "./components/layout/Footer.vue";
   <TopBar />
   <HeaderBar />
   <RouterView />
+  <Footer />
 </template>
