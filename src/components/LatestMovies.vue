@@ -44,11 +44,7 @@ import { getPosterImage } from "@/utils/index";
                   <div class="trend_2ilast bg_grey p-3 clearfix" style="height: 174px;">
                     <h5><a class="col_red" href="#">{{ movie.original_title }}</a></h5>
                     <p class="mb-2 text-truncate">{{ movie.overview }}</p>
-                    <span class="col_red">
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
+                    <span class="col_red" v-for="index in Math.round(movie.vote_average / 2)" :key="index">
                       <i class="fa fa-star"></i>
                     </span>
                     <p class="mb-0">{{ movie.popularity }} Views</p>

@@ -46,3 +46,22 @@ export const getMovieVideos = async (movie_id) => {
     console.log("getMovieVideos-catch exception:", error.message);
   }
 }
+//Movie upcoming
+export const getMovieUpcoming = async () => {
+  try {
+    const result = await axios.get("movie/upcoming");
+    return result;
+  } catch (error) {
+    console.log("getMovieUpcoming-catch exception:", error.message);
+  }
+}
+//Movie popular
+export const getMoviePopular = async () => {
+  try {
+    const result = await axios.get("movie/popular");
+    return result;
+  } catch (error) {
+    console.log("getMoviePopular-catch exception:", error.message);
+  }
+}
+
