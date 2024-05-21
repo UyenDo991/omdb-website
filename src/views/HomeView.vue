@@ -1,21 +1,23 @@
 <script setup>
 import { onMounted, ref } from "vue";
-import { getNowPlayling, getMovieGenres, getTvGenres, getMovieUpcoming, getMoviePopular} from "@/api/api";
-import { useRouter } from "vue-router";
+import { getNowPlayling, getMovieUpcoming, getTvGenres, getMoviePopular } from "@/api/api";
+// import { useRouter } from "vue-router";
 import { chunkArray } from "@/utils/index";
 import { getPosterImage } from "@/utils/index";
-import LatestMovies  from "@/components/LatestMovies.vue";
-import FilmsUpcoming  from "@/components/FilmsUpcoming.vue";
+import LatestMovies from "@/components/LatestMovies.vue";
+import FilmsUpcoming from "@/components/FilmsUpcoming.vue";
 
-const router = useRouter();
+// const router = useRouter();
 
 const nowPlayingList = ref([]);
 const movieUpcomingList = ref([]);
 const moviePopularList = ref([]);
+const tvSeriesList = ref([]);
 
-const viewDetail = async (movie_id) => {
-  router.push(`/movies/${movie_id}`);
-}
+// getMovieGenres, getTvGenres,
+// const viewDetail = async (movie_id) => {
+//   router.push(`/movies/${movie_id}`);
+// }
 
 onMounted(async () => {
   /* const movieGenresList = await getMovieGenres();
@@ -33,7 +35,7 @@ onMounted(async () => {
   console.log('----------nowPlayingList-------------');
   console.log(nowPlayingList.value);
   //movie upcoming
-  const res_movies_upcoming =  await getMovieUpcoming();
+  const res_movies_upcoming = await getMovieUpcoming();
   if (res_movies_upcoming && res_movies_upcoming.results.length) {
     const chunk_movies_upcoming = chunkArray(res_movies_upcoming.results, 3);
     if (chunk_movies_upcoming.length) {
@@ -42,103 +44,65 @@ onMounted(async () => {
   }
   console.log('----------movieUpcomingList-------------');
   console.log(movieUpcomingList.value);
+  //console.log(res_movies_upcoming.total_pages);
   //movie popular
-  const res_movies_popular =  await getMovieUpcoming();
-  if (res_movies_popular && res_movies_popular.results.length > 4) {
-    const chunk_movies_popular = chunkArray(res_movies_popular.results, 1);
+  const res_movies_popular = await getMoviePopular();
+  if (res_movies_popular && res_movies_popular.results.length) {
+    const chunk_movies_popular = res_movies_popular.results;//.filter(x => [1026436, 1266992, 1010600].includes(x.id));
     if (chunk_movies_popular.length) {
-      moviePopularList.value = [...chunk_movies_popular];
+      moviePopularList.value = chunk_movies_popular;
     }
   }
   console.log('----------moviePopularList-------------' + res_movies_popular.results.length);
   console.log(moviePopularList.value);
+
+  //TV series 
+  const res_TV_series = await getTvGenres();
+  console.log(res_TV_series);
+  if (res_TV_series && res_TV_series.genres.length) {
+    const chunk_TV_series = res_TV_series.genres.filter(x => [35, 16, 10759, 18].includes(x.id));
+    if (chunk_TV_series.length) {
+      tvSeriesList.value = chunk_TV_series;
+    }
+  }
+  console.log('----------tvSeriesList-------------');
+  console.log(tvSeriesList.value);
+
+
+  //End
 })
 </script>
 
 <template>
   <section id="center" class="center_home">
     <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
-      <div class="carousel-indicators">
-        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
-          aria-label="Slide 1"></button>
-        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"
-          class="" aria-current="true"></button>
-        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
-          aria-label="Slide 3"></button>
-      </div>
+      <!-- <div class="carousel-indicators">
+        <button v-for="(item, index) in moviePopularList" :key="index" type="button"
+          data-bs-target="#carouselExampleCaptions" :data-bs-slide-to="index" :class="index === 0 ? 'active' : ''"
+          :aria-label="`Slide ${index}`"></button>
+      </div> -->
       <div class="carousel-inner">
-        <div class="carousel-item active">
-          <img src="/src/assets/images/1.jpg" class="d-block w-100" alt="...">
+        <div v-for="(movie, index) in moviePopularList" :key="index"
+          :class="index === 0 ? 'carousel-item active' : 'carousel-item'">
+          <img :src="getPosterImage(movie.poster_path)" class="d-block w-100" alt="..."
+            style="object-fit: contain;height: 800px;">
           <div class="carousel-caption d-md-block">
-            <h1 class="font_60"> Entertainment Website Films - DUL</h1>
+            <h1 class="font_60">{{ movie.original_title }}</h1>
             <h6 class="mt-3">
-              <span class="col_red me-3">
+              <span class="col_red me-3" v-for="index in Math.round(movie.vote_average / 2)" :key="index">
                 <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star-half-o"></i>
               </span>
-              4.5 (Imdb) Year : 2022
-              <a class="bg_red p-2 pe-4 ps-4 ms-3 text-white d-inline-block" href="#">Action</a>
+              <span class="col_red me-3" v-for="index in Math.round(5 - (movie.vote_average / 2))" :key="index">
+                <i class="fa fa-star-o"></i>
+              </span>
+              <p class="mt-3 text-truncate">{{ movie.release_date }}</p>
+              <!-- <a class="bg_red p-2 pe-4 ps-4 ms-3 text-white d-inline-block" href="#">Action</a> -->
             </h6>
-            <p class="mt-3">Four waves of increasingly deadly alien attacks have left most of Earth in ruin. Cassie is
-              on the run, desperately trying to save her younger brother.</p>
-            <p class="mb-2"><span class="col_red me-1 fw-bold">Starring:</span> Eget Nulla Semper Porta Dapibus Diam
-              Ipsum</p>
-            <p class="mb-2"><span class="col_red me-1 fw-bold">Genres:</span> Music</p>
-            <p><span class="col_red me-1 fw-bold">Runtime:</span> 1h 32m</p>
+            <p class="mt-3" style="width: 30%;display: inline-block;">{{ movie.overview }}</p>
+            <p class="mb-0">{{ movie.popularity }} Views</p>
+            <!-- <p class="mb-2"><span class="col_red me-1 fw-bold">Genres:</span> Music</p> -->
+            <!-- <p><span class="col_red me-1 fw-bold">Runtime:</span> 1h 32m</p> -->
             <h6 class="mt-4"><a class="button" href="#"><i class="fa fa-play-circle align-middle me-1"></i> Watch
-                Trailer</a></h6>
-          </div>
-        </div>
-        <div class="carousel-item">
-          <img src="/src/assets/images/2.jpg" class="d-block w-100" alt="...">
-          <div class="carousel-caption d-md-block">
-            <h1 class="font_60"> Lorem Semper Nulla</h1>
-            <h6 class="mt-3">
-              <span class="col_red me-3">
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star-half-o"></i>
-              </span>
-              4.5 (Imdb) Year : 2022
-              <a class="bg_red p-2 pe-4 ps-4 ms-3 text-white d-inline-block" href="#">Action</a>
-            </h6>
-            <p class="mt-3">Four waves of increasingly deadly alien attacks have left most of Earth in ruin. Cassie is
-              on the run, desperately trying to save her younger brother.</p>
-            <p class="mb-2"><span class="col_red me-1 fw-bold">Starring:</span> Eget Nulla Semper Porta Dapibus Diam
-              Ipsum</p>
-            <p class="mb-2"><span class="col_red me-1 fw-bold">Genres:</span> Music</p>
-            <p><span class="col_red me-1 fw-bold">Runtime:</span> 1h 32m</p>
-            <h6 class="mt-4"><a class="button" href="#"><i class="fa fa-play-circle align-middle me-1"></i> Watch
-                Trailer</a></h6>
-          </div>
-        </div>
-        <div class="carousel-item">
-          <img src="/src/assets/images/3.jpg" class="d-block w-100" alt="...">
-          <div class="carousel-caption d-md-block">
-            <h1 class="font_60"> Eget Diam Ipsum</h1>
-            <h6 class="mt-3">
-              <span class="col_red me-3">
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star-half-o"></i>
-              </span>
-              4.5 (Imdb) Year : 2022
-              <a class="bg_red p-2 pe-4 ps-4 ms-3 text-white d-inline-block" href="#">Action</a>
-            </h6>
-            <p class="mt-3">Four waves of increasingly deadly alien attacks have left most of Earth in ruin. Cassie is
-              on the run, desperately trying to save her younger brother.</p>
-            <p class="mb-2"><span class="col_red me-1 fw-bold">Starring:</span> Eget Nulla Semper Porta Dapibus Diam
-              Ipsum</p>
-            <p class="mb-2"><span class="col_red me-1 fw-bold">Genres:</span> Music</p>
-            <p><span class="col_red me-1 fw-bold">Runtime:</span> 1h 32m</p>
-            <h6 class="mt-4 mb-0"><a class="button" href="#"><i class="fa fa-play-circle align-middle me-1"></i> Watch
                 Trailer</a></h6>
           </div>
         </div>
@@ -167,31 +131,31 @@ onMounted(async () => {
       <div class="row trend_1">
         <div class="col-md-12">
           <div class="trend_1l">
-            <h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i> Trending <span
-                class="col_red">Events</span></h4>
+            <h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i> <span class="col_red">TV
+                Series</span> Lists </h4>
           </div>
         </div>
       </div>
       <div class="row popular_1 mt-4">
         <ul class="nav nav-tabs  border-0 mb-0">
           <li class="nav-item">
-            <a href="#home" data-bs-toggle="tab" aria-expanded="false" class="nav-link active">
-              <span class="d-md-block">JUST ARRIVED</span>
+            <a href="#airingtoday" data-bs-toggle="tab" aria-expanded="false" class="nav-link active">
+              <span class="d-md-block">AIRING TODAY</span>
             </a>
           </li>
           <li class="nav-item">
-            <a href="#profile" data-bs-toggle="tab" aria-expanded="true" class="nav-link">
-              <span class="d-md-block">POPULAR EVENTS</span>
+            <a href="#ontheair" data-bs-toggle="tab" aria-expanded="true" class="nav-link">
+              <span class="d-md-block">ON THE AIR</span>
             </a>
           </li>
           <li class="nav-item">
-            <a href="#settings" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
-              <span class="d-md-block">TV SHOWS</span>
+            <a href="#tvpopular" data-bs-toggle="tab" aria-expanded="true" class="nav-link">
+              <span class="d-md-block">POPULAR</span>
             </a>
           </li>
           <li class="nav-item">
-            <a href="#settings_o" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
-              <span class="d-md-block">FREE MOVIES</span>
+            <a href="#tvtoprated" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
+              <span class="d-md-block">TOP RATED</span>
             </a>
           </li>
 
@@ -199,7 +163,7 @@ onMounted(async () => {
       </div>
       <div class="popular_2 row mt-4">
         <div class="tab-content">
-          <div class="tab-pane active" id="home">
+          <div class="tab-pane active" id="airingtoday">
             <div class="popular_2i row">
               <div class="col-md-6">
                 <div class="popular_2i1 row">
@@ -333,7 +297,7 @@ onMounted(async () => {
               </div>
             </div>
           </div>
-          <div class="tab-pane" id="profile">
+          <div class="tab-pane" id="ontheair">
             <div class="popular_2i row">
               <div class="col-md-6">
                 <div class="popular_2i1 row">
@@ -467,7 +431,7 @@ onMounted(async () => {
               </div>
             </div>
           </div>
-          <div class="tab-pane" id="settings">
+          <div class="tab-pane" id="tvpopular">
             <div class="popular_2i row">
               <div class="col-md-6">
                 <div class="popular_2i1 row">
@@ -601,8 +565,7 @@ onMounted(async () => {
               </div>
             </div>
           </div>
-
-          <div class="tab-pane" id="settings_o">
+          <div class="tab-pane" id="tvtoprated">
             <div class="popular_2i row">
               <div class="col-md-6">
                 <div class="popular_2i1 row">
@@ -736,12 +699,10 @@ onMounted(async () => {
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </div>
   </section>
-
   <section id="choice" class="pt-4 pb-5">
     <div class="container">
       <div class="row trend_1">
