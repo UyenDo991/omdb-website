@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from "vue";
-import { getNowPlayling, getMovieUpcoming, getTvGenres, getMoviePopular, getTVTrendingList } from "@/api/api";
+import { getNowPlayling, getMovieUpcoming, getTvGenres, getMoviePopular, getTVTrendingList, getTVGenresList } from "@/api/api";
 // import { useRouter } from "vue-router";
 import { chunkArray } from "@/utils/index";
 import { getPosterImage } from "@/utils/index";
@@ -36,8 +36,8 @@ onMounted(async () => {
       nowPlayingList.value = [...chunk];
     }
   }
-  console.log('----------nowPlayingList-------------');
-  console.log(nowPlayingList.value);
+  //console.log('----------nowPlayingList-------------');
+  //console.log(nowPlayingList.value);
   //movie upcoming
   const res_movies_upcoming = await getMovieUpcoming();
   if (res_movies_upcoming && res_movies_upcoming.results.length) {
@@ -46,45 +46,64 @@ onMounted(async () => {
       movieUpcomingList.value = [...chunk_movies_upcoming];
     }
   }
-  console.log('----------movieUpcomingList-------------');
-  console.log(movieUpcomingList.value);
+  //console.log('----------movieUpcomingList-------------');
+  //console.log(movieUpcomingList.value);
   //console.log(res_movies_upcoming.total_pages);
   //movie popular
   const res_movies_popular = await getMoviePopular();
   if (res_movies_popular && res_movies_popular.results.length) {
-    const chunk_movies_popular = res_movies_popular.results;//.filter(x => [1026436, 1266992, 1010600].includes(x.id));
+    const chunk_movies_popular = res_movies_popular.results;
     if (chunk_movies_popular.length) {
       moviePopularList.value = chunk_movies_popular;
     }
   }
-  console.log('----------moviePopularList-------------' + res_movies_popular.results.length);
-  console.log(moviePopularList.value);
+  //console.log('----------moviePopularList-------------' + res_movies_popular.results.length);
+  //console.log(moviePopularList.value);
 
   //TV series 
   const res_TV_series = await getTvGenres();
-  console.log(res_TV_series);
+  //console.log(res_TV_series);
   if (res_TV_series && res_TV_series.genres.length) {
     const chunk_TV_series = res_TV_series.genres.filter(x => [35, 16, 10759, 18].includes(x.id));
     if (chunk_TV_series.length) {
       tvSeriesList.value = chunk_TV_series;
+      await fetchDataTVSeriesList(tvSeriesList.value[0].id);
     }
   }
-  console.log('----------tvSeriesList-------------');
+  //console.log('----------tvSeriesList-------------');
   console.log(tvSeriesList.value);
   //TV trending list
   const res_tv_trending = await getTVTrendingList();
-  console.log(res_tv_trending);
+  //console.log(res_tv_trending);
   if (res_tv_trending && res_tv_trending.results.length) {
     const chunk_tv_trending = chunkArray(res_tv_trending.results, 5);
     if (chunk_tv_trending.length) {
       tvTrendingList.value = [...chunk_tv_trending];
     }
   }
-  console.log('----------tvTrendingList-------------');
-  console.log(tvTrendingList.value);
+  //console.log('----------tvTrendingList-------------');
+  //console.log(tvTrendingList.value);
 
+  //List fl type
   //End
 })
+const flimsSeriesList = ref([]);
+async function fetchDataTVSeriesList(genres_id) {
+   try {
+      //console.log("genres_id : " + genres_id);
+      const res_flimsTVList = await getTVGenresList(genres_id);
+     // console.log("flimsTVList:", res_flimsTVList);
+    if(res_flimsTVList && res_flimsTVList.results.length) {
+      const chunk_list_tv_series = chunkArray(res_flimsTVList.results.slice(0, 4), 2);
+      flimsSeriesList.value = [...chunk_list_tv_series];
+      console.log(flimsSeriesList.value);
+    }
+   } catch (error) {
+     console.error('Error fetching data:', error);
+   }
+ }
+ //Goi hàm
+
 </script>
 
 <template>
@@ -140,6 +159,7 @@ onMounted(async () => {
   <!-- Films Upcoming -->
   <FilmsUpcoming :items="movieUpcomingList" />
   <!--End Films Upcoming -->
+  <!--List Films TV Series -->
   <section id="popular" class="pt-4 pb-5 bg_grey">
     <div class="container">
       <div class="row trend_1">
@@ -153,8 +173,8 @@ onMounted(async () => {
       <div class="row popular_1 mt-4">
         <ul class="nav nav-tabs border-0 mb-0">
           <li class="nav-item" v-for="(tvserieslist, index) in tvSeriesList" :key="tvserieslist.id">
-            <a href="#airingtoday" data-bs-toggle="tab" aria-expanded="false"
-              :class="index === 0 ? 'nav-link active' : 'nav-link'">
+            <a href="#" data-bs-toggle="tab" aria-expanded="false" :id="tvserieslist.id"
+              :class="index === 0 ? 'nav-link active' : 'nav-link'" @click="fetchDataTVSeriesList(tvserieslist.id)">
               <span class="d-md-block">{{ tvserieslist.name }}</span>
             </a>
           </li>
@@ -162,16 +182,16 @@ onMounted(async () => {
       </div>
       <div class="popular_2 row mt-4">
         <div class="tab-content">
-          <div class="tab-pane active" id="airingtoday">
-            <div class="popular_2i row">
-              <div class="col-md-6">
+          <div class="tab-pane active" id="airingtoday" v-for="(item, index) in flimsSeriesList" :key="index">
+            <div class="popular_2i row mt-4">
+              <div class="col-md-6" v-for="movie in item" :key="movie.id">
                 <div class="popular_2i1 row">
                   <div class="col-md-4 col-4">
                     <div class="popular_2i1lm position-relative clearfix">
                       <div class="popular_2i1lm1 clearfix">
                         <div class="grid">
                           <figure class="effect-jazz mb-0">
-                            <a href="#"><img src="/src/assets/images/18.jpg" class="w-100" alt="img25"></a>
+                            <a href="#"><img :src="getPosterImage(movie.poster_path)" class="w-100" alt="img25"></a>
                           </figure>
                         </div>
                       </div>
@@ -185,512 +205,11 @@ onMounted(async () => {
                   </div>
                   <div class="col-md-8 col-8">
                     <div class="popular_2i1r">
-                      <h5><a class="col_red" href="#">Semp Porta</a></h5>
+                      <h5><a class="col_red" href="#">{{ movie.original_title }}</a></h5>
                       <h6>Action, Thriller</h6>
                       <h6> Imdb 8.2 <span class="ms-2"><i class="fa fa-star col_red me-1"></i></span> Year : 2022 <span
-                          class="ms-2">Runtime: 1h 49m</span></h6>
-                      <p>Four waves of increasingly deadly alien attacks have left most of ruin. Cassie is on the run,
-                        desperately trying to save her younger brother.</p>
-                      <h6 class="mb-0"><a class="button" href="#"> More Info - Trailer</a></h6>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="popular_2i1 row">
-                  <div class="col-md-4 col-4">
-                    <div class="popular_2i1lm position-relative clearfix">
-                      <div class="popular_2i1lm1 clearfix">
-                        <div class="grid">
-                          <figure class="effect-jazz mb-0">
-                            <a href="#"><img src="/src/assets/images/19.jpg" class="w-100" alt="img25"></a>
-                          </figure>
-                        </div>
-                      </div>
-                      <div class="popular_2i1lm2 position-absolute top-0 w-100 text-center clearfix">
-                        <ul>
-                          <li class="d-inline-block"><a href="#"><i class="fa fa-link col_red"></i></a></li>
-                          <li class="d-inline-block"><a href="#"><i class="fa fa-search col_red"></i></a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-8 col-8">
-                    <div class="popular_2i1r">
-                      <h5><a class="col_red" href="#">Eget Diam</a></h5>
-                      <h6>Action, Thriller</h6>
-                      <h6> Imdb 8.3 <span class="ms-2"><i class="fa fa-star col_red me-1"></i></span> Year : 2022 <span
-                          class="ms-2">Runtime: 2h 29m</span></h6>
-                      <p>Four waves of increasingly deadly alien attacks have left most of ruin. Cassie is on the run,
-                        desperately trying to save her younger brother.</p>
-                      <h6 class="mb-0"><a class="button" href="#"> More Info - Trailer</a></h6>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="popular_2i row mt-4">
-              <div class="col-md-6">
-                <div class="popular_2i1 row">
-                  <div class="col-md-4 col-4">
-                    <div class="popular_2i1lm position-relative clearfix">
-                      <div class="popular_2i1lm1 clearfix">
-                        <div class="grid">
-                          <figure class="effect-jazz mb-0">
-                            <a href="#"><img src="/src/assets/images/20.jpg" class="w-100" alt="img25"></a>
-                          </figure>
-                        </div>
-                      </div>
-                      <div class="popular_2i1lm2 position-absolute top-0 w-100 text-center clearfix">
-                        <ul>
-                          <li class="d-inline-block"><a href="#"><i class="fa fa-link col_red"></i></a></li>
-                          <li class="d-inline-block"><a href="#"><i class="fa fa-search col_red"></i></a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-8 col-8">
-                    <div class="popular_2i1r">
-                      <h5><a class="col_red" href="#">Quis Sem</a></h5>
-                      <h6>Action, Thriller</h6>
-                      <h6> Imdb 8.4 <span class="ms-2"><i class="fa fa-star col_red me-1"></i></span> Year : 2022 <span
-                          class="ms-2">Runtime: 1h 59m</span></h6>
-                      <p>Four waves of increasingly deadly alien attacks have left most of ruin. Cassie is on the run,
-                        desperately trying to save her younger brother.</p>
-                      <h6 class="mb-0"><a class="button" href="#"> More Info - Trailer</a></h6>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="popular_2i1 row">
-                  <div class="col-md-4 col-4">
-                    <div class="popular_2i1lm position-relative clearfix">
-                      <div class="popular_2i1lm1 clearfix">
-                        <div class="grid">
-                          <figure class="effect-jazz mb-0">
-                            <a href="#"><img src="/src/assets/images/21.jpg" class="w-100" alt="img25"></a>
-                          </figure>
-                        </div>
-                      </div>
-                      <div class="popular_2i1lm2 position-absolute top-0 w-100 text-center clearfix">
-                        <ul>
-                          <li class="d-inline-block"><a href="#"><i class="fa fa-link col_red"></i></a></li>
-                          <li class="d-inline-block"><a href="#"><i class="fa fa-search col_red"></i></a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-8 col-8">
-                    <div class="popular_2i1r">
-                      <h5><a class="col_red" href="#">Ipsum Lorem</a></h5>
-                      <h6>Action, Thriller</h6>
-                      <h6> Imdb 8.6 <span class="ms-2"><i class="fa fa-star col_red me-1"></i></span> Year : 2022 <span
-                          class="ms-2">Runtime: 1h 48m</span></h6>
-                      <p>Four waves of increasingly deadly alien attacks have left most of ruin. Cassie is on the run,
-                        desperately trying to save her younger brother.</p>
-                      <h6 class="mb-0"><a class="button" href="#"> More Info - Trailer</a></h6>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="tab-pane" id="ontheair">
-            <div class="popular_2i row">
-              <div class="col-md-6">
-                <div class="popular_2i1 row">
-                  <div class="col-md-4 col-4">
-                    <div class="popular_2i1lm position-relative clearfix">
-                      <div class="popular_2i1lm1 clearfix">
-                        <div class="grid">
-                          <figure class="effect-jazz mb-0">
-                            <a href="#"><img src="/src/assets/images/22.jpg" class="w-100" alt="img25"></a>
-                          </figure>
-                        </div>
-                      </div>
-                      <div class="popular_2i1lm2 position-absolute top-0 w-100 text-center clearfix">
-                        <ul>
-                          <li class="d-inline-block"><a href="#"><i class="fa fa-link col_red"></i></a></li>
-                          <li class="d-inline-block"><a href="#"><i class="fa fa-search col_red"></i></a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-8 col-8">
-                    <div class="popular_2i1r">
-                      <h5><a class="col_red" href="#">Semp Porta</a></h5>
-                      <h6>Action, Thriller</h6>
-                      <h6> Imdb 8.2 <span class="ms-2"><i class="fa fa-star col_red me-1"></i></span> Year : 2022 <span
-                          class="ms-2">Runtime: 1h 49m</span></h6>
-                      <p>Four waves of increasingly deadly alien attacks have left most of ruin. Cassie is on the run,
-                        desperately trying to save her younger brother.</p>
-                      <h6 class="mb-0"><a class="button" href="#"> More Info - Trailer</a></h6>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="popular_2i1 row">
-                  <div class="col-md-4 col-4">
-                    <div class="popular_2i1lm position-relative clearfix">
-                      <div class="popular_2i1lm1 clearfix">
-                        <div class="grid">
-                          <figure class="effect-jazz mb-0">
-                            <a href="#"><img src="/src/assets/images/23.jpg" class="w-100" alt="img25"></a>
-                          </figure>
-                        </div>
-                      </div>
-                      <div class="popular_2i1lm2 position-absolute top-0 w-100 text-center clearfix">
-                        <ul>
-                          <li class="d-inline-block"><a href="#"><i class="fa fa-link col_red"></i></a></li>
-                          <li class="d-inline-block"><a href="#"><i class="fa fa-search col_red"></i></a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-8 col-8">
-                    <div class="popular_2i1r">
-                      <h5><a class="col_red" href="#">Eget Diam</a></h5>
-                      <h6>Action, Thriller</h6>
-                      <h6> Imdb 8.3 <span class="ms-2"><i class="fa fa-star col_red me-1"></i></span> Year : 2022 <span
-                          class="ms-2">Runtime: 2h 29m</span></h6>
-                      <p>Four waves of increasingly deadly alien attacks have left most of ruin. Cassie is on the run,
-                        desperately trying to save her younger brother.</p>
-                      <h6 class="mb-0"><a class="button" href="#"> More Info - Trailer</a></h6>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="popular_2i row mt-4">
-              <div class="col-md-6">
-                <div class="popular_2i1 row">
-                  <div class="col-md-4 col-4">
-                    <div class="popular_2i1lm position-relative clearfix">
-                      <div class="popular_2i1lm1 clearfix">
-                        <div class="grid">
-                          <figure class="effect-jazz mb-0">
-                            <a href="#"><img src="/src/assets/images/24.jpg" class="w-100" alt="img25"></a>
-                          </figure>
-                        </div>
-                      </div>
-                      <div class="popular_2i1lm2 position-absolute top-0 w-100 text-center clearfix">
-                        <ul>
-                          <li class="d-inline-block"><a href="#"><i class="fa fa-link col_red"></i></a></li>
-                          <li class="d-inline-block"><a href="#"><i class="fa fa-search col_red"></i></a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-8 col-8">
-                    <div class="popular_2i1r">
-                      <h5><a class="col_red" href="#">Quis Sem</a></h5>
-                      <h6>Action, Thriller</h6>
-                      <h6> Imdb 8.4 <span class="ms-2"><i class="fa fa-star col_red me-1"></i></span> Year : 2022 <span
-                          class="ms-2">Runtime: 1h 59m</span></h6>
-                      <p>Four waves of increasingly deadly alien attacks have left most of ruin. Cassie is on the run,
-                        desperately trying to save her younger brother.</p>
-                      <h6 class="mb-0"><a class="button" href="#"> More Info - Trailer</a></h6>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="popular_2i1 row">
-                  <div class="col-md-4 col-4">
-                    <div class="popular_2i1lm position-relative clearfix">
-                      <div class="popular_2i1lm1 clearfix">
-                        <div class="grid">
-                          <figure class="effect-jazz mb-0">
-                            <a href="#"><img src="/src/assets/images/25.jpg" class="w-100" alt="img25"></a>
-                          </figure>
-                        </div>
-                      </div>
-                      <div class="popular_2i1lm2 position-absolute top-0 w-100 text-center clearfix">
-                        <ul>
-                          <li class="d-inline-block"><a href="#"><i class="fa fa-link col_red"></i></a></li>
-                          <li class="d-inline-block"><a href="#"><i class="fa fa-search col_red"></i></a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-8 col-8">
-                    <div class="popular_2i1r">
-                      <h5><a class="col_red" href="#">Ipsum Lorem</a></h5>
-                      <h6>Action, Thriller</h6>
-                      <h6> Imdb 8.6 <span class="ms-2"><i class="fa fa-star col_red me-1"></i></span> Year : 2022 <span
-                          class="ms-2">Runtime: 1h 48m</span></h6>
-                      <p>Four waves of increasingly deadly alien attacks have left most of ruin. Cassie is on the run,
-                        desperately trying to save her younger brother.</p>
-                      <h6 class="mb-0"><a class="button" href="#"> More Info - Trailer</a></h6>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="tab-pane" id="tvpopular">
-            <div class="popular_2i row">
-              <div class="col-md-6">
-                <div class="popular_2i1 row">
-                  <div class="col-md-4 col-4">
-                    <div class="popular_2i1lm position-relative clearfix">
-                      <div class="popular_2i1lm1 clearfix">
-                        <div class="grid">
-                          <figure class="effect-jazz mb-0">
-                            <a href="#"><img src="/src/assets/images/26.jpg" class="w-100" alt="img25"></a>
-                          </figure>
-                        </div>
-                      </div>
-                      <div class="popular_2i1lm2 position-absolute top-0 w-100 text-center clearfix">
-                        <ul>
-                          <li class="d-inline-block"><a href="#"><i class="fa fa-link col_red"></i></a></li>
-                          <li class="d-inline-block"><a href="#"><i class="fa fa-search col_red"></i></a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-8 col-8">
-                    <div class="popular_2i1r">
-                      <h5><a class="col_red" href="#">Semp Porta</a></h5>
-                      <h6>Action, Thriller</h6>
-                      <h6> Imdb 8.2 <span class="ms-2"><i class="fa fa-star col_red me-1"></i></span> Year : 2022 <span
-                          class="ms-2">Runtime: 1h 49m</span></h6>
-                      <p>Four waves of increasingly deadly alien attacks have left most of ruin. Cassie is on the run,
-                        desperately trying to save her younger brother.</p>
-                      <h6 class="mb-0"><a class="button" href="#"> More Info - Trailer</a></h6>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="popular_2i1 row">
-                  <div class="col-md-4 col-4">
-                    <div class="popular_2i1lm position-relative clearfix">
-                      <div class="popular_2i1lm1 clearfix">
-                        <div class="grid">
-                          <figure class="effect-jazz mb-0">
-                            <a href="#"><img src="/src/assets/images/27.jpg" class="w-100" alt="img25"></a>
-                          </figure>
-                        </div>
-                      </div>
-                      <div class="popular_2i1lm2 position-absolute top-0 w-100 text-center clearfix">
-                        <ul>
-                          <li class="d-inline-block"><a href="#"><i class="fa fa-link col_red"></i></a></li>
-                          <li class="d-inline-block"><a href="#"><i class="fa fa-search col_red"></i></a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-8 col-8">
-                    <div class="popular_2i1r">
-                      <h5><a class="col_red" href="#">Eget Diam</a></h5>
-                      <h6>Action, Thriller</h6>
-                      <h6> Imdb 8.3 <span class="ms-2"><i class="fa fa-star col_red me-1"></i></span> Year : 2022 <span
-                          class="ms-2">Runtime: 2h 29m</span></h6>
-                      <p>Four waves of increasingly deadly alien attacks have left most of ruin. Cassie is on the run,
-                        desperately trying to save her younger brother.</p>
-                      <h6 class="mb-0"><a class="button" href="#"> More Info - Trailer</a></h6>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="popular_2i row mt-4">
-              <div class="col-md-6">
-                <div class="popular_2i1 row">
-                  <div class="col-md-4 col-4">
-                    <div class="popular_2i1lm position-relative clearfix">
-                      <div class="popular_2i1lm1 clearfix">
-                        <div class="grid">
-                          <figure class="effect-jazz mb-0">
-                            <a href="#"><img src="/src/assets/images/28.jpg" class="w-100" alt="img25"></a>
-                          </figure>
-                        </div>
-                      </div>
-                      <div class="popular_2i1lm2 position-absolute top-0 w-100 text-center clearfix">
-                        <ul>
-                          <li class="d-inline-block"><a href="#"><i class="fa fa-link col_red"></i></a></li>
-                          <li class="d-inline-block"><a href="#"><i class="fa fa-search col_red"></i></a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-8 col-8">
-                    <div class="popular_2i1r">
-                      <h5><a class="col_red" href="#">Quis Sem</a></h5>
-                      <h6>Action, Thriller</h6>
-                      <h6> Imdb 8.4 <span class="ms-2"><i class="fa fa-star col_red me-1"></i></span> Year : 2022 <span
-                          class="ms-2">Runtime: 1h 59m</span></h6>
-                      <p>Four waves of increasingly deadly alien attacks have left most of ruin. Cassie is on the run,
-                        desperately trying to save her younger brother.</p>
-                      <h6 class="mb-0"><a class="button" href="#"> More Info - Trailer</a></h6>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="popular_2i1 row">
-                  <div class="col-md-4 col-4">
-                    <div class="popular_2i1lm position-relative clearfix">
-                      <div class="popular_2i1lm1 clearfix">
-                        <div class="grid">
-                          <figure class="effect-jazz mb-0">
-                            <a href="#"><img src="/src/assets/images/29.jpg" class="w-100" alt="img25"></a>
-                          </figure>
-                        </div>
-                      </div>
-                      <div class="popular_2i1lm2 position-absolute top-0 w-100 text-center clearfix">
-                        <ul>
-                          <li class="d-inline-block"><a href="#"><i class="fa fa-link col_red"></i></a></li>
-                          <li class="d-inline-block"><a href="#"><i class="fa fa-search col_red"></i></a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-8 col-8">
-                    <div class="popular_2i1r">
-                      <h5><a class="col_red" href="#">Ipsum Lorem</a></h5>
-                      <h6>Action, Thriller</h6>
-                      <h6> Imdb 8.6 <span class="ms-2"><i class="fa fa-star col_red me-1"></i></span> Year : 2022 <span
-                          class="ms-2">Runtime: 1h 48m</span></h6>
-                      <p>Four waves of increasingly deadly alien attacks have left most of ruin. Cassie is on the run,
-                        desperately trying to save her younger brother.</p>
-                      <h6 class="mb-0"><a class="button" href="#"> More Info - Trailer</a></h6>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="tab-pane" id="tvtoprated">
-            <div class="popular_2i row">
-              <div class="col-md-6">
-                <div class="popular_2i1 row">
-                  <div class="col-md-4 col-4">
-                    <div class="popular_2i1lm position-relative clearfix">
-                      <div class="popular_2i1lm1 clearfix">
-                        <div class="grid">
-                          <figure class="effect-jazz mb-0">
-                            <a href="#"><img src="/src/assets/images/18.jpg" class="w-100" alt="img25"></a>
-                          </figure>
-                        </div>
-                      </div>
-                      <div class="popular_2i1lm2 position-absolute top-0 w-100 text-center clearfix">
-                        <ul>
-                          <li class="d-inline-block"><a href="#"><i class="fa fa-link col_red"></i></a></li>
-                          <li class="d-inline-block"><a href="#"><i class="fa fa-search col_red"></i></a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-8 col-8">
-                    <div class="popular_2i1r">
-                      <h5><a class="col_red" href="#">Semp Porta</a></h5>
-                      <h6>Action, Thriller</h6>
-                      <h6> Imdb 8.2 <span class="ms-2"><i class="fa fa-star col_red me-1"></i></span> Year : 2022 <span
-                          class="ms-2">Runtime: 1h 49m</span></h6>
-                      <p>Four waves of increasingly deadly alien attacks have left most of ruin. Cassie is on the run,
-                        desperately trying to save her younger brother.</p>
-                      <h6 class="mb-0"><a class="button" href="#"> More Info - Trailer</a></h6>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="popular_2i1 row">
-                  <div class="col-md-4 col-4">
-                    <div class="popular_2i1lm position-relative clearfix">
-                      <div class="popular_2i1lm1 clearfix">
-                        <div class="grid">
-                          <figure class="effect-jazz mb-0">
-                            <a href="#"><img src="/src/assets/images/19.jpg" class="w-100" alt="img25"></a>
-                          </figure>
-                        </div>
-                      </div>
-                      <div class="popular_2i1lm2 position-absolute top-0 w-100 text-center clearfix">
-                        <ul>
-                          <li class="d-inline-block"><a href="#"><i class="fa fa-link col_red"></i></a></li>
-                          <li class="d-inline-block"><a href="#"><i class="fa fa-search col_red"></i></a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-8 col-8">
-                    <div class="popular_2i1r">
-                      <h5><a class="col_red" href="#">Eget Diam</a></h5>
-                      <h6>Action, Thriller</h6>
-                      <h6> Imdb 8.3 <span class="ms-2"><i class="fa fa-star col_red me-1"></i></span> Year : 2022 <span
-                          class="ms-2">Runtime: 2h 29m</span></h6>
-                      <p>Four waves of increasingly deadly alien attacks have left most of ruin. Cassie is on the run,
-                        desperately trying to save her younger brother.</p>
-                      <h6 class="mb-0"><a class="button" href="#"> More Info - Trailer</a></h6>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="popular_2i row mt-4">
-              <div class="col-md-6">
-                <div class="popular_2i1 row">
-                  <div class="col-md-4 col-4">
-                    <div class="popular_2i1lm position-relative clearfix">
-                      <div class="popular_2i1lm1 clearfix">
-                        <div class="grid">
-                          <figure class="effect-jazz mb-0">
-                            <a href="#"><img src="/src/assets/images/20.jpg" class="w-100" alt="img25"></a>
-                          </figure>
-                        </div>
-                      </div>
-                      <div class="popular_2i1lm2 position-absolute top-0 w-100 text-center clearfix">
-                        <ul>
-                          <li class="d-inline-block"><a href="#"><i class="fa fa-link col_red"></i></a></li>
-                          <li class="d-inline-block"><a href="#"><i class="fa fa-search col_red"></i></a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-8 col-8">
-                    <div class="popular_2i1r">
-                      <h5><a class="col_red" href="#">Quis Sem</a></h5>
-                      <h6>Action, Thriller</h6>
-                      <h6> Imdb 8.4 <span class="ms-2"><i class="fa fa-star col_red me-1"></i></span> Year : 2022 <span
-                          class="ms-2">Runtime: 1h 59m</span></h6>
-                      <p>Four waves of increasingly deadly alien attacks have left most of ruin. Cassie is on the run,
-                        desperately trying to save her younger brother.</p>
-                      <h6 class="mb-0"><a class="button" href="#"> More Info - Trailer</a></h6>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="popular_2i1 row">
-                  <div class="col-md-4 col-4">
-                    <div class="popular_2i1lm position-relative clearfix">
-                      <div class="popular_2i1lm1 clearfix">
-                        <div class="grid">
-                          <figure class="effect-jazz mb-0">
-                            <a href="#"><img src="/src/assets/images/21.jpg" class="w-100" alt="img25"></a>
-                          </figure>
-                        </div>
-                      </div>
-                      <div class="popular_2i1lm2 position-absolute top-0 w-100 text-center clearfix">
-                        <ul>
-                          <li class="d-inline-block"><a href="#"><i class="fa fa-link col_red"></i></a></li>
-                          <li class="d-inline-block"><a href="#"><i class="fa fa-search col_red"></i></a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-8 col-8">
-                    <div class="popular_2i1r">
-                      <h5><a class="col_red" href="#">Ipsum Lorem</a></h5>
-                      <h6>Action, Thriller</h6>
-                      <h6> Imdb 8.6 <span class="ms-2"><i class="fa fa-star col_red me-1"></i></span> Year : 2022 <span
-                          class="ms-2">Runtime: 1h 48m</span></h6>
-                      <p>Four waves of increasingly deadly alien attacks have left most of ruin. Cassie is on the run,
-                        desperately trying to save her younger brother.</p>
+                          class="ms-2 ">Runtime: 1h 49m</span></h6>
+                      <p class="ms-2 text-truncate-2">{{ movie.overview }}</p>
                       <h6 class="mb-0"><a class="button" href="#"> More Info - Trailer</a></h6>
                     </div>
                   </div>
@@ -702,6 +221,7 @@ onMounted(async () => {
       </div>
     </div>
   </section>
+  <!--End  List Films TV Series-->
   <!-- TV Trending -->
   <TVTrendingList :items="tvTrendingList" />
   <!--End TV Trending -->

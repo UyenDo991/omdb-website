@@ -75,3 +75,17 @@ export const getTVTrendingList = async () => {
   }
 }
 //List drama
+export const getTVGenresList = async (genres_id) => {
+  try {
+    const response = await axios.get('discover/tv', {
+      params: {
+        with_genres: genres_id
+      }
+    });
+    // const result = await axios.get(`discover/tv/with_genres=${genres_id}`)
+    const result = response;
+    return result;
+  } catch (error) {
+    console.log('getTVGenresList-catch exception:', error.message)
+  }
+}

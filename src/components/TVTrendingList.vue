@@ -38,23 +38,11 @@ const { items } = toRefs(props);
                     <div class="trend_2im1 clearfix">
                       <div class="grid">
                         <figure class="effect-jazz mb-0">
-                          <a href="#"><img :src="getPosterImage(movie.poster_path)" class="w-100" alt="img25"></a>
+                          <a href="#"><img :src="getPosterImage(movie.poster_path)" class="w-100" alt="..." style="height: 400px; object-fit: cover;"></a>
                         </figure>
                       </div>
                     </div>
-                    <div class="trend_2im2 clearfix  position-absolute w-100 top-0">
-                      <h5><a class="col_red" href="#">Semper</a></h5>
-                      <span class="col_red">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                      </span>
-                      <p class="mb-0">2 Views</p>
-                    </div>
                   </div>
-
                 </div>
               </div>
             </div>
