@@ -47,7 +47,7 @@ export const getMovieVideos = async (movie_id) => {
   }
 }
 //Movie upcoming
-export const getMovieUpcoming = async (page = 2) => {
+export const getMovieUpcoming = async (page = 1) => {
   try {
     const result = await axios.get(`movie/upcoming?page=${page}`)
     return result
@@ -64,3 +64,14 @@ export const getMoviePopular = async (page = 8) => {
     console.log('getMoviePopular-catch exception:', error.message)
   }
 }
+
+//List TV trending
+export const getTVTrendingList = async () => {
+  try {
+    const result = await axios.get('trending/tv/day')
+    return result
+  } catch (error) {
+    console.log('getTVTrendingList-catch exception:', error.message)
+  }
+}
+//List drama

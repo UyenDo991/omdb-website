@@ -1,11 +1,13 @@
 <script setup>
 import { onMounted, ref } from "vue";
-import { getNowPlayling, getMovieUpcoming, getTvGenres, getMoviePopular } from "@/api/api";
+import { getNowPlayling, getMovieUpcoming, getTvGenres, getMoviePopular, getTVTrendingList } from "@/api/api";
 // import { useRouter } from "vue-router";
 import { chunkArray } from "@/utils/index";
 import { getPosterImage } from "@/utils/index";
 import LatestMovies from "@/components/LatestMovies.vue";
 import FilmsUpcoming from "@/components/FilmsUpcoming.vue";
+import TVTrendingList from "@/components/TVTrendingList.vue";
+
 
 // const router = useRouter();
 
@@ -13,6 +15,8 @@ const nowPlayingList = ref([]);
 const movieUpcomingList = ref([]);
 const moviePopularList = ref([]);
 const tvSeriesList = ref([]);
+const tvTrendingList = ref([]);
+
 
 // getMovieGenres, getTvGenres,
 // const viewDetail = async (movie_id) => {
@@ -67,7 +71,17 @@ onMounted(async () => {
   }
   console.log('----------tvSeriesList-------------');
   console.log(tvSeriesList.value);
-
+  //TV trending list
+  const res_tv_trending = await getTVTrendingList();
+  console.log(res_tv_trending);
+  if (res_tv_trending && res_tv_trending.results.length) {
+    const chunk_tv_trending = chunkArray(res_tv_trending.results, 5);
+    if (chunk_tv_trending.length) {
+      tvTrendingList.value = [...chunk_tv_trending];
+    }
+  }
+  console.log('----------tvTrendingList-------------');
+  console.log(tvTrendingList.value);
 
   //End
 })
@@ -688,327 +702,11 @@ onMounted(async () => {
       </div>
     </div>
   </section>
-  <!-- <section id="choice" class="pt-4 pb-5">
-    <div class="container">
-      <div class="row trend_1">
-        <div class="col-md-6 col-6">
-          <div class="trend_1l">
-            <h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i> Director's <span
-                class="col_red">Choice</span></h4>
-          </div>
-        </div>
-        <div class="col-md-6 col-6">
-          <div class="trend_1r text-end">
-            <h6 class="mb-0"><a class="button" href="#"> View All</a></h6>
-          </div>
-        </div>
-      </div>
-      <div class="row trend_2 mt-4">
-        <div id="carouselExampleCaptions3" class="carousel slide" data-bs-ride="carousel">
-          <div class="carousel-indicators">
-            <button type="button" data-bs-target="#carouselExampleCaptions3" data-bs-slide-to="0" class="active"
-              aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#carouselExampleCaptions3" data-bs-slide-to="1" aria-label="Slide 2"
-              class="" aria-current="true"></button>
-          </div>
-          <div class="carousel-inner">
-            <div class="carousel-item active">
-              <div class="trend_2i row">
-                <div class="col-md-4">
-                  <div class="trend_2im clearfix position-relative">
-                    <div class="trend_2im1 clearfix">
-                      <div class="grid">
-                        <figure class="effect-jazz mb-0">
-                          <a href="#"><img src="/src/assets/images/12.jpg" class="w-100" alt="img25"></a>
-                        </figure>
-                      </div>
-                    </div>
-                    <div class="trend_2im2 clearfix  position-absolute w-100 top-0">
-                      <h5><a class="col_red" href="#">Semper</a></h5>
-                      <span class="col_red">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                      </span>
-                      <p class="mb-0">2 Views</p>
-                    </div>
-                  </div>
+  <!-- TV Trending -->
+  <TVTrendingList :items="tvTrendingList" />
+  <!--End TV Trending -->
 
-                </div>
-                <div class="col-md-4">
-                  <div class="trend_2im clearfix position-relative">
-                    <div class="trend_2im1 clearfix">
-                      <div class="grid">
-                        <figure class="effect-jazz mb-0">
-                          <a href="#"><img src="/src/assets/images/13.jpg" class="w-100" alt="img25"></a>
-                        </figure>
-                      </div>
-                    </div>
-                    <div class="trend_2im2 clearfix  position-absolute w-100 top-0">
-                      <h5><a class="col_red" href="#">Lorem</a></h5>
-                      <span class="col_red">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                      </span>
-                      <p class="mb-0">1 Views</p>
-                    </div>
-                  </div>
-
-                </div>
-                <div class="col-md-4">
-                  <div class="trend_2im clearfix position-relative">
-                    <div class="trend_2im1 clearfix">
-                      <div class="grid">
-                        <figure class="effect-jazz mb-0">
-                          <a href="#"><img src="/src/assets/images/14.jpg" class="w-100" alt="img25"></a>
-                        </figure>
-                      </div>
-                    </div>
-                    <div class="trend_2im2 clearfix  position-absolute w-100 top-0">
-                      <h5><a class="col_red" href="#">Porta</a></h5>
-                      <span class="col_red">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                      </span>
-                      <p class="mb-0">4 Views</p>
-                    </div>
-                  </div>
-
-                </div>
-
-              </div>
-            </div>
-            <div class="carousel-item">
-              <div class="trend_2i row">
-
-                <div class="col-md-4">
-                  <div class="trend_2im clearfix position-relative">
-                    <div class="trend_2im1 clearfix">
-                      <div class="grid">
-                        <figure class="effect-jazz mb-0">
-                          <a href="#"><img src="/src/assets/images/15.jpg" class="w-100" alt="img25"></a>
-                        </figure>
-                      </div>
-                    </div>
-                    <div class="trend_2im2 clearfix  position-absolute w-100 top-0">
-                      <h5><a class="col_red" href="#">Porta</a></h5>
-                      <span class="col_red">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                      </span>
-                      <p class="mb-0">4 Views</p>
-                    </div>
-                  </div>
-
-                </div>
-                <div class="col-md-4">
-                  <div class="trend_2im clearfix position-relative">
-                    <div class="trend_2im1 clearfix">
-                      <div class="grid">
-                        <figure class="effect-jazz mb-0">
-                          <a href="#"><img src="/src/assets/images/16.jpg" class="w-100" alt="img25"></a>
-                        </figure>
-                      </div>
-                    </div>
-                    <div class="trend_2im2 clearfix  position-absolute w-100 top-0">
-                      <h5><a class="col_red" href="#">Dapibus</a></h5>
-                      <span class="col_red">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                      </span>
-                      <p class="mb-0">6 Views</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="trend_2im clearfix position-relative">
-                    <div class="trend_2im1 clearfix">
-                      <div class="grid">
-                        <figure class="effect-jazz mb-0">
-                          <a href="#"><img src="/src/assets/images/17.jpg" class="w-100" alt="img25"></a>
-                        </figure>
-                      </div>
-                    </div>
-                    <div class="trend_2im2 clearfix  position-absolute w-100 top-0">
-                      <h5><a class="col_red" href="#">Nulla</a></h5>
-                      <span class="col_red">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                      </span>
-                      <p class="mb-0">5 Views</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section> -->
-
-  <!-- <section id="play">
-    <div class="play_m clearfix">
-      <div class="container">
-        <div class="row trend_1">
-          <div class="col-md-12">
-            <div class="trend_1l">
-              <h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i> Top <span class="col_red">10
-                  Playlist</span></h4>
-            </div>
-          </div>
-        </div>
-        <div class="play1 row mt-4 bg_grey pt-3 pb-3">
-          <div class="col-md-9">
-            <div class="play1l">
-              <div class="grid clearfix">
-                <figure class="effect-jazz mb-0">
-                  <a href="#"><img src="/src/assets/images/2.jpg" class="w-100" height="450" alt="abc"></a>
-                </figure>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-3 ps-0">
-            <div class="play1r">
-              <div class="play1ri">
-                <div class="grid clearfix">
-                  <figure class="effect-jazz mb-0">
-                    <a href="#"><img src="/src/assets/images/4.jpg" class="w-100" alt="abc"></a>
-                  </figure>
-                </div>
-              </div>
-              <div class="play1ri mt-3">
-                <div class="grid clearfix">
-                  <figure class="effect-jazz mb-0">
-                    <a href="#"><img src="/src/assets/images/5.jpg" class="w-100" alt="abc"></a>
-                  </figure>
-                </div>
-              </div>
-              <div class="play1ri mt-3">
-                <div class="grid clearfix">
-                  <figure class="effect-jazz mb-0">
-                    <a href="#"><img src="/src/assets/images/6.jpg" class="w-100" alt="abc"></a>
-                  </figure>
-                </div>
-              </div>
-              <div class="play1ri mt-3">
-                <div class="grid clearfix">
-                  <figure class="effect-jazz mb-0">
-                    <a href="#"><img src="/src/assets/images/7.jpg" class="w-100" alt="abc"></a>
-                  </figure>
-                </div>
-              </div>
-              <div class="play1ri mt-3">
-                <div class="grid clearfix">
-                  <figure class="effect-jazz mb-0">
-                    <a href="#"><img src="/src/assets/images/8.jpg" class="w-100" alt="abc"></a>
-                  </figure>
-                </div>
-              </div>
-              <div class="play1ri mt-3">
-                <div class="grid clearfix">
-                  <figure class="effect-jazz mb-0">
-                    <a href="#"><img src="/src/assets/images/9.jpg" class="w-100" alt="abc"></a>
-                  </figure>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="play2 row mt-4">
-          <div class="col-md-4 p-0">
-            <div class="play2l">
-              <div class="grid clearfix">
-                <figure class="effect-jazz mb-0">
-                  <a href="#"><img src="/src/assets/images/31.jpg" height="515" class="w-100" alt="abc"></a>
-                </figure>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-8 p-0">
-            <div class="play2r  bg_grey p-4">
-              <h5><span class="col_red">BEST MOVIE OF THE MONTH :</span> LIAM NEESON <span
-                  class="col_red">BLACKLIGHT</span><br>
-                THEY’RE GONNA NEED MORE MEN</h5>
-              <h5 class="mt-3">Thriller</h5>
-              <hr class="line">
-              <p class="mt-3">A humble businessman with a buried past seeks justice when his daughter is killed in an
-                act of terrorism. A cat-and-mouse conflict ensues with a government official, whose past may hold clues
-                to the killers' identities.</p>
-              <div class="play2ri row mt-4">
-                <div class="col-md-6">
-                  <div class="play2ril">
-                    <h6 class="fw-normal">
-                      Running Time: <span class="pull-right">1 hr 50 min</span></h6>
-                    <hr class="hr_1">
-                    <h6 class="fw-normal">
-                      Genre: <span class="pull-right">Action, Thriller</span></h6>
-                    <hr class="hr_1">
-                    <h6 class="fw-normal">
-                      Director: <span class="pull-right">Eget Nulla</span></h6>
-                    <hr class="hr_1">
-                    <h6 class="fw-normal">
-                      Stars: <span class="pull-right">Semp Port, Dapibus Diam</span></h6>
-                    <hr class="hr_1">
-                    <h6 class="fw-normal">
-                      Release Date: <span class="pull-right">2023</span></h6>
-                    <hr class="hr_1 mb-0">
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="play2rir">
-                    <h6 class="fw-normal">Imdb - 9.2</h6>
-                    <div class="progress">
-                      <div class="progress-bar" role="progressbar" style="width: 92%;" aria-valuenow="25"
-                        aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <h6 class="fw-normal mt-3">Semper - 7.3</h6>
-                    <div class="progress">
-                      <div class="progress-bar" role="progressbar" style="width: 73%;" aria-valuenow="25"
-                        aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <h6 class="fw-normal mt-3">Dapibus - 9.0</h6>
-                    <div class="progress">
-                      <div class="progress-bar" role="progressbar" style="width: 90%;" aria-valuenow="25"
-                        aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <h6 class="fw-normal mt-3">Ipsum - 8.3</h6>
-                    <div class="progress">
-                      <div class="progress-bar" role="progressbar" style="width: 83%;" aria-valuenow="25"
-                        aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <h6 class="fw-normal mt-3">Lorem - 7.9</h6>
-                    <div class="progress">
-                      <div class="progress-bar" role="progressbar" style="width: 79%;" aria-valuenow="25"
-                        aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section> -->
-
+  <!-- List drama -->
   <section id="stream" class="pb-5 pt-4">
     <div class="container">
       <div class="row trend_1">
