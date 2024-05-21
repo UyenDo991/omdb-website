@@ -137,28 +137,13 @@ onMounted(async () => {
         </div>
       </div>
       <div class="row popular_1 mt-4">
-        <ul class="nav nav-tabs  border-0 mb-0">
-          <li class="nav-item">
-            <a href="#airingtoday" data-bs-toggle="tab" aria-expanded="false" class="nav-link active">
-              <span class="d-md-block">AIRING TODAY</span>
+        <ul class="nav nav-tabs border-0 mb-0">
+          <li class="nav-item" v-for="(tvserieslist, index) in tvSeriesList" :key="tvserieslist.id">
+            <a href="#airingtoday" data-bs-toggle="tab" aria-expanded="false"
+              :class="index === 0 ? 'nav-link active' : 'nav-link'">
+              <span class="d-md-block">{{ tvserieslist.name }}</span>
             </a>
           </li>
-          <li class="nav-item">
-            <a href="#ontheair" data-bs-toggle="tab" aria-expanded="true" class="nav-link">
-              <span class="d-md-block">ON THE AIR</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="#tvpopular" data-bs-toggle="tab" aria-expanded="true" class="nav-link">
-              <span class="d-md-block">POPULAR</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="#tvtoprated" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
-              <span class="d-md-block">TOP RATED</span>
-            </a>
-          </li>
-
         </ul>
       </div>
       <div class="popular_2 row mt-4">
@@ -703,7 +688,7 @@ onMounted(async () => {
       </div>
     </div>
   </section>
-  <section id="choice" class="pt-4 pb-5">
+  <!-- <section id="choice" class="pt-4 pb-5">
     <div class="container">
       <div class="row trend_1">
         <div class="col-md-6 col-6">
@@ -848,7 +833,6 @@ onMounted(async () => {
                       <p class="mb-0">6 Views</p>
                     </div>
                   </div>
-
                 </div>
                 <div class="col-md-4">
                   <div class="trend_2im clearfix position-relative">
@@ -871,20 +855,16 @@ onMounted(async () => {
                       <p class="mb-0">5 Views</p>
                     </div>
                   </div>
-
-
                 </div>
               </div>
             </div>
-
           </div>
-
         </div>
       </div>
     </div>
-  </section>
+  </section> -->
 
-  <section id="play">
+  <!-- <section id="play">
     <div class="play_m clearfix">
       <div class="container">
         <div class="row trend_1">
@@ -1027,7 +1007,7 @@ onMounted(async () => {
         </div>
       </div>
     </div>
-  </section>
+  </section> -->
 
   <section id="stream" class="pb-5 pt-4">
     <div class="container">
