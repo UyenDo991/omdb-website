@@ -93,7 +93,7 @@ export const getTVGenresList = async (genres_id) => {
 //List collection Harry Poster id : 1241
 export const getCollectionFilmsList = async () => {
   try {
-    const result = await axios.get('collection/1241')
+    const result = await axios.get('collection/1241?sort_by=release_date.asc')
     return result
   } catch (error) {
     console.log('getCollectionFilmsList-catch exception:', error.message)
