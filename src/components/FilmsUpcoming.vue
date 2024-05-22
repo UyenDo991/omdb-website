@@ -1,6 +1,6 @@
 <!-- toRefs : cập nhật props  -->
 <script setup>
-import { toRefs, defineProps } from 'vue';
+import { toRefs } from 'vue';
 import { getPosterImage } from "@/utils/index";
 const props = defineProps({
   items: Array
@@ -43,9 +43,6 @@ const { items } = toRefs(props);
                               alt="img25"></a>
                         </figure>
                       </div>
-                    </div>
-                    <div class="trend_2im2 clearfix text-center position-absolute w-100 top-0">
-                      <span class="fs-1"><a class="col_red" href="#"><i class="fa fa-youtube-play"></i></a></span>
                     </div>
                   </div>
                   <div class="trend_2ilast bg_grey p-3 clearfix">

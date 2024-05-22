@@ -1,6 +1,6 @@
 <!-- toRefs : cập nhật props  -->
 <script setup>
-import { toRefs, defineProps } from 'vue';
+import { toRefs } from 'vue';
 import { getPosterImage } from "@/utils/index";
 const props = defineProps({
   items: Array
@@ -38,7 +38,7 @@ const { items } = toRefs(props);
                     <div class="latest_2im1 clearfix">
                       <div class="grid">
                         <figure class="effect-jazz mb-0">
-                          <a href="#"><img :src="getPosterImage(movie.poster_path)" class="w-100" alt="img25"></a>
+                          <router-link :to="`/movies/${movie.id}`"><img :src="getPosterImage(movie.poster_path)" class="w-100" alt="img25"></router-link>
                         </figure>
                       </div>
                     </div>

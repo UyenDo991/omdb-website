@@ -1,6 +1,6 @@
 <!-- toRefs : cập nhật props  -->
 <script setup>
-import { toRefs, defineProps } from 'vue';
+import { toRefs } from 'vue';
 import { getPosterImage } from "@/utils/index";
 const props = defineProps({
   items: Array

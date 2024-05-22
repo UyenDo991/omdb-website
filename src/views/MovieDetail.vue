@@ -9,11 +9,10 @@ const trailerClip = ref({})
 
 const getDetails = async (movie_id) => {
   detailInfo.value = await getMovieDetails(movie_id);
-  // console.log("detailInfo:", detailInfo);
+  console.log("detailInfo:", detailInfo);
   const videoList = await getMovieVideos(movie_id);
-  // console.log("videoList:", videoList.results);
-  if (videoList.results.length) {
-    trailerClip.value = videoList.results.pop();
+  console.log("videoList:", videoList.results);
+  if (videoList.results.length) {    
     // console.log(trailerClip.value);
 
   }
@@ -72,7 +71,7 @@ watch(() => route.params.id, async (val) => {
                 <div class="popular_2i1lm1 clearfix">
                   <div class="grid">
                     <figure class="effect-jazz mb-0">
-                      <a href="#"><img src="img/2.jpg" height="450" class="w-100" alt="img25"></a>
+                      <a href="#"><img src="@/assets/images/2.jpg" height="450" class="w-100" alt="img25"></a>
                     </figure>
                   </div>
                 </div>
@@ -139,7 +138,7 @@ watch(() => route.params.id, async (val) => {
                     <div class="popular_2i1lm1 clearfix">
                       <div class="grid">
                         <figure class="effect-jazz mb-0">
-                          <a href="#"><img src="img/32.jpg" class="w-100" alt="img25"></a>
+                          <a href="#"><img src="@/assets/images/32.jpg" class="w-100" alt="img25"></a>
                         </figure>
                       </div>
                     </div>
@@ -169,7 +168,7 @@ watch(() => route.params.id, async (val) => {
                     <div class="popular_2i1lm1 clearfix">
                       <div class="grid">
                         <figure class="effect-jazz mb-0">
-                          <a href="#"><img src="img/33.jpg" class="w-100" alt="img25"></a>
+                          <a href="#"><img src="@/assets/images/33.jpg" class="w-100" alt="img25"></a>
                         </figure>
                       </div>
                     </div>
@@ -201,7 +200,7 @@ watch(() => route.params.id, async (val) => {
               <div class="blog_1l5i row">
                 <div class="col-md-2 col-2 pe-0">
                   <div class="blog_1l5il">
-                    <img src="img/34.jpg" class="w-100" alt="abc">
+                    <img src="@/assets/images/34.jpg" class="w-100" alt="abc">
                   </div>
                 </div>
                 <div class="col-md-10 col-10">
@@ -218,7 +217,7 @@ watch(() => route.params.id, async (val) => {
               <div class="blog_1l5i row">
                 <div class="col-md-2 col-2 pe-0">
                   <div class="blog_1l5il">
-                    <img src="img/35.jpg" class="w-100" alt="abc">
+                    <img src="@/assets/images/35.jpg" class="w-100" alt="abc">
                   </div>
                 </div>
                 <div class="col-md-10 col-10">
@@ -235,7 +234,7 @@ watch(() => route.params.id, async (val) => {
               <div class="blog_1l5i row">
                 <div class="col-md-2 col-2 pe-0">
                   <div class="blog_1l5il">
-                    <img src="img/36.jpg" class="w-100" alt="abc">
+                    <img src="@/assets/images/36.jpg" class="w-100" alt="abc">
                   </div>
                 </div>
                 <div class="col-md-10 col-10">
@@ -310,7 +309,7 @@ watch(() => route.params.id, async (val) => {
                   <div class="blog_1r1il">
                     <div class="grid clearfix">
                       <figure class="effect-jazz mb-0">
-                        <a href="blog_detail.html"><img src="img/4.jpg" class="w-100" alt="abc"></a>
+                        <a href="blog_detail.html"><img src="@/assets/images/4.jpg" class="w-100" alt="abc"></a>
                       </figure>
                     </div>
                   </div>
@@ -328,7 +327,7 @@ watch(() => route.params.id, async (val) => {
                   <div class="blog_1r1il">
                     <div class="grid clearfix">
                       <figure class="effect-jazz mb-0">
-                        <a href="blog_detail.html"><img src="img/5.jpg" class="w-100" alt="abc"></a>
+                        <a href="blog_detail.html"><img src="@/assets/images/5.jpg" class="w-100" alt="abc"></a>
                       </figure>
                     </div>
                   </div>
@@ -346,7 +345,7 @@ watch(() => route.params.id, async (val) => {
                   <div class="blog_1r1il">
                     <div class="grid clearfix">
                       <figure class="effect-jazz mb-0">
-                        <a href="blog_detail.html"><img src="img/6.jpg" class="w-100" alt="abc"></a>
+                        <a href="blog_detail.html"><img src="@/assets/images/6.jpg" class="w-100" alt="abc"></a>
                       </figure>
                     </div>
                   </div>
@@ -364,7 +363,7 @@ watch(() => route.params.id, async (val) => {
                   <div class="blog_1r1il">
                     <div class="grid clearfix">
                       <figure class="effect-jazz mb-0">
-                        <a href="blog_detail.html"><img src="img/7.jpg" class="w-100" alt="abc"></a>
+                        <a href="blog_detail.html"><img src="@/assets/images/7.jpg" class="w-100" alt="abc"></a>
                       </figure>
                     </div>
                   </div>
