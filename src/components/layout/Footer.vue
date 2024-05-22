@@ -1,6 +1,5 @@
 <script setup>
 
-
 </script>
 <template>
   <section id="footer">
@@ -12,8 +11,8 @@
               <h3><a class="text-white" href="index.html"><i class="fa fa-video-camera col_red me-1"></i> Website Films
                   - DUL</a>
               </h3>
-              <p class="mt-3">Lorem ipsum dolor sit amet consect etur adi pisicing elit sed do eiusmod tempor
-                incididunt. Lorem ipsum dolor sit amet consect etur. </p>
+              <p class="mt-3">We want to introduce you to the best movies in the world, experiencing a wide range of
+                emotions through each film!. </p>
               <h6 class="fw-normal"><i class="fa fa-map-marker fs-5 align-middle col_red me-1"></i> 5311 Ceaver Sidge
                 Td.
                 Pakland, DE 13507</h6>
@@ -31,11 +30,40 @@
                   <div class="footer_1i1i">
                     <div class="grid clearfix">
                       <figure class="effect-jazz mb-0">
+                        <a href="#"><img src="/src/assets/images/1.jpg" height="70" class="w-100" alt="abc"></a>
+                      </figure>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 col-3">
+                  <div class="footer_1i1i">
+                    <div class="grid clearfix">
+                      <figure class="effect-jazz mb-0">
+                        <a href="#"><img src="/src/assets/images/2.jpg" height="70" class="w-100" alt="abc"></a>
+                      </figure>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 col-3">
+                  <div class="footer_1i1i">
+                    <div class="grid clearfix">
+                      <figure class="effect-jazz mb-0">
+                        <a href="#"><img src="/src/assets/images/3.jpg" height="70" class="w-100" alt="abc"></a>
+                      </figure>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 col-3">
+                  <div class="footer_1i1i">
+                    <div class="grid clearfix">
+                      <figure class="effect-jazz mb-0">
                         <a href="#"><img src="/src/assets/images/4.jpg" height="70" class="w-100" alt="abc"></a>
                       </figure>
                     </div>
                   </div>
                 </div>
+              </div>
+              <div class="footer_1i1 row mt-3">
                 <div class="col-md-3 col-3">
                   <div class="footer_1i1i">
                     <div class="grid clearfix">
@@ -63,40 +91,11 @@
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="footer_1i1 row mt-3">
                 <div class="col-md-3 col-3">
                   <div class="footer_1i1i">
                     <div class="grid clearfix">
                       <figure class="effect-jazz mb-0">
                         <a href="#"><img src="/src/assets/images/8.jpg" height="70" class="w-100" alt="abc"></a>
-                      </figure>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-3 col-3">
-                  <div class="footer_1i1i">
-                    <div class="grid clearfix">
-                      <figure class="effect-jazz mb-0">
-                        <a href="#"><img src="/src/assets/images/9.jpg" height="70" class="w-100" alt="abc"></a>
-                      </figure>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-3 col-3">
-                  <div class="footer_1i1i">
-                    <div class="grid clearfix">
-                      <figure class="effect-jazz mb-0">
-                        <a href="#"><img src="/src/assets/images/10.jpg" height="70" class="w-100" alt="abc"></a>
-                      </figure>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-3 col-3">
-                  <div class="footer_1i1i">
-                    <div class="grid clearfix">
-                      <figure class="effect-jazz mb-0">
-                        <a href="#"><img src="/src/assets/images/11.jpg" height="70" class="w-100" alt="abc"></a>
                       </figure>
                     </div>
                   </div>
@@ -133,20 +132,7 @@
       <div class="row footer_1">
         <div class="col-md-8">
           <div class="footer_1l">
-            <p class="mb-0">© 2013 Your Website Name. All Rights Reserved | Design by <a class="col_red"
-                href="http://www.templateonweb.com">TemplateOnWeb</a></p>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="footer_1r">
-            <ul class="mb-0">
-              <li class="d-inline-block me-2"><a href="#">Home</a></li>
-              <li class="d-inline-block me-2"><a href="#">Features</a></li>
-              <li class="d-inline-block me-2"><a href="#">Pages</a></li>
-              <li class="d-inline-block me-2"><a href="#">Portfolio</a></li>
-              <li class="d-inline-block me-2"><a href="#">Blog</a></li>
-              <li class="d-inline-block"><a href="#">Contact</a></li>
-            </ul>
+            <p class="mb-0">© 2024 Thu Duc College of Technology | Design by <a class="col_red" href="">DUL</a></p>
           </div>
         </div>
       </div>

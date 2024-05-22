@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from "vue";
-import { getNowPlayling, getMovieUpcoming, getTvGenres, getMoviePopular, getTVTrendingList, getTVGenresList } from "@/api/api";
+import { getNowPlayling, getMovieUpcoming, getTvGenres, getMoviePopular, getTVTrendingList, getTVGenresList, getCollectionFilmsList } from "@/api/api";
 // import { useRouter } from "vue-router";
 import { chunkArray } from "@/utils/index";
 import { getPosterImage } from "@/utils/index";
@@ -16,6 +16,8 @@ const movieUpcomingList = ref([]);
 const moviePopularList = ref([]);
 const tvSeriesList = ref([]);
 const tvTrendingList = ref([]);
+const collectionFilmsList = ref([]);
+
 
 
 // getMovieGenres, getTvGenres,
@@ -84,25 +86,33 @@ onMounted(async () => {
   //console.log('----------tvTrendingList-------------');
   //console.log(tvTrendingList.value);
 
-  //List fl type
+  //List collection films
+  const res_collection = await getCollectionFilmsList();
+  console.log(res_collection);
+  if (res_collection && res_collection.parts.length) {
+    const chunk_collection = chunkArray(res_collection.parts, 4);
+    if (chunk_collection.length) {
+      collectionFilmsList.value = [...chunk_collection];
+    }
+  }
   //End
 })
 const flimsSeriesList = ref([]);
 async function fetchDataTVSeriesList(genres_id) {
-   try {
-      //console.log("genres_id : " + genres_id);
-      const res_flimsTVList = await getTVGenresList(genres_id);
-     // console.log("flimsTVList:", res_flimsTVList);
-    if(res_flimsTVList && res_flimsTVList.results.length) {
+  try {
+    //console.log("genres_id : " + genres_id);
+    const res_flimsTVList = await getTVGenresList(genres_id);
+    // console.log("flimsTVList:", res_flimsTVList);
+    if (res_flimsTVList && res_flimsTVList.results.length) {
       const chunk_list_tv_series = chunkArray(res_flimsTVList.results.slice(0, 4), 2);
       flimsSeriesList.value = [...chunk_list_tv_series];
       console.log(flimsSeriesList.value);
     }
-   } catch (error) {
-     console.error('Error fetching data:', error);
-   }
- }
- //Goi hàm
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+}
+//Goi hàm
 
 </script>
 
@@ -182,7 +192,7 @@ async function fetchDataTVSeriesList(genres_id) {
       </div>
       <div class="popular_2 row mt-4">
         <div class="tab-content">
-          <div class="tab-pane active" id="airingtoday" v-for="(item, index) in flimsSeriesList" :key="index">
+          <div class="tab-pane active" v-for="(item, index) in flimsSeriesList" :key="index">
             <div class="popular_2i row mt-4">
               <div class="col-md-6" v-for="movie in item" :key="movie.id">
                 <div class="popular_2i1 row">
@@ -225,9 +235,8 @@ async function fetchDataTVSeriesList(genres_id) {
   <!-- TV Trending -->
   <TVTrendingList :items="tvTrendingList" />
   <!--End TV Trending -->
-
   <!-- List drama -->
-  <section id="stream" class="pb-5 pt-4">
+  <section id="collection" class="pb-5 pt-4">
     <div class="container">
       <div class="row trend_1">
         <div class="col-md-6 col-6">
@@ -243,255 +252,41 @@ async function fetchDataTVSeriesList(genres_id) {
         </div>
       </div>
       <div class="row trend_2 mt-4">
-        <div id="carouselExampleCaptions4" class="carousel slide" data-bs-ride="carousel">
+        <div id="carouselExampleCaptions5" class="carousel slide" data-bs-ride="carousel">
           <div class="carousel-indicators">
-            <button type="button" data-bs-target="#carouselExampleCaptions4" data-bs-slide-to="0" class="active"
-              aria-label="Slide 1" aria-current="true"></button>
-            <button type="button" data-bs-target="#carouselExampleCaptions4" data-bs-slide-to="1" aria-label="Slide 2"
-              class=""></button>
+            <button v-for="(item, index) in collectionFilmsList" :key="index" type="button"
+              data-bs-target="#carouselExampleCaptions5" :data-bs-slide-to="index" :class="index === 0 ? 'active' : ''"
+              aria-label="`Slide ${index}`" aria-current="true"></button>
           </div>
           <div class="carousel-inner">
-            <div class="carousel-item active">
+            <div v-for="(item, index) in collectionFilmsList" :key="index"
+              :class="index === 0 ? 'carousel-item active' : 'carousel-item'">
               <div class="trend_2i row">
-                <div class="col">
+                <div v-for="movie in item" :key="movie.id" class="col-md-3 col-4">
                   <div class="trend_2im clearfix position-relative">
                     <div class="trend_2im1 clearfix">
                       <div class="grid">
                         <figure class="effect-jazz mb-0">
-                          <a href="#"><img src="/src/assets/images/4.jpg" class="w-100" alt="img25"></a>
+                          <a href="#"><img :src="getPosterImage(movie.poster_path)" class="w-100" alt="..."
+                              style="height:350px; "></a>
                         </figure>
                       </div>
                     </div>
-                    <div class="trend_2im2 clearfix  position-absolute w-100 top-0">
-                      <h5><a class="col_red" href="#">Semper</a></h5>
-                      <span class="col_red">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
+                    <div class="mt-5">
+                      <h5><a class="col_red" href="#">{{ movie.original_title }}</a></h5>
+                      <span class="col_red" v-for="index in Math.round(movie.vote_average / 2)" :key="index">
                         <i class="fa fa-star"></i>
                       </span>
-                      <p class="mb-0">2 Views</p>
-                    </div>
-                  </div>
-
-                </div>
-                <div class="col">
-                  <div class="trend_2im clearfix position-relative">
-                    <div class="trend_2im1 clearfix">
-                      <div class="grid">
-                        <figure class="effect-jazz mb-0">
-                          <a href="#"><img src="/src/assets/images/5.jpg" class="w-100" alt="img25"></a>
-                        </figure>
-                      </div>
-                    </div>
-                    <div class="trend_2im2 clearfix  position-absolute w-100 top-0">
-                      <h5><a class="col_red" href="#">Semper</a></h5>
-                      <span class="col_red">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
+                      <span class="col_red" v-for="index in Math.round(5 - (movie.vote_average / 2))" :key="index">
+                        <i class="fa fa-star-o"></i>
                       </span>
-                      <p class="mb-0">2 Views</p>
+                      <p class="mb-0">{{ movie.popularity }} Views</p>
                     </div>
                   </div>
-
-                </div>
-                <div class="col">
-                  <div class="trend_2im clearfix position-relative">
-                    <div class="trend_2im1 clearfix">
-                      <div class="grid">
-                        <figure class="effect-jazz mb-0">
-                          <a href="#"><img src="/src/assets/images/6.jpg" class="w-100" alt="img25"></a>
-                        </figure>
-                      </div>
-                    </div>
-                    <div class="trend_2im2 clearfix  position-absolute w-100 top-0">
-                      <h5><a class="col_red" href="#">Semper</a></h5>
-                      <span class="col_red">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                      </span>
-                      <p class="mb-0">2 Views</p>
-                    </div>
-                  </div>
-
-                </div>
-                <div class="col">
-                  <div class="trend_2im clearfix position-relative">
-                    <div class="trend_2im1 clearfix">
-                      <div class="grid">
-                        <figure class="effect-jazz mb-0">
-                          <a href="#"><img src="/src/assets/images/7.jpg" class="w-100" alt="img25"></a>
-                        </figure>
-                      </div>
-                    </div>
-                    <div class="trend_2im2 clearfix  position-absolute w-100 top-0">
-                      <h5><a class="col_red" href="#">Semper</a></h5>
-                      <span class="col_red">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                      </span>
-                      <p class="mb-0">2 Views</p>
-                    </div>
-                  </div>
-
-                </div>
-                <div class="col">
-                  <div class="trend_2im clearfix position-relative">
-                    <div class="trend_2im1 clearfix">
-                      <div class="grid">
-                        <figure class="effect-jazz mb-0">
-                          <a href="#"><img src="/src/assets/images/8.jpg" class="w-100" alt="img25"></a>
-                        </figure>
-                      </div>
-                    </div>
-                    <div class="trend_2im2 clearfix  position-absolute w-100 top-0">
-                      <h5><a class="col_red" href="#">Semper</a></h5>
-                      <span class="col_red">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                      </span>
-                      <p class="mb-0">2 Views</p>
-                    </div>
-                  </div>
-
                 </div>
               </div>
             </div>
-            <div class="carousel-item">
-              <div class="trend_2i row">
-                <div class="col">
-                  <div class="trend_2im clearfix position-relative">
-                    <div class="trend_2im1 clearfix">
-                      <div class="grid">
-                        <figure class="effect-jazz mb-0">
-                          <a href="#"><img src="/src/assets/images/9.jpg" class="w-100" alt="img25"></a>
-                        </figure>
-                      </div>
-                    </div>
-                    <div class="trend_2im2 clearfix  position-absolute w-100 top-0">
-                      <h5><a class="col_red" href="#">Semper</a></h5>
-                      <span class="col_red">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                      </span>
-                      <p class="mb-0">2 Views</p>
-                    </div>
-                  </div>
-
-                </div>
-                <div class="col">
-                  <div class="trend_2im clearfix position-relative">
-                    <div class="trend_2im1 clearfix">
-                      <div class="grid">
-                        <figure class="effect-jazz mb-0">
-                          <a href="#"><img src="/src/assets/images/10.jpg" class="w-100" alt="img25"></a>
-                        </figure>
-                      </div>
-                    </div>
-                    <div class="trend_2im2 clearfix  position-absolute w-100 top-0">
-                      <h5><a class="col_red" href="#">Semper</a></h5>
-                      <span class="col_red">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                      </span>
-                      <p class="mb-0">2 Views</p>
-                    </div>
-                  </div>
-
-                </div>
-                <div class="col">
-                  <div class="trend_2im clearfix position-relative">
-                    <div class="trend_2im1 clearfix">
-                      <div class="grid">
-                        <figure class="effect-jazz mb-0">
-                          <a href="#"><img src="/src/assets/images/11.jpg" class="w-100" alt="img25"></a>
-                        </figure>
-                      </div>
-                    </div>
-                    <div class="trend_2im2 clearfix  position-absolute w-100 top-0">
-                      <h5><a class="col_red" href="#">Semper</a></h5>
-                      <span class="col_red">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                      </span>
-                      <p class="mb-0">2 Views</p>
-                    </div>
-                  </div>
-
-                </div>
-                <div class="col">
-                  <div class="trend_2im clearfix position-relative">
-                    <div class="trend_2im1 clearfix">
-                      <div class="grid">
-                        <figure class="effect-jazz mb-0">
-                          <a href="#"><img src="/src/assets/images/4.jpg" class="w-100" alt="img25"></a>
-                        </figure>
-                      </div>
-                    </div>
-                    <div class="trend_2im2 clearfix  position-absolute w-100 top-0">
-                      <h5><a class="col_red" href="#">Semper</a></h5>
-                      <span class="col_red">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                      </span>
-                      <p class="mb-0">2 Views</p>
-                    </div>
-                  </div>
-
-                </div>
-                <div class="col">
-                  <div class="trend_2im clearfix position-relative">
-                    <div class="trend_2im1 clearfix">
-                      <div class="grid">
-                        <figure class="effect-jazz mb-0">
-                          <a href="#"><img src="/src/assets/images/5.jpg" class="w-100" alt="img25"></a>
-                        </figure>
-                      </div>
-                    </div>
-                    <div class="trend_2im2 clearfix  position-absolute w-100 top-0">
-                      <h5><a class="col_red" href="#">Semper</a></h5>
-                      <span class="col_red">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                      </span>
-                      <p class="mb-0">2 Views</p>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-
           </div>
-
         </div>
       </div>
     </div>

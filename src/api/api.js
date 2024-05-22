@@ -81,11 +81,21 @@ export const getTVGenresList = async (genres_id) => {
       params: {
         with_genres: genres_id
       }
-    });
+    })
     // const result = await axios.get(`discover/tv/with_genres=${genres_id}`)
-    const result = response;
-    return result;
+    const result = response
+    return result
   } catch (error) {
     console.log('getTVGenresList-catch exception:', error.message)
+  }
+}
+
+//List collection Harry Poster id : 1241
+export const getCollectionFilmsList = async () => {
+  try {
+    const result = await axios.get('collection/1241')
+    return result
+  } catch (error) {
+    console.log('getCollectionFilmsList-catch exception:', error.message)
   }
 }

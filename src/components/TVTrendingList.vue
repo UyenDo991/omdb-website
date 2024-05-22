@@ -8,7 +8,7 @@ const props = defineProps({
 const { items } = toRefs(props);
 </script>
 <template>
-  <section id="stream" class="pb-10 pt-4">
+  <section id="trend" class="pb-10 pt-4">
     <div class="container">
       <div class="row trend_1">
         <div class="col-md-6 col-6">
@@ -38,7 +38,8 @@ const { items } = toRefs(props);
                     <div class="trend_2im1 clearfix">
                       <div class="grid">
                         <figure class="effect-jazz mb-0">
-                          <a href="#"><img :src="getPosterImage(movie.poster_path)" class="w-100" alt="..." style="height: 400px; object-fit: cover;"></a>
+                          <a href="#"><img :src="getPosterImage(movie.poster_path)" class="w-100" alt="..."
+                              style="height: 400px; object-fit: cover;"></a>
                         </figure>
                       </div>
                     </div>
