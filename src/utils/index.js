@@ -7,3 +7,7 @@ export const chunkArray = (arr, size) =>
 export const getPosterImage = (poster_path) => {
   return `https://image.tmdb.org/t/p/original${poster_path}`;
 }
+//Hàm gọi images detail
+export const getPosterDtl = (poster_path) => {
+  return `https://image.tmdb.org/t/p/original${poster_path}`;
+}

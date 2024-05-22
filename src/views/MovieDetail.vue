@@ -1,21 +1,37 @@
 <script setup>
-import { getMovieDetails, getMovieVideos } from "@/api/api";
+import { getMovieDetails, getMovieVideos, getMoviePerson} from "@/api/api";
 import { ref, watch } from "vue";
 import { useRoute } from "vue-router";
+import { getPosterDtl } from "@/utils/index";
 const route = useRoute();
 
-const detailInfo = ref({})
-const trailerClip = ref({})
+const detailInfo = ref({});
+const trailerClip = ref({});
+const personInfo = ref({});
 
 const getDetails = async (movie_id) => {
+  //detailInfo
   detailInfo.value = await getMovieDetails(movie_id);
   console.log("detailInfo:", detailInfo);
+  
+  //videoList
   const videoList = await getMovieVideos(movie_id);
   console.log("videoList:", videoList.results);
-  if (videoList.results.length) {    
-    // console.log(trailerClip.value);
-
+  if(videoList.results.length > 0){
+    for(let i = 0; i < videoList.results.length; i++){
+        if(videoList.results[i].type == 'Trailer'){
+            trailerClip.value = videoList.results[i];
+          console.log(trailerClip.value);
+          break;
+        }
+    }
   }
+  
+  //personInfo
+  personInfo.value = await getMoviePerson(movie_id);
+  console.log("videoList:", videoList.results);
+  console.log("personInfo:", personInfo);
+
 }
 
 
@@ -43,24 +59,51 @@ watch(() => route.params.id, async (val) => {
       </v-col>
     </v-row>
   </v-container> -->
-  <section id="center" class="center_o pt-2 pb-2">
+  <!-- <section id="center" class="center_o pt-2 pb-2">
     <div class="container-xl">
       <div class="row center_o1">
         <div class="col-md-5">
           <div class="center_o1l">
-            <h2 class="mb-0">Blog Detail</h2>
+            <h2 class="mb-0">Film Movie Detail</h2>
           </div>
         </div>
         <div class="col-md-7">
           <div class="center_o1r text-end">
             <h6 class="mb-0 col_red"><a href="#">Home</a> <span class="me-2 ms-2 text-light"><i
-                  class="fa fa-caret-right align-middle"></i></span> Blog Detail</h6>
+                  class="fa fa-caret-right align-middle"></i></span> Film Movie Detail</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section> -->
+  <section id="center" class="center_o pt-2 pb-2">
+    <div class="container-xl" v-if="detailInfo">
+      <div class="row center_o1">
+        <div class="col-md-6">
+          <div class="center_o1l">
+            <h2 class="mt-3"><a class="col_red" href="#">{{ detailInfo.original_title }}</a></h2>
+            <p>{{ detailInfo.belongs_to_collection.name }}</p>
+            <p>Release date : {{ detailInfo.release_date }}</p>
+            <p>Run time : {{ detailInfo.runtime }} p</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="center_o1r text-end">
+            <ul class="social-network detail_info mb-0 mt-4">
+              <li><a href="#" class="" title="Imdb Rating">Imdb Rating</a></li>
+              <li><a href="#" class="" title="POPULARITY">POPULARITY</a></li>
+              <li><a href="#" class="" title="Imdb Rating">Revenue</a></li>
+            </ul>
+            <ul class="social-network detail_info mb-0 mt-4">
+              <li><a href="#" class="" title="Imdb Rating">{{ Math.round(detailInfo.vote_average) }} / 10</a></li>
+              <li><a href="#" class="mb-0" title="POPULARITY">{{ detailInfo.popularity }}</a></li>
+              <li><a href="#" class="mb-0" title="Imdb Rating">{{ detailInfo.revenue }} USD</a></li>
+            </ul>
           </div>
         </div>
       </div>
     </div>
   </section>
-
   <section id="blog" class="pt-4 pb-4 bg_grey">
     <div class="container-xl">
       <div class="row blog_1">
@@ -69,24 +112,32 @@ watch(() => route.params.id, async (val) => {
             <div class="blog_1l1">
               <div class="popular_2i1lm position-relative clearfix">
                 <div class="popular_2i1lm1 clearfix">
-                  <div class="grid">
-                    <figure class="effect-jazz mb-0">
-                      <a href="#"><img src="@/assets/images/2.jpg" height="450" class="w-100" alt="img25"></a>
-                    </figure>
+                  <div class="grid" >
+                    <v-card color="transparent" v-if="detailInfo && trailerClip">
+                      <iframe 
+                        width="800" height="400" 
+                        :src="`https://www.youtube.com/embed/${trailerClip.key}`" 
+                        :title="detailInfo.title" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        referrerpolicy="strict-origin-when-cross-origin" 
+                        allowfullscreen>
+                      </iframe>
+                    </v-card>
                   </div>
                 </div>
-                <div class="popular_2i1lm2 position-absolute top-0 w-100 text-center clearfix">
+                <!-- <div class="popular_2i1lm2 position-absolute top-0 w-100 text-center clearfix">
                   <ul>
                     <li class="d-inline-block"><a href="#"><i class="fa fa-link col_red"></i></a></li>
                     <li class="d-inline-block"><a href="#"><i class="fa fa-search col_red"></i></a></li>
                   </ul>
-                </div>
+                </div> -->
               </div>
               <div class="blog_1l1i mt-3">
                 <h5><i class="fa fa-folder-open col_red me-1"></i> Movie News</h5>
-                <h2 class="mt-3"><a class="col_red" href="#">Company Foundation Provides Grant to Emory Law </a></h2>
+                <h2 class="mt-3"><a class="col_red" href="#">{{ detailInfo.original_title }}</a></h2>
                 <h6 class="fw-normal mt-3 col_light">
-                  <span><i class="fa fa-clock-o me-1 align-middle col_red"></i> 14 December 2021</span>
+                  <span><i class="fa fa-clock-o me-1 align-middle col_red"></i>{{ detailInfo.release_date }} </span>
                   <span class="ms-3"><i class="fa fa-user me-1 align-middle col_red"></i> Admin</span>
                   <span class="ms-3"><i class="fa fa-comment me-1 align-middle col_red"></i> Comment</span>
                 </h6>
@@ -277,29 +328,10 @@ watch(() => route.params.id, async (val) => {
         </div>
         <div class="col-md-4">
           <div class="blog_1r">
-            <div class="blog_1r1 p-4">
-              <h4>Main <span class="col_red">Menu</span></h4>
-              <hr class="line mb-4">
-              <h6><a href="blog_detail.html"><i class="fa fa-chevron-right me-1 col_red font_12"></i> Audio <span
-                    class="pull-right">(12)</span></a></h6>
-              <hr>
-              <h6><a href="blog_detail.html"><i class="fa fa-chevron-right me-1 col_red font_12"></i> Magazine <span
-                    class="pull-right">(03)</span></a></h6>
-              <hr>
-              <h6><a href="blog_detail.html"><i class="fa fa-chevron-right me-1 col_red font_12"></i> News <span
-                    class="pull-right">(08)</span></a></h6>
-              <hr>
-              <h6><a href="blog_detail.html"><i class="fa fa-chevron-right me-1 col_red font_12"></i> Photoshop <span
-                    class="pull-right">(12)</span></a></h6>
-              <hr>
-              <h6><a href="blog_detail.html"><i class="fa fa-chevron-right me-1 col_red font_12"></i> Technical <span
-                    class="pull-right">(07)</span></a></h6>
-              <hr>
-              <h6><a href="blog_detail.html"><i class="fa fa-chevron-right me-1 col_red font_12"></i> Uncategorized
-                  <span class="pull-right">(09)</span></a></h6>
-              <hr>
-              <h6 class="mb-0"><a href="blog_detail.html"><i class="fa fa-chevron-right me-1 col_red font_12"></i> Video
-                  <span class="pull-right">(04)</span></a></h6>
+            <div class="blog_1r1">
+              <figure class="effect-jazz mb-0">
+                <a href="#"><img :src="getPosterDtl(detailInfo.poster_path)" height="400" class="w-100" alt="img25"></a>
+              </figure>
             </div>
             <div class="blog_1r1 p-4 mt-4">
               <h4>Sidebar <span class="col_red">News</span></h4>

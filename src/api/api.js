@@ -46,6 +46,16 @@ export const getMovieVideos = async (movie_id) => {
     console.log('getMovieVideos-catch exception:', error.message)
   }
 }
+
+export const getMoviePerson = async (movie_id) => {
+  try {
+    const result = await axios.get(`movie/${movie_id}/credits`)
+    return result
+  } catch (error) {
+    console.log('getMoviePerson-catch exception:', error.message)
+  }
+}
+
 //Movie upcoming
 export const getMovieUpcoming = async (page = 1) => {
   try {
