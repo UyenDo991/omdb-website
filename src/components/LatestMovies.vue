@@ -19,7 +19,8 @@ const { items } = toRefs(props);
         </div>
         <div class="col-md-6 col-6">
           <div class="latest_1r text-end">
-            <h6 class="mb-0"><a class="button" href="#"> View All</a></h6>
+            <router-link :to="`/movies/list/now_playing`" ><h6 class="mb-0"><a class="button" href="#"> View All</a></h6></router-link>
+            <!-- <h6 class="mb-0"><a class="button" href="#"> View All</a></h6> -->
           </div>
         </div>
       </div>

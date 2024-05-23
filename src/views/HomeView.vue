@@ -4,9 +4,9 @@ import { getNowPlayling, getMovieUpcoming, getTvGenres, getMoviePopular, getTVTr
 // import { useRouter } from "vue-router";
 import { chunkArray } from "@/utils/index";
 import { getPosterImage } from "@/utils/index";
-import LatestMovies from "@/components/LatestMovies.vue";
-import FilmsUpcoming from "@/components/FilmsUpcoming.vue";
-import TVTrendingList from "@/components/TVTrendingList.vue";
+// import LatestMovies from "@/components/LatestMovies.vue";
+// import FilmsUpcoming from "@/components/FilmsUpcoming.vue";
+// import TVTrendingList from "@/components/TVTrendingList.vue";
 
 
 // const router = useRouter();
@@ -118,15 +118,9 @@ async function fetchDataTVSeriesList(genres_id) {
 
 //Goi hàm
 </script>
-
 <template>
   <section id="center" class="center_home">
     <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
-      <!-- <div class="carousel-indicators">
-        <button v-for="(item, index) in moviePopularList" :key="index" type="button"
-          data-bs-target="#carouselExampleCaptions" :data-bs-slide-to="index" :class="index === 0 ? 'active' : ''"
-          :aria-label="`Slide ${index}`"></button>
-      </div> -->
       <div class="carousel-inner">
         <div v-for="(movie, index) in moviePopularList" :key="index"
           :class="index === 0 ? 'carousel-item active' : 'carousel-item'">
@@ -167,10 +161,115 @@ async function fetchDataTVSeriesList(genres_id) {
   </section>
 
   <!-- Latest Movie -->
-  <LatestMovies :items="nowPlayingList" />
-  <!-- Latest Movie -->
+  <!-- <LatestMovies :items="nowPlayingList" /> -->
+  <section id="latest" class="pt-4 pb-5">
+    <div class="container">
+      <div class="row latest_1">
+        <div class="col-md-6 col-6">
+          <div class="latest_1l">
+            <h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i> Latest <span
+                class="col_red">Movies</span></h4>
+          </div>
+        </div>
+        <div class="col-md-6 col-6">
+          <div class="latest_1r text-end">
+            <router-link :to="`/movies/list/now_playing`" ><h6 class="mb-0"><a class="button" href="#"> View All</a></h6></router-link>
+            <!-- <h6 class="mb-0"><a class="button" href="#"> View All</a></h6> -->
+          </div>
+        </div>
+      </div>
+      <div class="row latest_2 mt-4">
+        <div id="carouselExampleCaptions1" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-indicators">
+            <button v-for="(itemNowplaying, index) in nowPlayingList" :key="index" type="button" data-bs-target="#carouselExampleCaptions1"
+              :data-bs-slide-to="index" :class="index === 0 ? 'active' : ''" :aria-label="`Slide ${index}`"></button>
+          </div>
+          <div class="carousel-inner">
+            <div v-for="(itemNowplaying, index) in nowPlayingList" :key="index"
+              :class="index === 0 ? 'carousel-item active' : 'carousel-item'">
+              <div class="latest_2i row">
+                <div v-for="movieNowplaying in itemNowplaying" :key="movieNowplaying.id" class="col-md-3 col-6">
+                  <div class="latest_2im clearfix position-relative">
+                    <div class="latest_2im1 clearfix">
+                      <div class="grid">
+                        <figure class="effect-jazz mb-0">
+                          <router-link :to="`/movies/${movieNowplaying.id}`"><img :src="getPosterImage(movieNowplaying.poster_path)" class="w-100" alt="img25"></router-link>
+                        </figure>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="latest_2ilast bg_grey p-3 clearfix" style="height: 174px;">
+                    <h5><a class="col_red" href="#">{{ movieNowplaying.original_title }}</a></h5>
+                    <p class="mb-2 text-truncate">{{ movieNowplaying.overview }}</p>
+                    <span class="col_red" v-for="index in Math.round(movieNowplaying.vote_average / 2)" :key="index">
+                      <i class="fa fa-star"></i>
+                    </span>
+                    <p class="mb-0">{{ movieNowplaying.popularity }} Views</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End Latest Movie -->
   <!-- Films Upcoming -->
-  <FilmsUpcoming :items="movieUpcomingList" />
+  <!-- <FilmsUpcoming :items="movieUpcomingList" /> -->
+  <section id="upcome" class="pt-4 pb-5">
+    <div class="container">
+      <div class="row trend_1">
+        <div class="col-md-6 col-6">
+          <div class="trend_1l">
+            <h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i> Films <span
+                class="col_red">Upcoming</span></h4>
+          </div>
+        </div>
+        <div class="col-md-6 col-6">
+          <div class="trend_1r text-end">
+            <h6 class="mb-0"><a class="button" href="#"> View All</a></h6>
+          </div>
+        </div>
+      </div>
+      <div class="row trend_2 mt-4">
+        <div id="carouselExampleCaptions2" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-indicators">
+            <button v-for="(itemUpcoming, index) in movieUpcomingList" :key="index" type="button"
+              data-bs-target="#carouselExampleCaptions2" :data-bs-slide-to="index" :class="index === 0 ? 'active' : ''"
+              :aria-label="`Slide ${index}`"></button>
+          </div>
+          <div class="carousel-inner">
+            <div v-for="(itemUpcoming, index) in movieUpcomingList" :key="index" class="carousel-item"
+              :class="index === 0 ? 'active' : ''">
+              <div class="trend_2i row">
+                <div v-for="movieUpcoming in itemUpcoming" :key="movieUpcoming.id" class="col-md-4">
+                  <div class="trend_2im clearfix position-relative">
+                    <div class="trend_2im1 clearfix">
+                      <div class="grid">
+                        <figure class="effect-jazz mb-0">
+                          <a href="#"><img :src="getPosterImage(movieUpcoming.poster_path)" class="w-100"
+                              alt="img25"></a>
+                        </figure>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="trend_2ilast bg_grey p-3 clearfix">
+                    <h5><a class="col_red" href="#">{{ movieUpcoming.original_title }}</a></h5>
+                    <p class="mb-2 text-truncate">{{ movieUpcoming.overview }}</p>
+                    <span class="col_red" v-for="index in Math.round(movieUpcoming.vote_average / 2)" :key="index">
+                      <i class="fa fa-star"></i>
+                    </span>
+                    <p class="mb-0">{{ movieUpcoming.popularity }} Views</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
   <!--End Films Upcoming -->
   <!--List Films TV Series -->
   <section id="popular" class="pt-4 pb-5 bg_grey">
@@ -236,7 +335,51 @@ async function fetchDataTVSeriesList(genres_id) {
   </section>
   <!--End  List Films TV Series-->
   <!-- TV Trending -->
-  <TVTrendingList :items="tvTrendingList" />
+  <!-- <TVTrendingList :items="tvTrendingList" /> -->
+  <section id="trend" class="pb-10 pt-4">
+    <div class="container">
+      <div class="row trend_1">
+        <div class="col-md-6 col-6">
+          <div class="trend_1l">
+            <h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i><span class="col_red">TV
+                Trending</span> List</h4>
+          </div>
+        </div>
+        <div class="col-md-6 col-6">
+          <div class="trend_1r text-end">
+            <h6 class="mb-0"><a class="button" href="#"> View All</a></h6>
+          </div>
+        </div>
+      </div>
+      <div class="row trend_2 mt-4">
+        <div id="carouselExampleCaptions4" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-indicators">
+            <button v-for="(itemtvTrending, index) in tvTrendingList" :key="index" type="button" data-bs-target="#carouselExampleCaptions4"
+              :data-bs-slide-to="index" :class="index === 0 ? 'active' : ''" :aria-label="`Slide ${index}`"></button>
+          </div>
+          <div class="carousel-inner">
+            <div v-for="(itemtvTrending, index) in tvTrendingList" :key="index"
+              :class="index === 0 ? 'carousel-item active' : 'carousel-item'">
+              <div class="trend_2i row">
+                <div v-for="tvTrending in itemtvTrending" :key="tvTrending.id" class="col">
+                  <div class="trend_2im clearfix position-relative">
+                    <div class="trend_2im1 clearfix">
+                      <div class="grid">
+                        <figure class="effect-jazz mb-0">
+                          <a href="#"><img :src="getPosterImage(tvTrending.poster_path)" class="w-100" alt="..."
+                              style="height: 400px; object-fit: cover;"></a>
+                        </figure>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
   <!--End TV Trending -->
   <!-- List drama -->
   <section id="collection" class="pb-5 pt-4">

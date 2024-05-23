@@ -170,7 +170,7 @@ watch(() => route.params.id, async (val) => {
                     <div class="popular_2i1lm1 clearfix">
                       <div class="grid">
                         <figure class="effect-jazz mb-0">
-                          <a href="#"><img :src="getPosterDtl(collect_movie.poster_path)" class="w-100" alt="img25"></a>
+                          <router-link :to="`/movies/${collect_movie.id}`" @click="reloadPage(collect_movie.id)" replace><img :src="getPosterDtl(collect_movie.poster_path)" class="w-100" alt="img25"></router-link>
                         </figure>
                       </div>
                     </div>
