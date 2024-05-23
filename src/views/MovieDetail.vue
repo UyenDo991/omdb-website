@@ -1,5 +1,5 @@
 <script setup>
-import { getMovieDetails, getMovieVideos, getMoviePerson} from "@/api/api";
+import { getMovieDetails, getMovieVideos, getMoviePerson } from "@/api/api";
 import { ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { getPosterDtl } from "@/utils/index";
@@ -13,20 +13,13 @@ const getDetails = async (movie_id) => {
   //detailInfo
   detailInfo.value = await getMovieDetails(movie_id);
   console.log("detailInfo:", detailInfo);
-  
+
   //videoList
   const videoList = await getMovieVideos(movie_id);
+  const trailers = videoList.results.filter(x => x.type === "Trailer");
+  trailerClip.value = trailers.length ? trailers[trailers.length - 1] : null;
   console.log("videoList:", videoList.results);
-  if(videoList.results.length > 0){
-    for(let i = 0; i < videoList.results.length; i++){
-        if(videoList.results[i].type == 'Trailer'){
-            trailerClip.value = videoList.results[i];
-          console.log(trailerClip.value);
-          break;
-        }
-    }
-  }
-  
+
   //personInfo
   personInfo.value = await getMoviePerson(movie_id);
   console.log("videoList:", videoList.results);
@@ -79,26 +72,21 @@ watch(() => route.params.id, async (val) => {
   <section id="center" class="center_o pt-2 pb-2">
     <div class="container-xl" v-if="detailInfo">
       <div class="row center_o1">
-        <div class="col-md-6">
+        <div class="col-md-9">
           <div class="center_o1l">
             <h2 class="mt-3"><a class="col_red" href="#">{{ detailInfo.original_title }}</a></h2>
             <p>{{ detailInfo.belongs_to_collection.name }}</p>
             <p>Release date : {{ detailInfo.release_date }}</p>
-            <p>Run time : {{ detailInfo.runtime }} p</p>
+            <p>Run time : {{ detailInfo.runtime }} minutes</p>
           </div>
         </div>
-        <div class="col-md-6">
-          <div class="center_o1r text-end">
-            <ul class="social-network detail_info mb-0 mt-4">
-              <li><a href="#" class="" title="Imdb Rating">Imdb Rating</a></li>
-              <li><a href="#" class="" title="POPULARITY">POPULARITY</a></li>
-              <li><a href="#" class="" title="Imdb Rating">Revenue</a></li>
-            </ul>
-            <ul class="social-network detail_info mb-0 mt-4">
-              <li><a href="#" class="" title="Imdb Rating">{{ Math.round(detailInfo.vote_average) }} / 10</a></li>
-              <li><a href="#" class="mb-0" title="POPULARITY">{{ detailInfo.popularity }}</a></li>
-              <li><a href="#" class="mb-0" title="Imdb Rating">{{ detailInfo.revenue }} USD</a></li>
-            </ul>
+        <div class="col-md-3">
+          <div class="center_o1r ">
+            <h2 class="mt-15"><a class="col_red" href="#"></a></h2>
+            <p>Imdb Rating : {{ Math.round(detailInfo.vote_average * 100) / 100 }} / 10 (Vote : {{ detailInfo.vote_count
+              }})</p>
+            <p>Popularity: {{ detailInfo.popularity.toLocaleString() }} View</p>
+            <p>Rrevenue : ${{ detailInfo.revenue.toLocaleString() }}</p>
           </div>
         </div>
       </div>
@@ -112,16 +100,12 @@ watch(() => route.params.id, async (val) => {
             <div class="blog_1l1">
               <div class="popular_2i1lm position-relative clearfix">
                 <div class="popular_2i1lm1 clearfix">
-                  <div class="grid" >
-                    <v-card color="transparent" v-if="detailInfo && trailerClip">
-                      <iframe 
-                        width="800" height="400" 
-                        :src="`https://www.youtube.com/embed/${trailerClip.key}`" 
-                        :title="detailInfo.title" 
-                        frameborder="0" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                        referrerpolicy="strict-origin-when-cross-origin" 
-                        allowfullscreen>
+                  <div class="grid">
+                    <v-card color="transparent" v-if="detailInfo && trailerClip && personInfo">
+                      <iframe width="800" height="480" :src="`https://www.youtube.com/embed/${trailerClip.key}`"
+                        :title="detailInfo.title" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
                       </iframe>
                     </v-card>
                   </div>
@@ -138,46 +122,30 @@ watch(() => route.params.id, async (val) => {
                 <h2 class="mt-3"><a class="col_red" href="#">{{ detailInfo.original_title }}</a></h2>
                 <h6 class="fw-normal mt-3 col_light">
                   <span><i class="fa fa-clock-o me-1 align-middle col_red"></i>{{ detailInfo.release_date }} </span>
-                  <span class="ms-3"><i class="fa fa-user me-1 align-middle col_red"></i> Admin</span>
-                  <span class="ms-3"><i class="fa fa-comment me-1 align-middle col_red"></i> Comment</span>
                 </h6>
-                <p class="mt-3">Consectetuer adipiscing elit sedare diam nonummy nibh euismod estat tinciduntal ut
-                  laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minimatisa veniam, quis nostrud exerci
-                  tation ullamcorper suscipit lobortis nisl. Name liber tempor cum soluta nobis eleifend option congue
-                  nihil imperdietes</p>
               </div>
             </div>
             <div class="blog_1l2">
-              <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum
-                dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto. Lorem Ipsum is simply dummy text of
-                the printing and typesetting industry. Lorem Ipsum has been the industry's standard text ever since the
-                1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen It has
-                urvived not only five centuries, but also the leap into electronic typesetting.</p>
-              <blockquote class="blockquote bg_dark p-4 pt-3 mt-4">
-                <p>Provident fugiat tempora architecto mollitia quos maiores perspiciatis obcaecati placeat aunty koi
-                  thako Architecto eaque accusamus minima in earum impedit atque</p>
-                <h6 class="fw-normal mb-0"><strong>- Dapibus Diam </strong>of Google Inc.</h6>
-              </blockquote>
-              <p>It was popularised in the 1980s with the release of Letraset sheets containing Lorem Ipsum passages,
-                and more recently with desktop publishing software like Aldus PageMaker including text are in so Ipsum.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation quis nostrud exercitation quis
-                nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-                reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                cupidatat non proident, sunt iest laborum.</p>
               <ul>
-                <li class="d-inline-block me-3"><a href="#"><i class="fa fa-tag me-1 col_red"></i> Blog</a></li>
-                <li class="d-inline-block me-3"><a href="#"><i class="fa fa-tag me-1 col_red"></i> Creative</a></li>
-                <li class="d-inline-block me-3"><a href="#"><i class="fa fa-tag me-1 col_red"></i> Business</a></li>
-                <li class="d-inline-block"><a href="#"><i class="fa fa-tag me-1 col_red"></i> News</a></li>
+                <span>Director : </span>
+                <template v-for="crew_list in personInfo.crew">
+                  <li v-if="crew_list.job === 'Director'" :key="crew_list.credit_id" class="d-inline-block me-1">
+                    <a :href="`#${crew_list.name}`">{{ crew_list.name }}</a>
+                  </li>
+                </template>
               </ul>
-              <ul class="social-network social-circle mb-0 mt-3">
-                <li><a href="#" class="icoRss" title="Rss"><i class="fa fa-skype"></i></a></li>
-                <li><a href="#" class="icoFacebook" title="Facebook"><i class="fa fa-facebook"></i></a></li>
-                <li><a href="#" class="icoTwitter" title="Twitter"><i class="fa fa-twitter"></i></a></li>
-                <li><a href="#" class="icoGoogle" title="Google +"><i class="fa fa-instagram"></i></a></li>
-                <li><a href="#" class="icoLinkedin" title="Linkedin"><i class="fa fa-linkedin"></i></a></li>
+              <ul>
+                <span>Cast : </span>
+                <li v-for="(cast_list, index) in personInfo.cast.slice(0, 4)" :key="cast_list.id"
+                  class="d-inline-block me-1"><a href="#">{{ cast_list.name }}</a>{{ index < 3 ? ',' : ',...' }} </li>
               </ul>
+            </div>
+            <div class="blog_1l2">
+              <ul>
+                <li v-for="genres_list in detailInfo.genres" :key="genres_list.id" class="d-inline-block me-3"><a
+                    href="#"><i class="fa fa-tag me-1 col_red"></i> {{ genres_list.name }}</a></li>
+              </ul>
+              <p>{{ detailInfo.overview }}</p>
             </div>
             <div class="blog_1l3 mt-4">
               <h3>Related Blogs</h3>
@@ -330,7 +298,7 @@ watch(() => route.params.id, async (val) => {
           <div class="blog_1r">
             <div class="blog_1r1">
               <figure class="effect-jazz mb-0">
-                <a href="#"><img :src="getPosterDtl(detailInfo.poster_path)" height="400" class="w-100" alt="img25"></a>
+                <a href="#"><img :src="getPosterDtl(detailInfo.poster_path)" height="480" class="w-100" alt="img25"></a>
               </figure>
             </div>
             <div class="blog_1r1 p-4 mt-4">
