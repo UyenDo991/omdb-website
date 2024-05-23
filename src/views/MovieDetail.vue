@@ -1,5 +1,5 @@
 <script setup>
-import { getMovieDetails, getMovieVideos, getMoviePerson } from "@/api/api";
+import { getMovieDetails, getMovieVideos, getMoviePerson, getCollectionFilmsList } from "@/api/api";
 import { ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { getPosterDtl } from "@/utils/index";
@@ -8,11 +8,13 @@ const route = useRoute();
 const detailInfo = ref({});
 const trailerClip = ref({});
 const personInfo = ref({});
+const collectionFilmsList = ref([]);
 
 const getDetails = async (movie_id) => {
   //detailInfo
   detailInfo.value = await getMovieDetails(movie_id);
   console.log("detailInfo:", detailInfo);
+  console.log("detailInfo_collection:", detailInfo.value.belongs_to_collection.id);
 
   //videoList
   const videoList = await getMovieVideos(movie_id);
@@ -25,9 +27,25 @@ const getDetails = async (movie_id) => {
   console.log("videoList:", videoList.results);
   console.log("personInfo:", personInfo);
 
+  //Related Films
+  
+  const collect_id = detailInfo.value.belongs_to_collection.id;
+  const res_collection = await getCollectionFilmsList(collect_id);
+  // console.log(res_collection);
+  if (res_collection && res_collection.parts.length) {
+    const chunk_collection = res_collection.parts.slice(0, 4);
+    if (chunk_collection.length) {
+      collectionFilmsList.value = chunk_collection;
+    }
+  }
+  
+  console.log("collectionFilmsList:",collectionFilmsList);
 }
 
-
+const reloadPage= async (val) => {
+  await getDetails(val);
+  window.location.reload();
+}
 watch(() => route.params.id, async (val) => {
   // console.log('id:', val);
   await getDetails(val);
@@ -110,12 +128,6 @@ watch(() => route.params.id, async (val) => {
                     </v-card>
                   </div>
                 </div>
-                <!-- <div class="popular_2i1lm2 position-absolute top-0 w-100 text-center clearfix">
-                  <ul>
-                    <li class="d-inline-block"><a href="#"><i class="fa fa-link col_red"></i></a></li>
-                    <li class="d-inline-block"><a href="#"><i class="fa fa-search col_red"></i></a></li>
-                  </ul>
-                </div> -->
               </div>
               <div class="blog_1l1i mt-3">
                 <h5><i class="fa fa-folder-open col_red me-1"></i> Movie News</h5>
@@ -136,8 +148,9 @@ watch(() => route.params.id, async (val) => {
               </ul>
               <ul>
                 <span>Cast : </span>
-                <li v-for="(cast_list, index) in personInfo.cast.slice(0, 4)" :key="cast_list.id"
-                  class="d-inline-block me-1"><a href="#">{{ cast_list.name }}</a>{{ index < 3 ? ',' : ',...' }} </li>
+                <li v-for="(cast_list, index) in personInfo.cast.slice(0, 4)" :key="cast_list.id" class="d-inline-block me-1">
+                  <a href="#">{{ cast_list.name }}</a>{{ index < 3 ? ',' : (index === 3 ? ',...' : '') }}
+                </li>
               </ul>
             </div>
             <div class="blog_1l2">
@@ -148,16 +161,16 @@ watch(() => route.params.id, async (val) => {
               <p>{{ detailInfo.overview }}</p>
             </div>
             <div class="blog_1l3 mt-4">
-              <h3>Related Blogs</h3>
+              <h3>Related Films</h3>
             </div>
             <div class="blog_1l4 mt-3">
-              <div class="popular_2i1 row">
+              <div class="popular_2i1 mt-3 row" v-for="(collect_movie, index) in collectionFilmsList" :key="index">
                 <div class="col-md-4 col-4">
                   <div class="popular_2i1lm position-relative clearfix">
                     <div class="popular_2i1lm1 clearfix">
                       <div class="grid">
                         <figure class="effect-jazz mb-0">
-                          <a href="#"><img src="@/assets/images/32.jpg" class="w-100" alt="img25"></a>
+                          <a href="#"><img :src="getPosterDtl(collect_movie.poster_path)" class="w-100" alt="img25"></a>
                         </figure>
                       </div>
                     </div>
@@ -171,98 +184,14 @@ watch(() => route.params.id, async (val) => {
                 </div>
                 <div class="col-md-8 col-8">
                   <div class="popular_2i1r">
-                    <h5><a class="col_red" href="#">Eget Diam</a></h5>
-                    <h6>Action, Thriller</h6>
-                    <h6> Imdb 8.3 <span class="ms-2"><i class="fa fa-star col_red me-1"></i></span> Year : 2022 <span
-                        class="ms-2">Runtime: 2h 29m</span></h6>
-                    <p>Four waves of increasingly deadly alien attacks have left most of ruin. Cassie is on the run,
-                      desperately trying to save her younger brother.</p>
-                    <h6 class="mb-0"><a class="button" href="#"> More Info - Trailer</a></h6>
-                  </div>
-                </div>
-              </div>
-              <div class="popular_2i1 mt-3 row">
-                <div class="col-md-4 col-4">
-                  <div class="popular_2i1lm position-relative clearfix">
-                    <div class="popular_2i1lm1 clearfix">
-                      <div class="grid">
-                        <figure class="effect-jazz mb-0">
-                          <a href="#"><img src="@/assets/images/33.jpg" class="w-100" alt="img25"></a>
-                        </figure>
-                      </div>
-                    </div>
-                    <div class="popular_2i1lm2 position-absolute top-0 w-100 text-center clearfix">
-                      <ul>
-                        <li class="d-inline-block"><a href="#"><i class="fa fa-link col_red"></i></a></li>
-                        <li class="d-inline-block"><a href="#"><i class="fa fa-search col_red"></i></a></li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-8 col-8">
-                  <div class="popular_2i1r">
-                    <h5><a class="col_red" href="#">Eget Diam</a></h5>
-                    <h6>Action, Thriller</h6>
-                    <h6> Imdb 8.3 <span class="ms-2"><i class="fa fa-star col_red me-1"></i></span> Year : 2022 <span
-                        class="ms-2">Runtime: 2h 29m</span></h6>
-                    <p>Four waves of increasingly deadly alien attacks have left most of ruin. Cassie is on the run,
-                      desperately trying to save her younger brother.</p>
-                    <h6 class="mb-0"><a class="button" href="#"> More Info - Trailer</a></h6>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="blog_1l3 mt-4">
-              <h3>Recent Comments</h3>
-            </div>
-            <div class="blog_1l5 mt-3">
-              <div class="blog_1l5i row">
-                <div class="col-md-2 col-2 pe-0">
-                  <div class="blog_1l5il">
-                    <img src="@/assets/images/34.jpg" class="w-100" alt="abc">
-                  </div>
-                </div>
-                <div class="col-md-10 col-10">
-                  <div class="blog_1l5ir">
-                    <h5><a href="#">Mr Eget Nulla</a> <span class="font_14 col_light">/ 13 July 2017</span></h5>
-                    <p class="font_14">Hi, this is a comment.<br>
-                      To delete a comment, just log in and view the post's comments. There you will have the option to
-                      edit or delete them.</p>
-                    <h6 class="font_14 mb-0 mt-3"><a class="button p-3 pt-2 pb-2" href="#"> Reply</a></h6>
-                  </div>
-                </div>
-              </div>
-              <hr>
-              <div class="blog_1l5i row">
-                <div class="col-md-2 col-2 pe-0">
-                  <div class="blog_1l5il">
-                    <img src="@/assets/images/35.jpg" class="w-100" alt="abc">
-                  </div>
-                </div>
-                <div class="col-md-10 col-10">
-                  <div class="blog_1l5ir">
-                    <h5><a href="#">Mr Semp Porta</a> <span class="font_14 col_light">/ 13 July 2017</span></h5>
-                    <p class="font_14">Hi, this is a comment.<br>
-                      To delete a comment, just log in and view the post's comments. There you will have the option to
-                      edit or delete them.</p>
-                    <h6 class="font_14 mb-0 mt-3"><a class="button p-3 pt-2 pb-2" href="#"> Reply</a></h6>
-                  </div>
-                </div>
-              </div>
-              <hr>
-              <div class="blog_1l5i row">
-                <div class="col-md-2 col-2 pe-0">
-                  <div class="blog_1l5il">
-                    <img src="@/assets/images/36.jpg" class="w-100" alt="abc">
-                  </div>
-                </div>
-                <div class="col-md-10 col-10">
-                  <div class="blog_1l5ir">
-                    <h5><a href="#">Mr Quis Sem</a> <span class="font_14 col_light">/ 13 July 2017</span></h5>
-                    <p class="font_14">Hi, this is a comment.<br>
-                      To delete a comment, just log in and view the post's comments. There you will have the option to
-                      edit or delete them.</p>
-                    <h6 class="font_14 mb-0 mt-3"><a class="button p-3 pt-2 pb-2" href="#"> Reply</a></h6>
+                    <h5><a class="col_red" href="#">{{ collect_movie.original_title }}</a></h5>
+                    <h6><i class="fa fa-clock-o me-1 align-middle col_red"></i>{{ collect_movie.release_date }}</h6>
+                    <h6>  {{ Math.round(collect_movie.vote_average * 100) / 100 }} / 10 (Vote : {{ collect_movie.vote_count }})
+                        <span class="ms-2">Runtime: {{ collect_movie.runtime }} minutes</span></h6>
+                        <p>{{ collect_movie.overview }}</p>
+                    <h6 class="mb-0">
+                      <router-link class="button" :to="`/movies/${collect_movie.id}`" @click="reloadPage(collect_movie.id)" replace>More Info - Trailer</router-link>
+                    </h6>
                   </div>
                 </div>
               </div>
@@ -377,59 +306,6 @@ watch(() => route.params.id, async (val) => {
               </div>
             </div>
             <div class="blog_1r1 p-4 mt-4">
-              <h4>Accordion <span class="col_red">Module</span></h4>
-              <hr class="line mb-4">
-              <div class="accordion" id="accordionExample">
-                <div class="accordion-item">
-                  <h2 class="accordion-header" id="headingOne">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                      data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                      Vestibulum Ante Ipsum Prin Orci
-                    </button>
-                  </h2>
-                  <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
-                    data-bs-parent="#accordionExample">
-                    <div class="accordion-body">
-                      Lorem ipsum dolor sit amet consec tetuer adipiscing elit Suspendissete justo consec tetuer
-                      elite.consectetuer adipiscing hendrerit augue .
-                    </div>
-                  </div>
-                </div>
-
-                <div class="accordion-item">
-                  <h2 class="accordion-header" id="headingTwo">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                      data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                      Cras Eleifend Lacus Ullamcorper
-                    </button>
-                  </h2>
-                  <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
-                    data-bs-parent="#accordionExample">
-                    <div class="accordion-body">
-                      Lorem ipsum dolor sit amet consec tetuer adipiscing elit Suspendissete justo consec tetuer
-                      elite.consectetuer adipiscing hendrerit augue .
-                    </div>
-                  </div>
-                </div>
-
-                <div class="accordion-item">
-                  <h2 class="accordion-header" id="headingThree">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                      data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                      Suspendisse Lacinia Turpis Convallis
-                    </button>
-                  </h2>
-                  <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
-                    data-bs-parent="#accordionExample">
-                    <div class="accordion-body">
-                      Lorem ipsum dolor sit amet consec tetuer adipiscing elit Suspendissete justo consec tetuer
-                      elite.consectetuer adipiscing hendrerit augue .
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="blog_1r1 p-4 mt-4">
               <h4>Login <span class="col_red">Form</span></h4>
               <hr class="line mb-4">
               <div class="input-group input-group-merge">
@@ -456,26 +332,6 @@ watch(() => route.params.id, async (val) => {
                     class="fa fa-long-arrow-right ms-1"></i></a></h6>
               <h6 class="mt-3"><a class="col_red" href="blog_detail.html">Forgot your username? </a></h6>
               <h6 class="mt-3 mb-0"><a class="col_red" href="blog_detail.html">Forgot your password? </a></h6>
-            </div>
-            <div class="blog_1r1 p-4 mt-4">
-              <h4>Popular <span class="col_red">Tags</span></h4>
-              <hr class="line mb-4">
-              <ul class="mb-0">
-                <li class="d-inline-block"><a class="d-block" href="blog_detail.html">Analyze</a></li>
-                <li class="d-inline-block"><a class="d-block" href="blog_detail.html">Audio</a></li>
-                <li class="d-inline-block"><a class="d-block" href="blog_detail.html">Blog</a></li>
-                <li class="d-inline-block"><a class="d-block" href="blog_detail.html">Business</a></li>
-                <li class="d-inline-block"><a class="d-block" href="blog_detail.html">Creative</a></li>
-                <li class="d-inline-block"><a class="d-block" href="blog_detail.html">Design</a></li>
-                <li class="d-inline-block"><a class="d-block" href="blog_detail.html">Experiment</a></li>
-                <li class="d-inline-block"><a class="d-block" href="blog_detail.html">News</a></li>
-                <li class="d-inline-block"><a class="d-block" href="blog_detail.html">Expertize</a></li>
-                <li class="d-inline-block"><a class="d-block" href="blog_detail.html">Express</a></li>
-                <li class="d-inline-block"><a class="d-block" href="blog_detail.html">Share</a></li>
-                <li class="d-inline-block"><a class="d-block" href="blog_detail.html">Sustain</a></li>
-                <li class="d-inline-block"><a class="d-block" href="blog_detail.html">Video</a></li>
-                <li class="d-inline-block"><a class="d-block" href="blog_detail.html">Youtube</a></li>
-              </ul>
             </div>
           </div>
         </div>

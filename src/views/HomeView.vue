@@ -87,8 +87,9 @@ onMounted(async () => {
   //console.log(tvTrendingList.value);
 
   //List collection films
-  const res_collection = await getCollectionFilmsList();
-  console.log(res_collection);
+  const collect_id = 1241;
+  const res_collection = await getCollectionFilmsList(collect_id);
+  // console.log(res_collection);
   if (res_collection && res_collection.parts.length) {
     const chunk_collection = chunkArray(res_collection.parts, 4);
     if (chunk_collection.length) {
@@ -97,6 +98,8 @@ onMounted(async () => {
   }
   //End
 })
+
+//List films series 
 const flimsSeriesList = ref([]);
 async function fetchDataTVSeriesList(genres_id) {
   try {
@@ -112,8 +115,8 @@ async function fetchDataTVSeriesList(genres_id) {
     console.error('Error fetching data:', error);
   }
 }
-//Goi hàm
 
+//Goi hàm
 </script>
 
 <template>

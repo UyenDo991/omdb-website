@@ -87,13 +87,7 @@ export const getTVTrendingList = async () => {
 //List drama
 export const getTVGenresList = async (genres_id) => {
   try {
-    const response = await axios.get('discover/tv', {
-      params: {
-        with_genres: genres_id
-      }
-    })
-    // const result = await axios.get(`discover/tv/with_genres=${genres_id}`)
-    const result = response
+    const result = await axios.get(`discover/tv?with_genres=${genres_id}`)
     return result
   } catch (error) {
     console.log('getTVGenresList-catch exception:', error.message)
@@ -101,9 +95,9 @@ export const getTVGenresList = async (genres_id) => {
 }
 
 //List collection Harry Poster id : 1241
-export const getCollectionFilmsList = async () => {
+export const getCollectionFilmsList = async (collect_id) => {
   try {
-    const result = await axios.get('collection/1241?sort_by=release_date.asc')
+    const result = await axios.get(`collection/${collect_id}?sort_by=release_date.asc`)
     return result
   } catch (error) {
     console.log('getCollectionFilmsList-catch exception:', error.message)
