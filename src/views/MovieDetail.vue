@@ -28,16 +28,21 @@ const getDetails = async (movie_id) => {
   console.log("personInfo:", personInfo);
 
   //Related Films
-  
-  const collect_id = detailInfo.value.belongs_to_collection.id;
-  const res_collection = await getCollectionFilmsList(collect_id);
-  // console.log(res_collection);
-  if (res_collection && res_collection.parts.length) {
-    const chunk_collection = res_collection.parts.slice(0, 4);
-    if (chunk_collection.length) {
-      collectionFilmsList.value = chunk_collection;
+  if(detailInfo.value.belongs_to_collection === null){
+    collectionFilmsList.value = [];
+  }
+  else{
+    const collect_id = detailInfo.value.belongs_to_collection.id;
+    const res_collection = await getCollectionFilmsList(collect_id);
+    // console.log(res_collection);
+    if (res_collection && res_collection.parts.length) {
+      const chunk_collection = res_collection.parts.slice(0, 4);
+      if (chunk_collection.length) {
+        collectionFilmsList.value = chunk_collection;
+      }
     }
   }
+  
   
   console.log("collectionFilmsList:",collectionFilmsList);
 }
@@ -93,7 +98,7 @@ watch(() => route.params.id, async (val) => {
         <div class="col-md-9">
           <div class="center_o1l">
             <h2 class="mt-3"><a class="col_red" href="#">{{ detailInfo.original_title }}</a></h2>
-            <p>{{ detailInfo.belongs_to_collection.name }}</p>
+            <p>{{ detailInfo.belongs_to_collection == null ? '' : detailInfo.belongs_to_collection.name }}</p>
             <p>Release date : {{ detailInfo.release_date }}</p>
             <p>Run time : {{ detailInfo.runtime }} minutes</p>
           </div>

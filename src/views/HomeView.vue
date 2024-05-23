@@ -82,6 +82,8 @@ onMounted(async () => {
     if (chunk_tv_trending.length) {
       tvTrendingList.value = [...chunk_tv_trending];
     }
+     console.log("tvTrendingList : ");
+     console.log(tvTrendingList);
   }
   //console.log('----------tvTrendingList-------------');
   //console.log(tvTrendingList.value);
@@ -109,7 +111,8 @@ async function fetchDataTVSeriesList(genres_id) {
     if (res_flimsTVList && res_flimsTVList.results.length) {
       const chunk_list_tv_series = chunkArray(res_flimsTVList.results.slice(0, 4), 2);
       flimsSeriesList.value = [...chunk_list_tv_series];
-      console.log(flimsSeriesList.value);
+      console.log('flimsSeriesList.value');
+      console.log(flimsSeriesList);
     }
   } catch (error) {
     console.error('Error fetching data:', error);
@@ -307,23 +310,23 @@ async function fetchDataTVSeriesList(genres_id) {
                       </div>
                       <div class="popular_2i1lm2 position-absolute top-0 w-100 text-center clearfix">
                         <ul>
-                          
-                          
                           <li class="d-inline-block"><a href="#"><i class="fa fa-link col_red"></i></a></li>
                           <li class="d-inline-block">
-                            <router-link :to="`/movies/${seriesList.id}`"><img :src="getPosterImage(seriesList.poster_path)" class="w-100" alt="..."><i class="fa fa-search col_red"></i></router-link></li>
+                            <router-link :to="`/movies/${seriesList.id}`"><i class="fa fa-search col_red"></i></router-link>
+                          </li>
                         </ul>
                       </div>
                     </div>
                   </div>
                   <div class="col-md-8 col-8">
                     <div class="popular_2i1r">
-                      <h5><a class="col_red" href="#">{{ seriesList.original_title }}</a></h5>
-                      <h6>Action, Thriller</h6>
+                      <h5><a class="col_red" href="#">{{ seriesList.name }} {{ seriesList.id }}</a></h5>
                       <h6> Imdb 8.2 <span class="ms-2"><i class="fa fa-star col_red me-1"></i></span> Year : 2022 <span
                           class="ms-2 ">Runtime: 1h 49m</span></h6>
                       <p class="ms-2 text-truncate-2">{{ seriesList.overview }}</p>
-                      <h6 class="mb-0"><a class="button" href="#"> More Info - Trailer</a></h6>
+                      <h6 class="mb-0">
+                        <router-link :to="`/movies/${seriesList.id}`" class="button">More Info - Trailer</router-link>
+                      </h6>
                     </div>
                   </div>
                 </div>
@@ -367,8 +370,9 @@ async function fetchDataTVSeriesList(genres_id) {
                     <div class="trend_2im1 clearfix">
                       <div class="grid">
                         <figure class="effect-jazz mb-0">
-                          <a href="#"><img :src="getPosterImage(tvTrending.poster_path)" class="w-100" alt="..."
-                              style="height: 400px; object-fit: cover;"></a>
+                          <router-link :to="`/movies/${tvTrending.id}`"><img :src="getPosterImage(tvTrending.poster_path)" class="w-100" alt="...." style="height: 400px; object-fit: cover;"></router-link>
+                          <!-- <a href="#"><img :src="getPosterImage(tvTrending.poster_path)" class="w-100" alt="..."
+                              style="height: 400px; object-fit: cover;"></a> -->
                         </figure>
                       </div>
                     </div>
