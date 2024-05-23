@@ -3,9 +3,12 @@
 import { toRefs } from 'vue';
 import { getPosterImage } from "@/utils/index";
 const props = defineProps({
-  items: Array
+  items: Array,
+
 });
 const { items } = toRefs(props);
+console.log('items');
+console.log(items);
 </script>
 <template>
   <section id="upcome" class="pt-4 pb-5">

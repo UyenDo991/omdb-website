@@ -1,9 +1,7 @@
 <script setup>
 import { watch, ref } from "vue";
-import { getNowPlayling, getMovieUpcoming, getTvGenres, getMoviePopular, getTVTrendingList, getTVGenresList, getCollectionFilmsList } from "@/api/api";
+import { getNowPlayling, getMovieUpcoming, getTVTrendingList} from "@/api/api";
 import { useRoute } from "vue-router";
-import { chunkArray } from "@/utils/index";
-import { getPosterImage } from "@/utils/index";
 import ListViewFilms from "@/components/ListViewFilms.vue";
 const route = useRoute();
 
@@ -17,6 +15,12 @@ const getViewListType = async (film_type) => {
   if (film_type === "now_playing") {
     res.value = await getNowPlayling(); // Sử dụng res.value để gán giá trị mới
   }
+  else if(film_type === "upcomning"){
+    res.value = await getMovieUpcoming(); // Sử dụng res.value để gán giá trị mới
+  }
+  else if(film_type === "trending"){
+    res.value = await getTVTrendingList(); // Sử dụng res.value để gán giá trị mới
+  }
   if (res.value && res.value.results.length) {
     listFilmsView.value = res.value.results; // Sử dụng listFilmsView.value để gán giá trị mới
     console.log('listFilmsView');
@@ -24,16 +28,6 @@ const getViewListType = async (film_type) => {
   }
   // Kết thúc
 }
-// getViewListType(async (val) => {
-//   const res = await getNowPlayling();
-//     console.log(res);
-//   if (res && res.results.length) {
-//     listFilmsView.value = res.results;
-//     console.log('listFilmsView');
-//     console.log(listFilmsView);
-//   }
-//   //End
-// })
 watch(() => route.params.film_type, async (film_type) => {
   // console.log('id:', val);
   await getViewListType(film_type);
