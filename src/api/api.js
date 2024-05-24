@@ -66,7 +66,7 @@ export const getMovieUpcoming = async (page = 1) => {
   }
 }
 //Movie popular
-export const getMoviePopular = async (page = 8) => {
+export const getMoviePopular = async (page = 1) => {
   try {
     const result = await axios.get(`movie/popular?page=${page}`)
     return result
@@ -76,21 +76,21 @@ export const getMoviePopular = async (page = 8) => {
 }
 
 //List TV trending
-export const getTVTrendingList = async () => {
+export const getMovieTrendingList = async () => {
   try {
-    const result = await axios.get('trending/tv/day')
+    const result = await axios.get('trending/movie/day')
     return result
   } catch (error) {
-    console.log('getTVTrendingList-catch exception:', error.message)
+    console.log('getMovieTrendingList-catch exception:', error.message)
   }
 }
 //List drama
-export const getTVGenresList = async (genres_id) => {
+export const getMovieGenresList = async (genres_id) => {
   try {
-    const result = await axios.get(`discover/tv?with_genres=${genres_id}`)
+    const result = await axios.get(`discover/movie?with_genres=${genres_id}`)
     return result
   } catch (error) {
-    console.log('getTVGenresList-catch exception:', error.message)
+    console.log('getMovieGenresList-catch exception:', error.message)
   }
 }
 

@@ -3,6 +3,7 @@ import { getMovieDetails, getMovieVideos, getMoviePerson, getCollectionFilmsList
 import { ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { getPosterDtl } from "@/utils/index";
+import { formatNumber } from "@/utils/index";
 const route = useRoute();
 
 const detailInfo = ref({});
@@ -13,8 +14,6 @@ const collectionFilmsList = ref([]);
 const getDetails = async (movie_id) => {
   //detailInfo
   detailInfo.value = await getMovieDetails(movie_id);
-  console.log("detailInfo:", detailInfo);
-  console.log("detailInfo_collection:", detailInfo.value.belongs_to_collection.id);
 
   //videoList
   const videoList = await getMovieVideos(movie_id);
@@ -32,6 +31,8 @@ const getDetails = async (movie_id) => {
     collectionFilmsList.value = [];
   }
   else{
+    console.log("detailInfo:", detailInfo);
+    console.log("detailInfo_collection:", detailInfo.value.belongs_to_collection.id);
     const collect_id = detailInfo.value.belongs_to_collection.id;
     const res_collection = await getCollectionFilmsList(collect_id);
     // console.log(res_collection);
@@ -42,9 +43,8 @@ const getDetails = async (movie_id) => {
       }
     }
   }
-  
-  
   console.log("collectionFilmsList:",collectionFilmsList);
+  
 }
 
 const reloadPage= async (val) => {
@@ -52,7 +52,7 @@ const reloadPage= async (val) => {
   window.location.reload();
 }
 watch(() => route.params.id, async (val) => {
-  // console.log('id:', val);
+  console.log('id:', val);
   await getDetails(val);
 }, { immediate: true })
 </script>
@@ -101,6 +101,7 @@ watch(() => route.params.id, async (val) => {
             <p>{{ detailInfo.belongs_to_collection == null ? '' : detailInfo.belongs_to_collection.name }}</p>
             <p>Release date : {{ detailInfo.release_date }}</p>
             <p>Run time : {{ detailInfo.runtime }} minutes</p>
+            <p>Language : {{ detailInfo.original_language }}  </p>
           </div>
         </div>
         <div class="col-md-3">
@@ -108,8 +109,8 @@ watch(() => route.params.id, async (val) => {
             <h2 class="mt-15"><a class="col_red" href="#"></a></h2>
             <p>Imdb Rating : {{ Math.round(detailInfo.vote_average * 100) / 100 }} / 10 (Vote : {{ detailInfo.vote_count
               }})</p>
-            <p>Popularity: {{ detailInfo.popularity.toLocaleString() }} View</p>
-            <p>Rrevenue : ${{ detailInfo.revenue.toLocaleString() }}</p>
+            <p>Popularity: {{ formatNumber(detailInfo.popularity) }} View</p>
+            <p>Rrevenue : ${{ formatNumber(detailInfo.revenue) }}</p>
           </div>
         </div>
       </div>
@@ -144,6 +145,12 @@ watch(() => route.params.id, async (val) => {
             </div>
             <div class="blog_1l2">
               <ul>
+                <span>Product Company : </span>
+                  <li v-for="(productioncompanies, index) in detailInfo.production_companies" :key="productioncompanies.id" class="d-inline-block me-1">
+                    {{ productioncompanies.name }} <span v-if="index !== detailInfo.production_companies.length-1">,</span>
+                  </li>
+              </ul>
+              <ul>
                 <span>Director : </span>
                 <template v-for="crew_list in personInfo.crew">
                   <li v-if="crew_list.job === 'Director'" :key="crew_list.credit_id" class="d-inline-block me-1">
@@ -153,8 +160,8 @@ watch(() => route.params.id, async (val) => {
               </ul>
               <ul>
                 <span>Cast : </span>
-                <li v-for="(cast_list, index) in personInfo.cast.slice(0, 4)" :key="cast_list.id" class="d-inline-block me-1">
-                  <a href="#">{{ cast_list.name }}</a>{{ index < 3 ? ',' : (index === 3 ? ',...' : '') }}
+                <li v-for="(cast_list, index) in personInfo.cast" :key="cast_list.id" class="d-inline-block me-1">
+                  <a href="#">{{ index < 5 ? cast_list.name : '' }}</a>{{ index < 5 ? ',' : (index === 5 ? ',...' : '') }}
                 </li>
               </ul>
             </div>

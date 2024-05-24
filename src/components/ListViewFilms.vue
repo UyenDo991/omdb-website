@@ -29,21 +29,21 @@ console.log(items);
       <div class="row trend_2 mt-4">
         <div id="carouselExampleCaptions2" class="carousel slide" data-bs-ride="carousel">
           <div class="carousel-inner">
-            <div v-for="(item, index) in items" :key="index" class="carousel-item"
-              :class="index === 0 ? 'active' : ''">
+            <div class="carousel-item active">
               <div class="trend_2i row">
-                <div v-for="item in items" :key="item.id" class="col-md-3 col-6">
+                <div v-for="item in items" :key="item.id" class="col-md-3 col-6 mb-3">
                   <div class="trend_2im clearfix position-relative">
                     <div class="trend_2im1 clearfix">
                       <div class="grid">
                         <figure class="effect-jazz mb-0">
-                          <a href="#"><img :src="getPosterImage(item.poster_path)" class="w-100"
-                              alt="img25"></a>
+                          <router-link :to="`/movies/${item.id}`"><img :src="getPosterImage(item.poster_path)" class="w-100" alt="..."></router-link>
+                          <!-- <a href="#"><img :src="getPosterImage(item.poster_path)" class="w-100" -->
+                              <!-- alt="img25"></a> -->
                         </figure>
                       </div>
                     </div>
                   </div>
-                  <div class="trend_2ilast bg_grey p-3 clearfix">
+                  <div class="trend_2ilast bg_grey p-3 clearfix" style= "height: 250px">
                     <h5><a class="col_red" href="#">{{ item.original_title }}</a></h5>
                     <p class="mb-2 text-truncate">{{ item.overview }}</p>
                     <span class="col_red" v-for="index in Math.round(item.vote_average / 2)" :key="index">

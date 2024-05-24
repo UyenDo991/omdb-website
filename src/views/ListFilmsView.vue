@@ -1,6 +1,6 @@
 <script setup>
 import { watch, ref } from "vue";
-import { getNowPlayling, getMovieUpcoming, getTVTrendingList} from "@/api/api";
+import { getNowPlayling, getMovieUpcoming, getMovieTrendingList} from "@/api/api";
 import { useRoute } from "vue-router";
 import ListViewFilms from "@/components/ListViewFilms.vue";
 const route = useRoute();
@@ -19,7 +19,7 @@ const getViewListType = async (film_type) => {
     res.value = await getMovieUpcoming(); // Sử dụng res.value để gán giá trị mới
   }
   else if(film_type === "trending"){
-    res.value = await getTVTrendingList(); // Sử dụng res.value để gán giá trị mới
+    res.value = await getMovieTrendingList(); // Sử dụng res.value để gán giá trị mới
   }
   if (res.value && res.value.results.length) {
     listFilmsView.value = res.value.results; // Sử dụng listFilmsView.value để gán giá trị mới
