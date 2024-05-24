@@ -16,17 +16,15 @@
             <li class="nav-item">
               <router-link class="nav-link active" aria-current="page" to="/">Home</router-link>
             </li>
-            <li class="nav-item">
-              <a class="nav-link">About Us</a>
-            </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
                 aria-expanded="false">
-                Blog
+                Topic Movie Films 
               </a>
               <ul class="dropdown-menu drop_1" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item">Blog</a></li>
-                <li><a class="dropdown-item border-0">Blog Detail</a></li>
+                <router-link :to="`/movies/list/now_playing`" ><li><a class="dropdown-item">Latest Flims</a></li></router-link>
+                <router-link :to="`/movies/list/upcomning`" ><li><a class="dropdown-item">Upcomning Films</a></li></router-link>
+                <router-link :to="`/movies/list/trending`" ><li><a class="dropdown-item">Trending Films</a></li></router-link>
               </ul>
             </li>
             <li class="nav-item">
