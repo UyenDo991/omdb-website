@@ -1,23 +1,41 @@
 <!-- toRefs : cập nhật props  -->
 <script setup>
+
 import { toRefs } from 'vue';
 import { getPosterImage } from "@/utils/index";
+import { getMovieDetails } from "@/api/api";
 const props = defineProps({
   items: Array,
+  items_genres: Array,
 
 });
-const { items } = toRefs(props);
+const detailInfo = toRefs({});
+const getDetails = async (id) => {
+  detailInfo.value = await getMovieDetails(id);
+  console.log(detailInfo.value);
+}
+
+const { items, items_genres } = toRefs(props);
 console.log('items');
 console.log(items);
+console.log('items_genres');
+console.log(items_genres);
 </script>
 <template>
   <section id="upcome" class="pt-4 pb-5">
     <div class="container">
+      <!-- button genres -->
+      <div v-for="itemGenre in items_genres" :key="items_genres.id" class="btn-group pt-5 pb-10" role="group"
+        aria-label="Basic checkbox toggle button group">
+        <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off">
+        <label class="btn btn-outline-danger" for="btncheck1">{{ itemGenre.name }}</label>
+      </div>
+      <!-- button genres -->
       <div class="row trend_1">
         <div class="col-md-6 col-6">
           <div class="trend_1l">
-            <h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i><span
-                class="col_red">Films List</span></h4>
+            <h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i><span class="col_red">Films
+                List</span></h4>
           </div>
         </div>
         <div class="col-md-6 col-6">
@@ -36,19 +54,28 @@ console.log(items);
                     <div class="trend_2im1 clearfix">
                       <div class="grid">
                         <figure class="effect-jazz mb-0">
-                          <router-link :to="`/movies/${item.id}`"><img :src="getPosterImage(item.poster_path)" class="w-100" alt="..."></router-link>
+                          <router-link :to="`/movies/${item.id}`"><img :src="getPosterImage(item.poster_path)"
+                              class="w-100" alt="..."></router-link>
                           <!-- <a href="#"><img :src="getPosterImage(item.poster_path)" class="w-100" -->
-                              <!-- alt="img25"></a> -->
+                          <!-- alt="img25"></a> -->
                         </figure>
                       </div>
                     </div>
                   </div>
-                  <div class="trend_2ilast bg_grey p-3 clearfix" style= "height: 250px">
+                  <div class="trend_2ilast bg_grey p-3 clearfix" style="height: 250px">
                     <h5><a class="col_red" href="#">{{ item.original_title }}</a></h5>
                     <p class="mb-2 text-truncate">{{ item.overview }}</p>
                     <span class="col_red" v-for="index in Math.round(item.vote_average / 2)" :key="index">
                       <i class="fa fa-star"></i>
                     </span>
+                    <p class="mb-2 text-truncate" v-if="getDetails(item.id)"></p>
+                    <ul>
+                      <span>Genres : </span>
+                      <li v-for="(item_list, index) in detailInfo" :key="item_list.id" class="d-inline-block me-1">
+                        <a href="#" v-for="(genres_list, index_1)  in item_list.genres" :key="genres_list.id">{{
+                          genres_list.name }}{{ index_1 < item_list.genres.length - 1 ? ', ' : '' }} </a>
+                      </li>
+                    </ul>
                     <p class="mb-0">{{ item.popularity }} Views</p>
                   </div>
                 </div>

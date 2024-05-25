@@ -103,3 +103,13 @@ export const getCollectionFilmsList = async (collect_id) => {
     console.log('getCollectionFilmsList-catch exception:', error.message)
   }
 }
+
+//
+export const getArryGeneres = async (generes_id) => {
+  try {
+    const result = await axios.get(`genre/movie/list/genres/${generes_id}`)
+    return result
+  } catch (error) {
+    console.log('getMovieDetails-catch exception:', error.message)
+  }
+}

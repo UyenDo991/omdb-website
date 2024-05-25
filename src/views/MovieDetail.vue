@@ -2,8 +2,7 @@
 import { getMovieDetails, getMovieVideos, getMoviePerson, getCollectionFilmsList } from "@/api/api";
 import { ref, watch } from "vue";
 import { useRoute } from "vue-router";
-import { getPosterDtl } from "@/utils/index";
-import { formatNumber } from "@/utils/index";
+import { getPosterDtl, formatNumber } from "@/utils/index";
 const route = useRoute();
 
 const detailInfo = ref({});
@@ -27,10 +26,10 @@ const getDetails = async (movie_id) => {
   console.log("personInfo:", personInfo);
 
   //Related Films
-  if(detailInfo.value.belongs_to_collection === null){
+  if (detailInfo.value.belongs_to_collection === null) {
     collectionFilmsList.value = [];
   }
-  else{
+  else {
     console.log("detailInfo:", detailInfo);
     console.log("detailInfo_collection:", detailInfo.value.belongs_to_collection.id);
     const collect_id = detailInfo.value.belongs_to_collection.id;
@@ -43,11 +42,11 @@ const getDetails = async (movie_id) => {
       }
     }
   }
-  console.log("collectionFilmsList:",collectionFilmsList);
-  
+  console.log("collectionFilmsList:", collectionFilmsList);
+
 }
 
-const reloadPage= async (val) => {
+const reloadPage = async (val) => {
   await getDetails(val);
   window.location.reload();
 }
@@ -101,7 +100,7 @@ watch(() => route.params.id, async (val) => {
             <p>{{ detailInfo.belongs_to_collection == null ? '' : detailInfo.belongs_to_collection.name }}</p>
             <p>Release date : {{ detailInfo.release_date }}</p>
             <p>Run time : {{ detailInfo.runtime }} minutes</p>
-            <p>Language : {{ detailInfo.original_language }}  </p>
+            <p>Language : {{ detailInfo.original_language }} </p>
           </div>
         </div>
         <div class="col-md-3">
@@ -146,9 +145,11 @@ watch(() => route.params.id, async (val) => {
             <div class="blog_1l2">
               <ul>
                 <span>Product Company : </span>
-                  <li v-for="(productioncompanies, index) in detailInfo.production_companies" :key="productioncompanies.id" class="d-inline-block me-1">
-                    {{ productioncompanies.name }} <span v-if="index !== detailInfo.production_companies.length-1">,</span>
-                  </li>
+                <li v-for="(productioncompanies, index) in detailInfo.production_companies"
+                  :key="productioncompanies.id" class="d-inline-block me-1">
+                  {{ productioncompanies.name }} <span
+                    v-if="index !== detailInfo.production_companies.length - 1">,</span>
+                </li>
               </ul>
               <ul>
                 <span>Director : </span>
@@ -161,8 +162,8 @@ watch(() => route.params.id, async (val) => {
               <ul>
                 <span>Cast : </span>
                 <li v-for="(cast_list, index) in personInfo.cast" :key="cast_list.id" class="d-inline-block me-1">
-                  <a href="#">{{ index < 5 ? cast_list.name : '' }}</a>{{ index < 5 ? ',' : (index === 5 ? ',...' : '') }}
-                </li>
+                  <a href="#">{{ index < 5 ? cast_list.name : '' }}</a>{{ index < 5 ? ',' : (index === 5 ? ',...' : '')
+                        }} </li>
               </ul>
             </div>
             <div class="blog_1l2">
@@ -182,7 +183,9 @@ watch(() => route.params.id, async (val) => {
                     <div class="popular_2i1lm1 clearfix">
                       <div class="grid">
                         <figure class="effect-jazz mb-0">
-                          <router-link :to="`/movies/${collect_movie.id}`" @click="reloadPage(collect_movie.id)" replace><img :src="getPosterDtl(collect_movie.poster_path)" class="w-100" alt="img25"></router-link>
+                          <router-link :to="`/movies/${collect_movie.id}`" @click="reloadPage(collect_movie.id)"
+                            replace><img :src="getPosterDtl(collect_movie.poster_path)" class="w-100"
+                              alt="img25"></router-link>
                         </figure>
                       </div>
                     </div>
@@ -198,11 +201,14 @@ watch(() => route.params.id, async (val) => {
                   <div class="popular_2i1r">
                     <h5><a class="col_red" href="#">{{ collect_movie.original_title }}</a></h5>
                     <h6><i class="fa fa-clock-o me-1 align-middle col_red"></i>{{ collect_movie.release_date }}</h6>
-                    <h6>  {{ Math.round(collect_movie.vote_average * 100) / 100 }} / 10 (Vote : {{ collect_movie.vote_count }})
-                        <span class="ms-2">Runtime: {{ collect_movie.runtime }} minutes</span></h6>
-                        <p>{{ collect_movie.overview }}</p>
+                    <h6> {{ Math.round(collect_movie.vote_average * 100) / 100 }} / 10 (Vote : {{
+                      collect_movie.vote_count }})
+                      <span class="ms-2">Runtime: {{ collect_movie.runtime }} minutes</span>
+                    </h6>
+                    <p>{{ collect_movie.overview }}</p>
                     <h6 class="mb-0">
-                      <router-link class="button" :to="`/movies/${collect_movie.id}`" @click="reloadPage(collect_movie.id)" replace>More Info - Trailer</router-link>
+                      <router-link class="button" :to="`/movies/${collect_movie.id}`"
+                        @click="reloadPage(collect_movie.id)" replace>More Info - Trailer</router-link>
                     </h6>
                   </div>
                 </div>

@@ -5,11 +5,6 @@ import { getNowPlayling, getMovieUpcoming, getMovieGenres, getMoviePopular, getM
 import { chunkArray } from "@/utils/index";
 import { getPosterImage } from "@/utils/index";
 import { formatNumber } from "@/utils/index";
-// import LatestMovies from "@/components/LatestMovies.vue";
-// import FilmsUpcoming from "@/components/FilmsUpcoming.vue";
-// import movieTrendingList from "@/components/movieTrendingList.vue";
-
-
 // const router = useRouter();
 
 const nowPlayingList = ref([]);
@@ -20,18 +15,7 @@ const movieTrendingList = ref([]);
 const collectionFilmsList = ref([]);
 
 
-
-// getMovieGenres, getTvGenres,
-// const viewDetail = async (movie_id) => {
-//   router.push(`/movies/${movie_id}`);
-// }
-
 onMounted(async () => {
-  /* const movieGenresList = await getMovieGenres();
-  const tvGenresList = await getTvGenres();
-  console.log("movieGenresList:", movieGenresList)
-  console.log("tvGenresList:", tvGenresList) */
-
   const res = await getNowPlayling();
   if (res && res.results.length) {
     const chunk = chunkArray(res.results, 4);
@@ -65,9 +49,9 @@ onMounted(async () => {
 
   //TV series 
   const res_movie = await getMovieGenres();
-  
-  console.log('res_movie');
-  console.log(res_movie);
+
+  //console.log('res_movie');
+  //console.log(res_movie);
   if (res_movie && res_movie.genres.length) {
     const chunk_TV_series = res_movie.genres.filter(x => [28, 35, 27, 10402].includes(x.id));
     if (chunk_TV_series.length) {
@@ -78,15 +62,15 @@ onMounted(async () => {
   //console.log('----------movieList-------------');
   console.log(movieList.value);
   //TV trending list
-  const res_tv_trending = await getMovieTrendingList();
+  const res_movie_trending = await getMovieTrendingList();
   //console.log(res_tv_trending);
-  if (res_tv_trending && res_tv_trending.results.length) {
-    const chunk_tv_trending = chunkArray(res_tv_trending.results, 5);
-    if (chunk_tv_trending.length) {
-      movieTrendingList.value = [...chunk_tv_trending];
+  if (res_movie_trending && res_movie_trending.results.length) {
+    const chunk_movie_trending = chunkArray(res_movie_trending.results, 5);
+    if (chunk_movie_trending.length) {
+      movieTrendingList.value = [...chunk_movie_trending];
     }
-     console.log("movieTrendingList : ");
-     console.log(movieTrendingList);
+    console.log("movieTrendingList : ");
+    console.log(movieTrendingList);
   }
   //console.log('----------movieTrendingList-------------');
   //console.log(movieTrendingList.value);
@@ -131,7 +115,8 @@ async function fetchDataMovieList(genres_id) {
           :class="index === 0 ? 'carousel-item active' : 'carousel-item'">
           <!-- <img :src="getPosterImage(movie.poster_path)" class="d-block w-100" alt="..."
             style="object-fit: contain;height: 800px;"> -->
-          <router-link :to="`/movies/${movie.id}`"><img :src="getPosterImage(movie.poster_path)" class="w-100" alt="...." style="height: 1000px;"></router-link>         
+          <router-link :to="`/movies/${movie.id}`"><img :src="getPosterImage(movie.poster_path)" class="w-100"
+              alt="...." style="height: 1000px;"></router-link>
           <div class="carousel-caption d-md-block">
             <h1 class="font_60">{{ movie.original_title }}</h1>
             <h6 class="mt-3">
@@ -146,8 +131,9 @@ async function fetchDataMovieList(genres_id) {
             </h6>
             <p class="mt-3" style="width: 30%;display: inline-block;">{{ movie.overview }}</p>
             <p class="mb-0">{{ formatNumber(movie.popularity) }} Views</p>
-            <router-link :to="`/movies/${movie.id}`" >
-              <h6 class="mb-0"><a class="button" href="#"><i class="fa fa-play-circle align-middle me-1"></i> Watch Trailer</a></h6>
+            <router-link :to="`/movies/${movie.id}`">
+              <h6 class="mb-0"><a class="button" href="#"><i class="fa fa-play-circle align-middle me-1"></i> Watch
+                  Trailer</a></h6>
             </router-link>
           </div>
         </div>
@@ -178,15 +164,18 @@ async function fetchDataMovieList(genres_id) {
         </div>
         <div class="col-md-6 col-6">
           <div class="latest_1r text-end">
-            <router-link :to="`/movies/list/now_playing`" ><h6 class="mb-0"><a class="button" href="#"> View All</a></h6></router-link>
+            <router-link :to="`/movies/list/now_playing`">
+              <h6 class="mb-0"><a class="button" href="#"> View All</a></h6>
+            </router-link>
           </div>
         </div>
       </div>
       <div class="row latest_2 mt-4">
         <div id="carouselExampleCaptions1" class="carousel slide" data-bs-ride="carousel">
           <div class="carousel-indicators">
-            <button v-for="(itemNowplaying, index) in nowPlayingList" :key="index" type="button" data-bs-target="#carouselExampleCaptions1"
-              :data-bs-slide-to="index" :class="index === 0 ? 'active' : ''" :aria-label="`Slide ${index}`"></button>
+            <button v-for="(itemNowplaying, index) in nowPlayingList" :key="index" type="button"
+              data-bs-target="#carouselExampleCaptions1" :data-bs-slide-to="index" :class="index === 0 ? 'active' : ''"
+              :aria-label="`Slide ${index}`"></button>
           </div>
           <div class="carousel-inner">
             <div v-for="(itemNowplaying, index) in nowPlayingList" :key="index"
@@ -197,7 +186,8 @@ async function fetchDataMovieList(genres_id) {
                     <div class="latest_2im1 clearfix">
                       <div class="grid">
                         <figure class="effect-jazz mb-0">
-                          <router-link :to="`/movies/${movieNowplaying.id}`"><img :src="getPosterImage(movieNowplaying.poster_path)" class="w-100" alt="...."></router-link>
+                          <router-link :to="`/movies/${movieNowplaying.id}`"><img
+                              :src="getPosterImage(movieNowplaying.poster_path)" class="w-100" alt="...."></router-link>
                         </figure>
                       </div>
                     </div>
@@ -232,7 +222,9 @@ async function fetchDataMovieList(genres_id) {
         </div>
         <div class="col-md-6 col-6">
           <div class="trend_1r text-end">
-            <router-link :to="`/movies/list/upcomning`" ><h6 class="mb-0"><a class="button" href="#"> View All</a></h6></router-link>
+            <router-link :to="`/movies/list/upcomning`">
+              <h6 class="mb-0"><a class="button" href="#"> View All</a></h6>
+            </router-link>
           </div>
         </div>
       </div>
@@ -252,7 +244,8 @@ async function fetchDataMovieList(genres_id) {
                     <div class="trend_2im1 clearfix">
                       <div class="grid">
                         <figure class="effect-jazz mb-0">
-                          <router-link :to="`/movies/${movieUpcoming.id}`"><img :src="getPosterImage(movieUpcoming.poster_path)" class="w-100" alt="..."></router-link>
+                          <router-link :to="`/movies/${movieUpcoming.id}`"><img
+                              :src="getPosterImage(movieUpcoming.poster_path)" class="w-100" alt="..."></router-link>
                         </figure>
                       </div>
                     </div>
@@ -280,8 +273,8 @@ async function fetchDataMovieList(genres_id) {
       <div class="row trend_1">
         <div class="col-md-12">
           <div class="trend_1l">
-            <h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i> <span class="col_red">TV
-                Series</span> Lists </h4>
+            <h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i> <span class="col_red">Films
+                Categories</span></h4>
           </div>
         </div>
       </div>
@@ -306,7 +299,8 @@ async function fetchDataMovieList(genres_id) {
                       <div class="popular_2i1lm1 clearfix">
                         <div class="grid">
                           <figure class="effect-jazz mb-0">
-                            <router-link :to="`/movies/${films.id}`"><img :src="getPosterImage(films.poster_path)" class="w-100" alt="..."></router-link>
+                            <router-link :to="`/movies/${films.id}`"><img :src="getPosterImage(films.poster_path)"
+                                class="w-100" alt="..."></router-link>
                           </figure>
                         </div>
                       </div>
@@ -323,9 +317,10 @@ async function fetchDataMovieList(genres_id) {
                   <div class="col-md-8 col-8">
                     <div class="popular_2i1r">
                       <h5><a class="col_red" href="#">{{ films.original_title }}</a></h5>
-                      <h6> Imdb {{ films.vote_average }} <span class="ms-2"><i class="fa fa-star col_red me-1"></i></span> Year : {{ films.release_date }} 
+                      <h6> Imdb {{ films.vote_average }} <span class="ms-2"><i
+                            class="fa fa-star col_red me-1"></i></span> Year : {{ films.release_date }}
                         <!-- <span class="ms-2 ">Runtime: {{ films.release_date }}</span> -->
-                        </h6>
+                      </h6>
                       <p class="ms-2 text-truncate-2">{{ films.overview }}</p>
                       <h6 class="mb-0">
                         <router-link :to="`/movies/${films.id}`" class="button">More Info - Trailer</router-link>
@@ -348,21 +343,24 @@ async function fetchDataMovieList(genres_id) {
       <div class="row trend_1">
         <div class="col-md-6 col-6">
           <div class="trend_1l">
-            <h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i><span class="col_red">TV
+            <h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i><span class="col_red">Movie
                 Trending</span> List</h4>
           </div>
         </div>
         <div class="col-md-6 col-6">
           <div class="trend_1r text-end">
-            <router-link :to="`/movies/list/trending`" ><h6 class="mb-0"><a class="button" href="#"> View All</a></h6></router-link>
+            <router-link :to="`/movies/list/trending`">
+              <h6 class="mb-0"><a class="button" href="#"> View All</a></h6>
+            </router-link>
           </div>
         </div>
       </div>
       <div class="row trend_2 mt-4">
         <div id="carouselExampleCaptions4" class="carousel slide" data-bs-ride="carousel">
           <div class="carousel-indicators">
-            <button v-for="(itemTrending, index) in movieTrendingList" :key="index" type="button" data-bs-target="#carouselExampleCaptions4"
-              :data-bs-slide-to="index" :class="index === 0 ? 'active' : ''" :aria-label="`Slide ${index}`"></button>
+            <button v-for="(itemTrending, index) in movieTrendingList" :key="index" type="button"
+              data-bs-target="#carouselExampleCaptions4" :data-bs-slide-to="index" :class="index === 0 ? 'active' : ''"
+              :aria-label="`Slide ${index}`"></button>
           </div>
           <div class="carousel-inner">
             <div v-for="(itemTrending, index) in movieTrendingList" :key="index"
@@ -373,7 +371,9 @@ async function fetchDataMovieList(genres_id) {
                     <div class="trend_2im1 clearfix">
                       <div class="grid">
                         <figure class="effect-jazz mb-0">
-                          <router-link :to="`/movies/${movieTrending.id}`"><img :src="getPosterImage(movieTrending.poster_path)" class="w-100" alt="...." style="height: 400px; object-fit: cover;"></router-link>
+                          <router-link :to="`/movies/${movieTrending.id}`"><img
+                              :src="getPosterImage(movieTrending.poster_path)" class="w-100" alt="...."
+                              style="height: 400px; object-fit: cover;"></router-link>
                           <!-- <a href="#"><img :src="getPosterImage(tvTrending.poster_path)" class="w-100" alt="..."
                               style="height: 400px; object-fit: cover;"></a> -->
                         </figure>
@@ -421,7 +421,8 @@ async function fetchDataMovieList(genres_id) {
                     <div class="trend_2im1 clearfix">
                       <div class="grid">
                         <figure class="effect-jazz mb-0">
-                          <router-link :to="`/movies/${movie.id}`"><img :src="getPosterImage(movie.poster_path)" class="w-100" alt="...." style="height:350px; "></router-link>
+                          <router-link :to="`/movies/${movie.id}`"><img :src="getPosterImage(movie.poster_path)"
+                              class="w-100" alt="...." style="height:350px; "></router-link>
                         </figure>
                       </div>
                     </div>
@@ -433,7 +434,7 @@ async function fetchDataMovieList(genres_id) {
                       <span class="col_red" v-for="index in Math.round(5 - (movie.vote_average / 2))" :key="index">
                         <i class="fa fa-star-o"></i>
                       </span>
-                      <p class="mb-0">{{ formatNumber(movie.popularity)}} Views</p>
+                      <p class="mb-0">{{ formatNumber(movie.popularity) }} Views</p>
                     </div>
                   </div>
                 </div>
