@@ -3,33 +3,32 @@
 
 import { toRefs } from 'vue';
 import { getPosterImage } from "@/utils/index";
-import { getMovieDetails } from "@/api/api";
 const props = defineProps({
   items: Array,
   items_genres: Array,
-
 });
-const detailInfo = toRefs({});
-const getDetails = async (id) => {
-  detailInfo.value = await getMovieDetails(id);
-  console.log(detailInfo.value);
-}
-
+const selectedGenres = [];
 const { items, items_genres } = toRefs(props);
-console.log('items');
-console.log(items);
-console.log('items_genres');
-console.log(items_genres);
+
+//console.log('items');
+//console.log(items);
+//console.log('items_genres');
+//console.log(items_genres);
+//fillter cate
 </script>
 <template>
   <section id="upcome" class="pt-4 pb-5">
     <div class="container">
       <!-- button genres -->
-      <div v-for="itemGenre in items_genres" :key="items_genres.id" class="btn-group pt-5 pb-10" role="group"
-        aria-label="Basic checkbox toggle button group">
-        <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off">
-        <label class="btn btn-outline-danger" for="btncheck1">{{ itemGenre.name }}</label>
+      <div v-for="itemGenre in items_genres" :key="itemGenre.id" class="btn-group pt-5 pb-10" role="group" aria-label="Basic checkbox toggle button group">
+          <input type="checkbox" class="btn-check" :id="'btncheck' + itemGenre.id" autocomplete="off" @click="filterDataFilms(itemGenre.id)" v-model="selectedGenres">
+          <label class="btn btn-outline-danger" :for="'btncheck' + itemGenre.id">{{ itemGenre.name }}</label>
       </div>
+      <!-- <div v-for="itemGenre in items_genres" :key="itemGenre.id" class="btn-group pt-5 pb-10" role="group"
+        aria-label="Basic checkbox toggle button group">
+        <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off" @click="fillterDataFilms(itemmovieList.id)">
+        <label class="btn btn-outline-danger" for="btncheck1">{{ itemGenre.name }}</label>
+      </div> -->
       <!-- button genres -->
       <div class="row trend_1">
         <div class="col-md-6 col-6">
@@ -68,12 +67,10 @@ console.log(items_genres);
                     <span class="col_red" v-for="index in Math.round(item.vote_average / 2)" :key="index">
                       <i class="fa fa-star"></i>
                     </span>
-                    <p class="mb-2 text-truncate" v-if="getDetails(item.id)"></p>
                     <ul>
-                      <span>Genres : </span>
-                      <li v-for="(item_list, index) in detailInfo" :key="item_list.id" class="d-inline-block me-1">
-                        <a href="#" v-for="(genres_list, index_1)  in item_list.genres" :key="genres_list.id">{{
-                          genres_list.name }}{{ index_1 < item_list.genres.length - 1 ? ', ' : '' }} </a>
+                      <span>Genres :</span>
+                      <li class="d-inline-block me-1">
+                        <a href="#" v-for="(genre, index) in item.details.genres" :key="index">{{ genre.name }}{{ index < item.details.genres.length - 1 ? ', ' : '' }}</a>
                       </li>
                     </ul>
                     <p class="mb-0">{{ item.popularity }} Views</p>

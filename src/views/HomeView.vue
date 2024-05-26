@@ -267,7 +267,7 @@ async function fetchDataMovieList(genres_id) {
     </div>
   </section>
   <!--End Films Upcoming -->
-  <!--List Films TV Series -->
+  <!--List Films Movie -->
   <section id="popular" class="pt-4 pb-5 bg_grey">
     <div class="container">
       <div class="row trend_1">
@@ -335,7 +335,7 @@ async function fetchDataMovieList(genres_id) {
       </div>
     </div>
   </section>
-  <!--End  List Films TV Series-->
+  <!--End  List Films Movie-->
   <!-- TV Trending -->
   <!-- <movieTrendingList :items="movieTrendingList" /> -->
   <section id="trend" class="pb-10 pt-4">
