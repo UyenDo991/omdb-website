@@ -1,10 +1,37 @@
 <script setup>
-import { ref } from "vue";
+import { ref, nextTick } from "vue";
+import { useRouter } from "vue-router";
 // import axios from 'axios';
 // const inputSearch = ref("");
 const inputSearch = ref({
   title: "",
 })
+const router = useRouter();
+const onSearch = async () => {
+  const inputTitle = inputSearch.value.title.trim().toLowerCase();
+  const normalizedTitle = inputTitle.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[đĐ]/g, 'd');
+  const formattedTitle = normalizedTitle.replace(/[\s-]+/g, '-');
+  const res_link = `/movie/search/1`;
+  await nextTick();
+
+  await router.push(res_link);
+
+  await nextTick();
+  //router.go(0);
+  //https://stackoverflow.com/questions/73147803/redirect-with-page-reload-vue-js-router
+  // if (inputSearch.value.title) {
+  //   const inputTitle = inputSearch.value.title.trim().toLowerCase();
+  //   const normalizedTitle = inputTitle.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[đĐ]/g, 'd');
+  //   const formattedTitle = normalizedTitle.replace(/[\s-]+/g, '-');
+  //   const res_link = `/movie/${formattedTitle}/search`;
+  //   router.push(res_link);
+
+  //   console.log(router);
+  // } else {
+  //   console.log('11111');
+  // }
+
+}
 </script>
 
 <template>
@@ -22,10 +49,13 @@ const inputSearch = ref({
             <div class="input-group">
               <input type="text" class="form-control bg-black" v-model="inputSearch.title" placeholder="Search Site...">
               <span class="input-group-btn">
-                <router-link
-                  :to="`/search/movie/${String(inputSearch.title).normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[đĐ]/g, 'd').trim().toLowerCase().replace(/[\s-]+/g, '-')}`">
+                <!-- <router-link :to="resLink">
                   <button class="btn btn text-white bg_red rounded-0 border-0" type="button"
-                    @click="onSearch">Search</button></router-link>
+                    @click="onSearch">Search</button></router-link> -->
+                <router-link :to="{ res_link }">
+                  <button class="btn btn text-white bg_red rounded-0 border-0" type="button"
+                    @click="onSearch">Search</button>
+                </router-link>
               </span>
             </div>
           </div>

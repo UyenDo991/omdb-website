@@ -28,8 +28,8 @@
                 <router-link :to="`/movies/list/now_playing`">
                   <li><a class="dropdown-item">Latest Flims</a></li>
                 </router-link>
-                <router-link :to="`/movies/list/upcomning`">
-                  <li><a class="dropdown-item">Upcomning Films</a></li>
+                <router-link :to="`/movies/list/upcoming`">
+                  <li><a class="dropdown-item">Upcoming Films</a></li>
                 </router-link>
                 <router-link :to="`/movies/list/trending`">
                   <li><a class="dropdown-item">Trending Films</a></li>
