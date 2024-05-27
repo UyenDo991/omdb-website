@@ -1,9 +1,9 @@
 <!-- toRefs : cập nhật props  -->
 <script setup>
-import { getSearchData, getMovieDetails } from "@/api/api";
+import { getSearchData } from "@/api/api";
 import { ref, watch } from "vue";
 import { useRoute } from "vue-router";
-import { getPosterDtl, formatNumber } from "@/utils/index";
+import { getPosterDtl } from "@/utils/index";
 const route = useRoute();
 
 const movieList = ref([]);

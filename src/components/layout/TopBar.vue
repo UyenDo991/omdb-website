@@ -7,30 +7,31 @@ const inputSearch = ref({
   title: "",
 })
 const router = useRouter();
+console.log(router);
 const onSearch = async () => {
+  // Lấy giá trị từ trường nhập
   const inputTitle = inputSearch.value.title.trim().toLowerCase();
+
+  // Chuẩn hóa tiêu đề
   const normalizedTitle = inputTitle.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[đĐ]/g, 'd');
+
+  // Format tiêu đề
   const formattedTitle = normalizedTitle.replace(/[\s-]+/g, '-');
-  const res_link = `/movie/search/1`;
+
+  // Tạo đường dẫn đến trang tìm kiếm
+  const res_link = `/movie/search/${formattedTitle}`;
+
+  // Chờ cho các thao tác giao diện kết thúc trước khi điều hướng đến trang kết quả tìm kiếm
   await nextTick();
 
+  // Sử dụng router để điều hướng 
   await router.push(res_link);
 
+  // Chờ một lần nữa sau khi điều hướng
   await nextTick();
-  //router.go(0);
-  //https://stackoverflow.com/questions/73147803/redirect-with-page-reload-vue-js-router
-  // if (inputSearch.value.title) {
-  //   const inputTitle = inputSearch.value.title.trim().toLowerCase();
-  //   const normalizedTitle = inputTitle.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[đĐ]/g, 'd');
-  //   const formattedTitle = normalizedTitle.replace(/[\s-]+/g, '-');
-  //   const res_link = `/movie/${formattedTitle}/search`;
-  //   router.push(res_link);
-
-  //   console.log(router);
-  // } else {
-  //   console.log('11111');
-  // }
-
+  
+  // Sử dụng router để điều hướng đến trang kết quả tìm kiếm
+  await router.push(res_link);
 }
 </script>
 
