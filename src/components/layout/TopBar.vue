@@ -1,12 +1,19 @@
 <script setup>
 import { ref } from "vue";
-const inputSearch = ref("");
-const onSearch = async () => {
-  try {    
-  } catch (error) {
-    console.log("onSearch-catch exception:", error.message);
-  }
-}
+// import axios from 'axios';
+// const inputSearch = ref("");
+const inputSearch = ref({
+  title: "",
+})
+// const onSearch = async () => {
+//   try {
+//     // const res = await axios.get(`search/movie?query=${inputSearch.value.title}&year=${inputSearch.value.year}`);
+//     const res = getSearchData(inputSearch.title);
+//     console.log("res:", res);
+//   } catch (error) {
+//     console.log("onSearch-catch exception:", error.message);
+//   }
+// }
 </script>
 
 <template>
@@ -15,15 +22,18 @@ const onSearch = async () => {
       <div class="row top_1">
         <div class="col-md-3">
           <div class="top_1l pt-1">
-            <h3 class="mb-0"><router-link class="text-white" to="/"><i class="fa fa-video-camera col_red me-1"></i>Planet</router-link></h3>
+            <h3 class="mb-0"><router-link class="text-white" to="/"><i
+                  class="fa fa-video-camera col_red me-1"></i>Planet</router-link></h3>
           </div>
         </div>
         <div class="col-md-5">
           <div class="top_1m">
             <div class="input-group">
-              <input type="text" class="form-control bg-black" placeholder="Search Site...">
+              <input type="text" class="form-control bg-black" v-model="inputSearch.title" placeholder="Search Site...">
               <span class="input-group-btn">
-                <button class="btn btn text-white bg_red rounded-0 border-0" type="button" @click="onSearch">Search</button>
+                <router-link :to="`/search/movie/${inputSearch.title}`">
+                  <button class="btn btn text-white bg_red rounded-0 border-0" type="button"
+                    @click="onSearch">Search</button></router-link>
               </span>
             </div>
           </div>

@@ -26,6 +26,11 @@ const router = createRouter({
       path: '/movies/list/:film_type',
       name: 'ListFilmsView',
       component: () => import('../views/ListFilmsView.vue')
+    },
+    {
+      path: '/search/movie/:search',
+      name: 'Search',
+      component: () => import('../views/SearchViewFilms.vue')
     }
   ]
 })

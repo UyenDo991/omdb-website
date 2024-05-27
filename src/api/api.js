@@ -57,7 +57,7 @@ export const getMoviePerson = async (movie_id) => {
 }
 
 //Movie upcoming
-export const getMovieUpcoming = async (page = 1) => {
+export const getMovieUpcoming = async (page = 2) => {
   try {
     const result = await axios.get(`movie/upcoming?page=${page}`)
     return result
@@ -104,12 +104,12 @@ export const getCollectionFilmsList = async (collect_id) => {
   }
 }
 
-//
-export const getArryGeneres = async (generes_id) => {
+//Search
+export const getSearchData = async (inputSearch) => {
   try {
-    const result = await axios.get(`genre/movie/list/genres/${generes_id}`)
+    const result = await axios.get(`search/movie?query=${inputSearch}`)
     return result
   } catch (error) {
-    console.log('getMovieDetails-catch exception:', error.message)
+    console.log('getSearchData-catch exception:', error.message)
   }
 }

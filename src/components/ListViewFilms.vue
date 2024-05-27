@@ -10,25 +10,18 @@ const props = defineProps({
 const selectedGenres = [];
 const { items, items_genres } = toRefs(props);
 
-//console.log('items');
-//console.log(items);
-//console.log('items_genres');
-//console.log(items_genres);
 //fillter cate
 </script>
 <template>
   <section id="upcome" class="pt-4 pb-5">
     <div class="container">
       <!-- button genres -->
-      <div v-for="itemGenre in items_genres" :key="itemGenre.id" class="btn-group pt-5 pb-10" role="group" aria-label="Basic checkbox toggle button group">
-          <input type="checkbox" class="btn-check" :id="'btncheck' + itemGenre.id" autocomplete="off" @click="filterDataFilms(itemGenre.id)" v-model="selectedGenres">
-          <label class="btn btn-outline-danger" :for="'btncheck' + itemGenre.id">{{ itemGenre.name }}</label>
-      </div>
-      <!-- <div v-for="itemGenre in items_genres" :key="itemGenre.id" class="btn-group pt-5 pb-10" role="group"
+      <div v-for="itemGenre in items_genres" :key="itemGenre.id" class="btn-group pt-5 pb-10" role="group"
         aria-label="Basic checkbox toggle button group">
-        <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off" @click="fillterDataFilms(itemmovieList.id)">
-        <label class="btn btn-outline-danger" for="btncheck1">{{ itemGenre.name }}</label>
-      </div> -->
+        <input type="checkbox" class="btn-check" :id="'btncheck' + itemGenre.id" autocomplete="off"
+          v-model="selectedGenres">
+        <label class="btn btn-outline-danger" :for="'btncheck' + itemGenre.id">{{ itemGenre.name }}</label>
+      </div>
       <!-- button genres -->
       <div class="row trend_1">
         <div class="col-md-6 col-6">
@@ -70,7 +63,8 @@ const { items, items_genres } = toRefs(props);
                     <ul>
                       <span>Genres :</span>
                       <li class="d-inline-block me-1">
-                        <a href="#" v-for="(genre, index) in item.details.genres" :key="index">{{ genre.name }}{{ index < item.details.genres.length - 1 ? ', ' : '' }}</a>
+                        <a href="#" v-for="(genre, index) in item.details.genres" :key="index">{{ genre.name }}{{ index
+                          < item.details.genres.length - 1 ? ', ' : '' }}</a>
                       </li>
                     </ul>
                     <p class="mb-0">{{ item.popularity }} Views</p>

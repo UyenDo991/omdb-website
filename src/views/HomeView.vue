@@ -17,6 +17,7 @@ const collectionFilmsList = ref([]);
 
 onMounted(async () => {
   const res = await getNowPlayling();
+  console.log(res);
   if (res && res.results.length) {
     const chunk = chunkArray(res.results, 4);
     if (chunk.length) {
@@ -69,8 +70,8 @@ onMounted(async () => {
     if (chunk_movie_trending.length) {
       movieTrendingList.value = [...chunk_movie_trending];
     }
-    console.log("movieTrendingList : ");
-    console.log(movieTrendingList);
+    //console.log("movieTrendingList : ");
+    //console.log(movieTrendingList);
   }
   //console.log('----------movieTrendingList-------------');
   //console.log(movieTrendingList.value);
@@ -98,8 +99,8 @@ async function fetchDataMovieList(genres_id) {
     if (res_flimsTVList && res_flimsTVList.results.length) {
       const chunk_list_tv_series = chunkArray(res_flimsTVList.results.slice(0, 4), 2);
       filmsMovieList.value = [...chunk_list_tv_series];
-      console.log('filmsMovieList.value');
-      console.log(filmsMovieList);
+      //console.log('filmsMovieList.value');
+      //console.log(filmsMovieList);
     }
   } catch (error) {
     console.error('Error fetching data:', error);
@@ -222,7 +223,7 @@ async function fetchDataMovieList(genres_id) {
         </div>
         <div class="col-md-6 col-6">
           <div class="trend_1r text-end">
-            <router-link :to="`/movies/list/upcomning`">
+            <router-link :to="`/movies/list/upcoming`">
               <h6 class="mb-0"><a class="button" href="#"> View All</a></h6>
             </router-link>
           </div>

@@ -15,27 +15,27 @@ const getViewListType = async (film_type) => {
   if (film_type === "now_playing") {
     res.value = await getNowPlayling(); // Sử dụng res.value để gán giá trị mới
   }
-  else if (film_type === "upcomning") {
+  else if (film_type === "upcoming") {
     res.value = await getMovieUpcoming(); // Sử dụng res.value để gán giá trị mới
   }
   else if (film_type === "trending") {
     res.value = await getMovieTrendingList(); // Sử dụng res.value để gán giá trị mới
   }
   if (res.value && res.value.results.length) {
-      listFilmsView.value = res.value.results; // Gán danh sách các phim mới vào listFilmsView.value
-      // Mảng để lưu trữ thông tin chi tiết của từng phim
-      const detailsList = [];
-      for (let i = 0; i < listFilmsView.value.length; i++) {
-          const _id = listFilmsView.value[i].id;
-          // Lấy thông tin chi tiết của phim với ID tương ứng
-          const details = await getMovieDetails(_id);
-          // Thêm thông tin chi tiết vào mảng detailsList
-          detailsList.push(details);
-      }
-      // Gán mảng detailsList vào mỗi phim trong danh sách
-      listFilmsView.value.forEach((film, index) => {
-          film.details = detailsList[index];
-      });
+    listFilmsView.value = res.value.results; // Gán danh sách các phim mới vào listFilmsView.value
+    // Mảng để lưu trữ thông tin chi tiết của từng phim
+    const detailsList = [];
+    for (let i = 0; i < listFilmsView.value.length; i++) {
+      const _id = listFilmsView.value[i].id;
+      // Lấy thông tin chi tiết của phim với ID tương ứng
+      const details = await getMovieDetails(_id);
+      // Thêm thông tin chi tiết vào mảng detailsList
+      detailsList.push(details);
+    }
+    // Gán mảng detailsList vào mỗi phim trong danh sách
+    listFilmsView.value.forEach((film, index) => {
+      film.details = detailsList[index];
+    });
   }
   //console.log('listFilmsView');
   //console.log(listFilmsView);
@@ -60,6 +60,6 @@ watch(() => route.params.film_type, async (film_type) => {
 
 <template>
   <!-- Latest Movie -->
-  <ListViewFilms :items="listFilmsView" :items_genres="listGenresView"/>
+  <ListViewFilms :items="listFilmsView" :items_genres="listGenresView" />
   <!--End Latest Movie -->
 </template>

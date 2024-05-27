@@ -18,20 +18,20 @@ const getDetails = async (movie_id) => {
   const videoList = await getMovieVideos(movie_id);
   const trailers = videoList.results.filter(x => x.type === "Trailer");
   trailerClip.value = trailers.length ? trailers[trailers.length - 1] : null;
-  console.log("videoList:", videoList.results);
+  //console.log("videoList:", videoList.results);
 
   //personInfo
   personInfo.value = await getMoviePerson(movie_id);
-  console.log("videoList:", videoList.results);
-  console.log("personInfo:", personInfo);
+  //console.log("videoList:", videoList.results);
+  //console.log("personInfo:", personInfo);
 
   //Related Films
   if (detailInfo.value.belongs_to_collection === null) {
     collectionFilmsList.value = [];
   }
   else {
-    console.log("detailInfo:", detailInfo);
-    console.log("detailInfo_collection:", detailInfo.value.belongs_to_collection.id);
+    //console.log("detailInfo:", detailInfo);
+    // console.log("detailInfo_collection:", detailInfo.value.belongs_to_collection.id);
     const collect_id = detailInfo.value.belongs_to_collection.id;
     const res_collection = await getCollectionFilmsList(collect_id);
     // console.log(res_collection);
@@ -42,7 +42,7 @@ const getDetails = async (movie_id) => {
       }
     }
   }
-  console.log("collectionFilmsList:", collectionFilmsList);
+  //console.log("collectionFilmsList:", collectionFilmsList);
 
 }
 
