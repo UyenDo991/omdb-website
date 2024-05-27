@@ -20,7 +20,7 @@
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle"
-                :class="{ 'nav-link dropdown-toggle': true, 'nav-link active dropdown-toggle': $route.name === 'MovieDetail' }"
+                :class="{ 'nav-link dropdown-toggle': true, 'nav-link active dropdown-toggle': $route.name === 'ListFilmsView' }"
                 id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Topic Movie Films
               </a>

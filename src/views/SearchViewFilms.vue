@@ -19,7 +19,9 @@ const getDetails = async (value) => {
 }
 watch(() => route.params.search, async (val) => {
   console.log('val :', val);
-  await getDetails(val);
+  if (val) {
+    await getDetails(val);
+  }
 }, { immediate: true })
 //fillter cate
 </script>

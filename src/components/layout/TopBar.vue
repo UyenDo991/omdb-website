@@ -5,15 +5,6 @@ import { ref } from "vue";
 const inputSearch = ref({
   title: "",
 })
-// const onSearch = async () => {
-//   try {
-//     // const res = await axios.get(`search/movie?query=${inputSearch.value.title}&year=${inputSearch.value.year}`);
-//     const res = getSearchData(inputSearch.title);
-//     console.log("res:", res);
-//   } catch (error) {
-//     console.log("onSearch-catch exception:", error.message);
-//   }
-// }
 </script>
 
 <template>
@@ -31,7 +22,8 @@ const inputSearch = ref({
             <div class="input-group">
               <input type="text" class="form-control bg-black" v-model="inputSearch.title" placeholder="Search Site...">
               <span class="input-group-btn">
-                <router-link :to="`/search/movie/${inputSearch.title}`">
+                <router-link
+                  :to="`/search/movie/${String(inputSearch.title).normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[đĐ]/g, 'd').trim().toLowerCase().replace(/[\s-]+/g, '-')}`">
                   <button class="btn btn text-white bg_red rounded-0 border-0" type="button"
                     @click="onSearch">Search</button></router-link>
               </span>

@@ -113,3 +113,13 @@ export const getSearchData = async (inputSearch) => {
     console.log('getSearchData-catch exception:', error.message)
   }
 }
+
+//add fav
+export const addFavMovie = async (input) => {
+  try {
+    const result = await axios.get(`search/movie?query=${inputSearch}`)
+    return result
+  } catch (error) {
+    console.log('getSearchData-catch exception:', error.message)
+  }
+}

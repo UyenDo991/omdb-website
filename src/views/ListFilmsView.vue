@@ -9,18 +9,23 @@ const route = useRoute();
 const res = ref({}); // Khai báo ref cho biến res
 const listFilmsView = ref([]); // Khai báo ref cho biến listFilmsView
 const listGenresView = ref([]); // Khai báo ref cho biến listGenresView
+var title_type = "";
 
 const getViewListType = async (film_type) => {
   console.log(film_type);
   if (film_type === "now_playing") {
     res.value = await getNowPlayling(); // Sử dụng res.value để gán giá trị mới
+    title_type = "List Now Playing Flims";
   }
   else if (film_type === "upcoming") {
     res.value = await getMovieUpcoming(); // Sử dụng res.value để gán giá trị mới
+    title_type = "List Upcoming Flims";
   }
   else if (film_type === "trending") {
     res.value = await getMovieTrendingList(); // Sử dụng res.value để gán giá trị mới
+    title_type = "List Trending Flims";
   }
+  //detailsList.push(title_type);
   if (res.value && res.value.results.length) {
     listFilmsView.value = res.value.results; // Gán danh sách các phim mới vào listFilmsView.value
     // Mảng để lưu trữ thông tin chi tiết của từng phim
@@ -37,12 +42,8 @@ const getViewListType = async (film_type) => {
       film.details = detailsList[index];
     });
   }
-  //console.log('listFilmsView');
-  //console.log(listFilmsView);
   //List thể loại
   const res_genres = await getMovieGenres();
-  //console.log('res');
-  //console.log(res);
   if (res_genres && res_genres.genres.length) {
     listGenresView.value = res_genres.genres;
     //console.log(res_genres);
@@ -60,6 +61,6 @@ watch(() => route.params.film_type, async (film_type) => {
 
 <template>
   <!-- Latest Movie -->
-  <ListViewFilms :items="listFilmsView" :items_genres="listGenresView" />
+  <ListViewFilms :items="listFilmsView" :items_genres="listGenresView" :title="title_type" />
   <!--End Latest Movie -->
 </template>

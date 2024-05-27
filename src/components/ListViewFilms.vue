@@ -6,9 +6,10 @@ import { getPosterImage } from "@/utils/index";
 const props = defineProps({
   items: Array,
   items_genres: Array,
+  title: String,
 });
 const selectedGenres = [];
-const { items, items_genres } = toRefs(props);
+const { items, items_genres, title } = toRefs(props);
 
 //fillter cate
 </script>
@@ -26,8 +27,8 @@ const { items, items_genres } = toRefs(props);
       <div class="row trend_1">
         <div class="col-md-6 col-6">
           <div class="trend_1l">
-            <h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i><span class="col_red">Films
-                List</span></h4>
+            <h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i><span class="col_red">{{ title
+                }}</span></h4>
           </div>
         </div>
         <div class="col-md-6 col-6">
