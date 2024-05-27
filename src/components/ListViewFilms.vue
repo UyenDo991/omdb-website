@@ -8,9 +8,21 @@ const props = defineProps({
   items_genres: Array,
   title: String,
 });
-const selectedGenres = [];
+const selectedGenres = ([]);
 const { items, items_genres, title } = toRefs(props);
 
+const onChange = (event)=>{
+  if (event.target.checked == true) {
+      selectedGenres.push(event.target.value);
+      console.log(selectedGenres);
+  }
+  else { // Nếu checkbox không được chọn, loại bỏ giá trị của nó khỏi mảng
+    // selectedGenres = selectedGenres.filter(item => item !== event.target.value);
+    //selectedGenres = selectedGenres.filter(item => item !== event.target.value);
+  }
+  console.log(selectedGenres);
+  // Hiển thị trạng thái của checkbox (true/false)
+}
 //fillter cate
 </script>
 <template>
@@ -19,8 +31,8 @@ const { items, items_genres, title } = toRefs(props);
       <!-- button genres -->
       <div v-for="itemGenre in items_genres" :key="itemGenre.id" class="btn-group pt-5 pb-10" role="group"
         aria-label="Basic checkbox toggle button group">
-        <input type="checkbox" class="btn-check" :id="'btncheck' + itemGenre.id" autocomplete="off"
-          v-model="selectedGenres">
+        <input type="checkbox" class="btn-check" :id="'btncheck' + itemGenre.id" autocomplete="off" :value="itemGenre.id"
+          v-model="selectedGenres" @change="onChange">
         <label class="btn btn-outline-danger" :for="'btncheck' + itemGenre.id">{{ itemGenre.name }}</label>
       </div>
       <!-- button genres -->
