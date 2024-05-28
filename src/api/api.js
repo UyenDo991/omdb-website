@@ -1,4 +1,35 @@
-import axios from 'axios'
+import axios from 'axios';
+import { useAuthStore } from '@/stores/auth';
+
+/* Authenticate */
+export const createRequestToken = async () => {
+  try {
+    const result = await axios.get("authentication/token/new");
+    return result;
+  } catch (error) {
+    console.log("createRequestToken-catch exception:", error.message);
+  }
+}
+
+export const authenticateUser = async (requestToken) => {
+  try {    
+    const result = await axios.post("authentication/session/new", {
+      request_token: requestToken
+    });
+    return result;
+  } catch (error) {
+    console.log("authenticateUser-catch exception:", error.message); 
+  }
+}
+
+export const getAccountInfo = async (sessionID) => {
+  try {
+    const result = await axios.get(`account?session_id=${sessionID}`);
+    return result;
+  } catch (error) {
+    console.log("authenticateUser-catch exception:", error.message);
+  }
+}
 
 /* genre */
 export const getMovieGenres = async () => {
@@ -114,12 +145,29 @@ export const getSearchData = async (inputSearch) => {
   }
 }
 
-//add fav
-export const addFavMovie = async (input) => {
+/* Account */
+// Add to Favorite
+export const addToFavorite = async (movie_id) => {
   try {
-    const result = await axios.get(`search/movie?query=${inputSearch}`)
-    return result
+    const { _sessionID, _accountInfo } = useAuthStore();
+    const result = await axios.post(`account/${_accountInfo.id}/favorite?session_id=${_sessionID}`, {
+      "media_type": "movie",
+      "media_id": 786892, // 786892 là example thôi, truyền movie_id vô
+      "favorite": true
+    })
+    return result;
   } catch (error) {
     console.log('getSearchData-catch exception:', error.message)
   }
 }
+// Get Favorites Movies
+export const getFavoriteMovies = async () => {
+  try {
+    const { _sessionID, _accountInfo } = useAuthStore();
+    const result = await axios.get(`account/${_accountInfo.id}/favorite/movies?session_id=${_sessionID}`);
+    return result;
+  } catch (error) {
+    console.log('getFavoriteMovies-catch exception:', error.message)
+  }
+}
+
