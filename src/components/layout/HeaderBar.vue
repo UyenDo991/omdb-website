@@ -7,7 +7,7 @@
     <nav class="navbar navbar-expand-md navbar-light" id="navbar_sticky">
       <div class="container">
         <router-link class="navbar-brand text-white fw-bold" to="/"><i
-            class="fa fa-video-camera col_red me-1"></i>Planet</router-link>
+            class="fa fa-video-camera col_red me-1"></i>Nhom9</router-link>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
           aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>

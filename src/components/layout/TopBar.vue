@@ -9,6 +9,10 @@ const inputSearch = ref({
 const router = useRouter();
 console.log(router);
 const onSearch = async () => {
+  if(!inputSearch.value.title){
+    alert('Xin chào ' +  '!');
+    return;
+  }
   // Lấy giá trị từ trường nhập
   const inputTitle = inputSearch.value.title.trim().toLowerCase();
 
@@ -42,7 +46,7 @@ const onSearch = async () => {
         <div class="col-md-3">
           <div class="top_1l pt-1">
             <h3 class="mb-0"><router-link class="text-white" to="/"><i
-                  class="fa fa-video-camera col_red me-1"></i>Planet</router-link></h3>
+                  class="fa fa-video-camera col_red me-1"></i>Nhom9</router-link></h3>
           </div>
         </div>
         <div class="col-md-5">
