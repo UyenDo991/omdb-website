@@ -48,15 +48,15 @@ onMounted(async () => {
   //console.log('----------moviePopularList-------------' + res_movies_popular.results.length);
   //console.log(moviePopularList.value);
 
-  //TV series 
+  //Movie genres
   const res_movie = await getMovieGenres();
 
   //console.log('res_movie');
   //console.log(res_movie);
   if (res_movie && res_movie.genres.length) {
-    const chunk_TV_series = res_movie.genres.filter(x => [28, 35, 27, 10402].includes(x.id));
-    if (chunk_TV_series.length) {
-      movieList.value = chunk_TV_series;
+    const chunk_movie_genres = res_movie.genres.filter(x => [28, 35, 27, 10402].includes(x.id));
+    if (chunk_movie_genres.length) {
+      movieList.value = chunk_movie_genres;
       await fetchDataMovieList(movieList.value[0].id);
     }
   }
@@ -94,11 +94,11 @@ const filmsMovieList = ref([]);
 async function fetchDataMovieList(genres_id) {
   try {
     //console.log("genres_id : " + genres_id);
-    const res_flimsTVList = await getMovieGenresList(genres_id);
-    // console.log("flimsTVList:", res_flimsTVList);
-    if (res_flimsTVList && res_flimsTVList.results.length) {
-      const chunk_list_tv_series = chunkArray(res_flimsTVList.results.slice(0, 4), 2);
-      filmsMovieList.value = [...chunk_list_tv_series];
+    const res_flimsMovieList = await getMovieGenresList(genres_id);
+    // console.log("flimsTVList:", res_flimsMovieList);
+    if (res_flimsMovieList && res_flimsMovieList.results.length) {
+      const chunk_list_movie = chunkArray(res_flimsMovieList.results.slice(0, 4), 2);
+      filmsMovieList.value = [...chunk_list_movie];
       //console.log('filmsMovieList.value');
       //console.log(filmsMovieList);
     }
