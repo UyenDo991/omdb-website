@@ -42,7 +42,7 @@ const getDetails = async (movie_id) => {
       }
     }
   }
-  //console.log("collectionFilmsList:", collectionFilmsList);
+  console.log("collectionFilmsList:", collectionFilmsList);
 
 }
 
@@ -203,7 +203,7 @@ watch(() => route.params.id, async (val) => {
                     <h6><i class="fa fa-clock-o me-1 align-middle col_red"></i>{{ collect_movie.release_date }}</h6>
                     <h6> {{ Math.round(collect_movie.vote_average * 100) / 100 }} / 10 (Vote : {{
                       collect_movie.vote_count }})
-                      <span class="ms-2">Runtime: {{ collect_movie.runtime }} minutes</span>
+                      <!-- <span class="ms-2">Runtime: {{ collect_movie.runtime }} minutes</span> -->
                     </h6>
                     <p>{{ collect_movie.overview }}</p>
                     <h6 class="mb-0">

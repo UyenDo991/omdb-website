@@ -9,8 +9,8 @@ const inputSearch = ref({
 const router = useRouter();
 console.log(router);
 const onSearch = async () => {
-  if(!inputSearch.value.title){
-    alert('Xin chào ' +  '!');
+  if (!inputSearch.value.title) {
+    alert('Mời nhập !');
     return;
   }
   // Lấy giá trị từ trường nhập
@@ -33,7 +33,7 @@ const onSearch = async () => {
 
   // Chờ một lần nữa sau khi điều hướng
   await nextTick();
-  
+
   // Sử dụng router để điều hướng đến trang kết quả tìm kiếm
   await router.push(res_link);
 }

@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from "vue";
-import { getNowPlayling, getMovieUpcoming, getMovieGenres, getMoviePopular, getMovieTrendingList, getMovieGenresList, getCollectionFilmsList } from "@/api/api";
+import { getNowPlayling, getMovieUpcoming, getMovieGenres, getMoviePopular, getMovieTrendingList, getMovieGenresList, getCollectionFilmsList, getMovieVideos } from "@/api/api";
 // import { useRouter } from "vue-router";
 import { chunkArray } from "@/utils/index";
 import { getPosterImage } from "@/utils/index";
@@ -13,6 +13,7 @@ const moviePopularList = ref([]);
 const movieList = ref([]);
 const movieTrendingList = ref([]);
 const collectionFilmsList = ref([]);
+const trailerClip = ref({});
 
 
 onMounted(async () => {
@@ -105,6 +106,17 @@ async function fetchDataMovieList(genres_id) {
   } catch (error) {
     console.error('Error fetching data:', error);
   }
+}
+//get data modal
+// getDataModal(films.id);
+async function getDataModal(id, name) {
+  const title_name = name;
+  console.log("films_id : " + id);
+  const videoList = await getMovieVideos(id);
+  const trailers = videoList.results.filter(x => x.type === "Trailer");
+  trailerClip.value = trailers.length ? trailers[trailers.length - 1] : null;
+  console.log('trailerClip');
+  console.log(trailerClip.value);
 }
 //Goi hàm
 </script>
@@ -307,10 +319,14 @@ async function fetchDataMovieList(genres_id) {
                       </div>
                       <div class="popular_2i1lm2 position-absolute top-0 w-100 text-center clearfix">
                         <ul>
-                          <li class="d-inline-block"><a href="#"><i class="fa fa-link col_red"></i></a></li>
+                          <li class="d-inline-block" data-bs-toggle="modal" data-bs-target="#productModal"
+                            @click="getDataModal(films.id, films.original_title)" replace><a href="#"><i
+                                class="fa fa-play col_red"></i></a>
+                          </li>
                           <li class="d-inline-block">
                             <router-link :to="`/movies/${films.id}`"><i class="fa fa-search col_red"></i></router-link>
                           </li>
+                          <li class="d-inline-block"><a href="#"><i class="fa fa-heart-o col_red"></i></a></li>
                         </ul>
                       </div>
                     </div>
@@ -446,4 +462,31 @@ async function fetchDataMovieList(genres_id) {
       </div>
     </div>
   </section>
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal">
+    Launch demo modal
+  </button>
+  <!-- Modal -->
+  <div class="modal fade bd-example-modal-lg" id="productModal" tabindex="-1" aria-labelledby="productModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" v-if="trailerClip">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="productModalLabel" style="color: black;">{{ trailerClip.name }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <v-card color="transparent">
+            <iframe width="800" height="480" :src="`https://www.youtube.com/embed/${trailerClip.key}`" frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+            </iframe>
+          </v-card>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>

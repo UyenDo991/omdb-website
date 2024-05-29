@@ -55,13 +55,7 @@ const onChange = (event) => {
       selectedGenres.splice(index, 1);
     }
   }
-  if (selectedGenres.length > 0) {
-    //console.log(selectedGenres);
-    fetchDataMovieList(selectedGenres);
-
-  } else {
-    console.log(selectedGenres);
-  }
+  fetchDataMovieList(selectedGenres);
 }
 async function fetchDataMovieList(genres_id) {
   try {
@@ -82,19 +76,19 @@ async function fetchDataMovieList(genres_id) {
 }
 //funtion get push genres 
 async function getGenres() {
-    // Mảng để lưu trữ thông tin chi tiết của từng phim
-    const detailsList = [];
-    for (let i = 0; i < listFilmsView.value.length; i++) {
-      const _id = listFilmsView.value[i].id;
-      // Lấy thông tin chi tiết của phim với ID tương ứng
-      const details = await getMovieDetails(_id);
-      // Thêm thông tin chi tiết vào mảng detailsList
-      detailsList.push(details);
-    }
-    // Gán mảng detailsList vào mỗi phim trong danh sách
-    listFilmsView.value.forEach((film, index) => {
-      film.details = detailsList[index];
-    });
+  // Mảng để lưu trữ thông tin chi tiết của từng phim
+  const detailsList = [];
+  for (let i = 0; i < listFilmsView.value.length; i++) {
+    const _id = listFilmsView.value[i].id;
+    // Lấy thông tin chi tiết của phim với ID tương ứng
+    const details = await getMovieDetails(_id);
+    // Thêm thông tin chi tiết vào mảng detailsList
+    detailsList.push(details);
+  }
+  // Gán mảng detailsList vào mỗi phim trong danh sách
+  listFilmsView.value.forEach((film, index) => {
+    film.details = detailsList[index];
+  });
 }
 watch(() => route.params.film_type, async (film_type) => {
   // console.log('id:', val);
@@ -106,18 +100,38 @@ watch(() => route.params.film_type, async (film_type) => {
 <template>
   <section id="upcome" class="pt-4 pb-5">
     <div class="container">
-      <!-- button genres -->
-      <div v-for="itemGenre in listGenresView" :key="itemGenre.id" class="btn-group pt-5 pb-10" role="group"
-        aria-label="Basic checkbox toggle button group">
-        <input type="checkbox" class="btn-check" :id="'btncheck' + itemGenre.id" autocomplete="off"
-          :value="itemGenre.id" v-model="selectedGenres" @change="onChange">
-        <label class="btn btn-outline-danger" :for="'btncheck' + itemGenre.id">{{ itemGenre.name }}</label>
+      <div class="blog_1r">
+        <div class="blog_1r1 p-4 mt-4">
+          <div class="accordion" id="accordionExample">
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                  data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                  <h4>Filter <span class="col_red">Genres</span></h4>
+                </button>
+              </h2>
+              <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                  <!-- button genres -->
+                  <div v-for="itemGenre in listGenresView" :key="itemGenre.id" class="btn-group pt-5 pb-10" role="group"
+                    aria-label="Basic checkbox toggle button group">
+                    <input type="checkbox" class="btn-check" :id="'btncheck' + itemGenre.id" autocomplete="off"
+                      :value="itemGenre.id" v-model="selectedGenres" @change="onChange">
+                    <label class="btn btn-outline-danger" :for="'btncheck' + itemGenre.id">{{ itemGenre.name }}</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <!-- button genres -->
       <div class="row trend_1">
         <div class="col-md-6 col-6">
           <div class="trend_1l">
-            <h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i><span class="col_red">{{ title_type
+            <h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i><span class="col_red">{{
+              title_type
                 }}</span></h4>
           </div>
         </div>

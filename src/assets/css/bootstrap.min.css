@@ -4496,6 +4496,7 @@ fieldset:disabled .btn {
   transform: rotate(-180deg);
 }
 .accordion-button::after {
+  background-color: currentColor;
   flex-shrink: 0;
   width: 1.25rem;
   height: 1.25rem;
