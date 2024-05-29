@@ -25,15 +25,9 @@
                 Topic Movie Films
               </a>
               <ul class="dropdown-menu drop_1" aria-labelledby="navbarDropdown">
-                <router-link :to="`/movies/list/now_playing`">
-                  <li><a class="dropdown-item">Latest Flims</a></li>
-                </router-link>
-                <router-link :to="`/movies/list/upcoming`">
-                  <li><a class="dropdown-item">Upcoming Films</a></li>
-                </router-link>
-                <router-link :to="`/movies/list/trending`">
-                  <li><a class="dropdown-item">Trending Films</a></li>
-                </router-link>
+                <li><router-link class="dropdown-item" :to="`/movies/list/now_playing`">Latest Flims</router-link></li>
+                <li><router-link class="dropdown-item" :to="`/movies/list/now_playing`">Upcoming Flims</router-link></li>
+                <li><router-link class="dropdown-item" :to="`/movies/list/now_playing`">Trending Flims</router-link></li>
               </ul>
             </li>
             <li class="nav-item">
