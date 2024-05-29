@@ -10,7 +10,7 @@ const route = useRoute();
 const res = ref({}); // Khai báo ref cho biến res
 const listFilmsView = ref([]); // Khai báo ref cho biến listFilmsView
 const listGenresView = ref([]); // Khai báo ref cho biến listGenresView
-var title_type = "";
+var title_type = "Loading...";
 
 const getViewListType = async (film_type) => {
   console.log(film_type);
