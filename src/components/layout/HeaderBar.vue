@@ -1,6 +1,5 @@
 <script setup>
 
-
 </script>
 <template>
   <section id="header">
@@ -15,19 +14,20 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mb-0">
             <li class="nav-item">
+              <!-- <router-link class="nav-link active" aria-current="page" to="/">Home</router-link> -->
               <router-link :class="{ 'nav-link': true, 'active': $route.name === 'home' }" aria-current="page"
                 to="/">Home</router-link>
             </li>
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle"
-                :class="{ 'nav-link dropdown-toggle': true, 'nav-link active dropdown-toggle': $route.name === 'ListFilmsView' }"
+              <a class="nav-link dropdown-toggle" :class="{ 'active': $route.name === 'ListFilmsView' }"
                 id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Topic Movie Films
               </a>
-              <ul class="dropdown-menu drop_1" aria-labelledby="navbarDropdown">
-                <li><router-link class="dropdown-item" :to="`/movies/list/now_playing`">Latest Flims</router-link></li>
-                <li><router-link class="dropdown-item" :to="`/movies/list/now_playing`">Upcoming Flims</router-link></li>
-                <li><router-link class="dropdown-item" :to="`/movies/list/now_playing`">Trending Flims</router-link></li>
+              <ul class="dropdown-menu drop_1" :class="{ 'active': $route.name === 'ListFilmsView' }"
+                aria-labelledby="navbarDropdown">
+                <li><router-link class="dropdown-item" to="/movies/list/now_playing">Latest Flims</router-link></li>
+                <li><router-link class="dropdown-item" to="/movies/list/upcoming">Upcoming Flims</router-link></li>
+                <li><router-link class="dropdown-item" to="/movies/list/trending">Trending Flims</router-link></li>
               </ul>
             </li>
             <li class="nav-item">

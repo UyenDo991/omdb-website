@@ -170,4 +170,13 @@ export const getFavoriteMovies = async () => {
     console.log('getFavoriteMovies-catch exception:', error.message)
   }
 }
-
+//Sort By type
+export const getMovieSortByList = async (genres_id, sort_by_type) => {
+  try {
+    const result = await axios.get(`discover/movie?with_genres=${genres_id}&sort_by=${sort_by_type}`);
+    return result; // Trả về dữ liệu từ phản hồi của axios, thay vì toàn bộ đối tượng response
+  } catch (error) {
+    console.log('getMovieSortByList - catch exception:', error.message);
+    throw error; // Ném lỗi để các thành phần gọi hàm này có thể xử lý nó
+  }
+};

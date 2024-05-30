@@ -1,13 +1,13 @@
 <script setup>
 import { watch, ref } from "vue";
-import { getNowPlayling, getMovieUpcoming, getMovieTrendingList, getMovieGenres, getMovieDetails, getMovieGenresList } from "@/api/api";
+import { getNowPlayling, getMovieUpcoming, getMovieTrendingList, getMovieGenres, getMovieDetails, getMovieSortByList } from "@/api/api";
 import { useRoute } from "vue-router";
 import { getPosterImage } from "@/utils/index";
 // import ListViewFilms from "@/components/ListViewFilms.vue";
 
 const route = useRoute();
 // const router = useRouter();
-const res = ref({}); // Khai báo ref cho biến res
+const res = ref([]); // Khai báo ref cho biến res
 const listFilmsView = ref([]); // Khai báo ref cho biến listFilmsView
 const listGenresView = ref([]); // Khai báo ref cho biến listGenresView
 var title_type = "Loading...";
@@ -34,16 +34,16 @@ const getViewListType = async (film_type) => {
   //List thể loại
   const res_genres = await getMovieGenres();
   if (res_genres && res_genres.genres.length) {
-    listGenresView.value = res_genres.genres;
+    listGenresView.value = res_genres.genres.slice(0, 10);
+    // window.location.reload();
     //console.log(res_genres);
   }
   //console.log(detailInfo.value);
   // Kết thúc
 }
-
 //
+var sort_by_type = "";
 const selectedGenres = [];
-
 const onChange = (event) => {
   if (event.target.checked === true) {
     selectedGenres.push(event.target.value);
@@ -55,23 +55,26 @@ const onChange = (event) => {
       selectedGenres.splice(index, 1);
     }
   }
-  fetchDataMovieList(selectedGenres);
+  fetchDataMovieList(selectedGenres, sort_by_type);
 }
-async function fetchDataMovieList(genres_id) {
-  try {
-    listFilmsView.value = [];
-    //console.log("genres_id : " + genres_id);
-    const res_flimsMovieList = await getMovieGenresList(genres_id);
-    // console.log("flimsTVList:", res_flimsMovieList);
-    if (res_flimsMovieList && res_flimsMovieList.results.length) {
-      const chunk_list_movie = res_flimsMovieList;
-      listFilmsView.value = chunk_list_movie.results;
-      getGenres();
-      //console.log('checkbox');
-      //console.log(filmsMovieList.value);
-    }
-  } catch (error) {
-    console.error('Error fetching data:', error);
+//Onchange sort by
+
+const onChangeSortBy = (soft_type) => {
+  sort_by_type = soft_type.target.value;
+  fetchDataMovieList(selectedGenres, sort_by_type);
+}
+async function fetchDataMovieList(genres_id, sort_by_type) {
+  listFilmsView.value = [];
+  //console.log("genres_id : " + genres_id);
+  const res_flimsMovieList = await getMovieSortByList(genres_id, sort_by_type);
+  console.log('test 1 :' + listFilmsView.value);
+  // console.log("flimsTVList:", res_flimsMovieList);
+  if (res_flimsMovieList && res_flimsMovieList.results.length) {
+    const chunk_list_movie = res_flimsMovieList;
+    listFilmsView.value = chunk_list_movie.results;
+    getGenres();
+    //console.log('checkbox');
+    //console.log(filmsMovieList.value);
   }
 }
 //funtion get push genres 
@@ -94,7 +97,7 @@ watch(() => route.params.film_type, async (film_type) => {
   // console.log('id:', val);
   await getViewListType(film_type);
 }, { immediate: true })
-//Goi hàm
+
 </script>
 
 <template>
@@ -114,11 +117,26 @@ watch(() => route.params.film_type, async (film_type) => {
                 data-bs-parent="#accordionExample">
                 <div class="accordion-body">
                   <!-- button genres -->
-                  <div v-for="itemGenre in listGenresView" :key="itemGenre.id" class="btn-group pt-5 pb-10" role="group"
+                  <span style="font-size: 20px;color: lightgoldenrodyellow;">List genres: </span>
+                  <div v-for="itemGenre in listGenresView" :key="itemGenre.id" class="btn-group pt-1 pb-1" role="group"
                     aria-label="Basic checkbox toggle button group">
                     <input type="checkbox" class="btn-check" :id="'btncheck' + itemGenre.id" autocomplete="off"
                       :value="itemGenre.id" v-model="selectedGenres" @change="onChange">
                     <label class="btn btn-outline-danger" :for="'btncheck' + itemGenre.id">{{ itemGenre.name }}</label>
+                  </div>
+                </div>
+                <div class="accordion-body">
+                  <!-- button genres -->
+                  <span style="font-size: 20px;color: lightgoldenrodyellow;">Sort by: </span>
+                  <div class="btn-group" role="group" aria-label="Basic example">
+                    <button type="button" class="btn btn-outline-danger" value="original_title.desc"
+                      @click="onChangeSortBy">Title desc</button>
+                    <button type="button" class="btn btn-outline-danger" value="original_title.asc"
+                      @click="onChangeSortBy">Title asc</button>
+                    <button type="button" class="btn btn-outline-danger" value="vote_average.desc"
+                      @click="onChangeSortBy">Vote average desc</button>
+                    <button type="button" class="btn btn-outline-danger" value="vote_average.asc"
+                      @click="onChangeSortBy">Vote average asc</button>
                   </div>
                 </div>
               </div>
@@ -130,9 +148,8 @@ watch(() => route.params.film_type, async (film_type) => {
       <div class="row trend_1">
         <div class="col-md-6 col-6">
           <div class="trend_1l">
-            <h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i><span class="col_red">{{
-              title_type
-                }}</span></h4>
+            <h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i><span class="col_red"> {{
+              listFilmsView.length > 0 ? title_type : 'Loading...' }}</span></h4>
           </div>
         </div>
         <div class="col-md-6 col-6">

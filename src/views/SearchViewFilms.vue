@@ -9,21 +9,36 @@ const route = useRoute();
 const movieList = ref([]);
 const res = ref({}); // Khai báo ref cho biến res
 
+let page = 1;
+const count_row = 4;
+let perPage = 0;
+let total_count = 0;
 const getDetails = async (value) => {
   //Info
   res.value = await getSearchData(value);
-  if (res.value.results.length > 0) {
-    movieList.value = res.value.results;
-  }
-  console.log(movieList.value);
+  perPage = count_row;
+  await getLoadMoreData(res.value, perPage);
 }
+//Goi Loadmore
+const onLoadMore = async () => {
+  page++;
+  perPage = ((page - 1) * 4) + count_row;
+  await getLoadMoreData(res.value, perPage);
+}
+async function getLoadMoreData(data, perPage) {
+  if (data.results.length > 0) {
+    total_count = data.results.length - perPage;
+    movieList.value = data.results.slice(0, perPage);
+  }
+}
+
+//Truyền biến
 watch(() => route.params.search, async (val) => {
   console.log('val :', val);
   if (val) {
     await getDetails(val);
   }
 }, { immediate: true })
-//fillter cate
 </script>
 <template>
 
@@ -48,7 +63,7 @@ watch(() => route.params.search, async (val) => {
                       <div class="grid">
                         <figure class="effect-jazz mb-0">
                           <router-link :to="`/movies/${item.id}`"><img :src="getPosterDtl(item.poster_path)"
-                              class="w-100" alt="..."></router-link>
+                              class="w-100" alt="..." style="height: 450px;"></router-link>
                         </figure>
                       </div>
                     </div>
@@ -66,6 +81,10 @@ watch(() => route.params.search, async (val) => {
             </div>
           </div>
         </div>
+      </div>
+      <div class="row trend_2 mt-4 text-center">
+        <button class="btn btn-outline-danger" @click="onLoadMore()"
+          :style="{ display: total_count === 0 ? 'none' : 'block' }">Load more ({{ total_count }})</button>
       </div>
     </div>
   </section>
