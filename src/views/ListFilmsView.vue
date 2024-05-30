@@ -148,8 +148,13 @@ watch(() => route.params.film_type, async (film_type) => {
       <div class="row trend_1">
         <div class="col-md-6 col-6">
           <div class="trend_1l">
-            <h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i><span class="col_red"> {{
-              listFilmsView.length > 0 ? title_type : 'Loading...' }}</span></h4>
+            <h4 class="mb-0">
+                <i class="fa fa-youtube-play align-middle col_red me-1"></i>
+                <span v-if="listFilmsView.length > 0" class="col_red">{{ title_type }}</span>
+                <div v-else class="spinner">
+                    <div class="blob blob-0"></div>
+                </div>
+            </h4>
           </div>
         </div>
         <div class="col-md-6 col-6">

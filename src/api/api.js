@@ -147,19 +147,19 @@ export const getSearchData = async (inputSearch) => {
 
 /* Account */
 // Add to Favorite
-export const addToFavorite = async (movie_id) => {
-  try {
-    const { _sessionID, _accountInfo } = useAuthStore();
-    const result = await axios.post(`account/${_accountInfo.id}/favorite?session_id=${_sessionID}`, {
-      "media_type": "movie",
-      "media_id": 786892, // 786892 là example thôi, truyền movie_id vô
-      "favorite": true
-    })
-    return result;
-  } catch (error) {
-    console.log('getSearchData-catch exception:', error.message)
-  }
-}
+// export const addToFavorite = async (movie_id) => {
+//   try {
+//     const { _sessionID, _accountInfo } = useAuthStore();
+//     const result = await axios.post(`account/${_accountInfo.id}/favorite?session_id=${_sessionID}`, {
+//       "media_type": "movie",
+//       "media_id": 786892, // 786892 là example thôi, truyền movie_id vô
+//       "favorite": true
+//     })
+//     return result;
+//   } catch (error) {
+//     console.log('getSearchData-catch exception:', error.message)
+//   }
+// }
 // Get Favorites Movies
 export const getFavoriteMovies = async () => {
   try {
