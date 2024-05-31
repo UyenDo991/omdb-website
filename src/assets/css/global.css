@@ -252,6 +252,9 @@ ul.social-network li {
 }
 
 /* footer social icons */
+.social-network a.ilogin:hover {
+  background-color: #319b6a;
+}
 .social-network a.icoRss:hover {
   background-color: #f56505;
 }
