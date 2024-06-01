@@ -3,8 +3,7 @@ import { onMounted, ref } from "vue";
 import { getNowPlayling, getMovieUpcoming, getMovieGenres, getMoviePopular, getMovieTrendingList, getMovieGenresList, getCollectionFilmsList, getMovieVideos } from "@/api/api";
 // import { useRouter } from "vue-router";
 import { chunkArray } from "@/utils/index";
-import { getPosterImage } from "@/utils/index";
-import { formatNumber } from "@/utils/index";
+import { getPosterImage, formatNumber } from "@/utils/index";
 // const router = useRouter();
 
 const nowPlayingList = ref([]);
@@ -109,14 +108,13 @@ async function fetchDataMovieList(genres_id) {
 }
 //get data modal
 // getDataModal(films.id);
-async function getDataModal(id, name) {
-  const title_name = name;
+async function getDataModal(id) {
   console.log("films_id : " + id);
   const videoList = await getMovieVideos(id);
   const trailers = videoList.results.filter(x => x.type === "Trailer");
   trailerClip.value = trailers.length ? trailers[trailers.length - 1] : null;
-  console.log('trailerClip');
-  console.log(trailerClip.value);
+  //console.log('trailerClip');
+  //console.log(trailerClip.value);
 }
 //Goi hàm
 </script>
@@ -126,27 +124,25 @@ async function getDataModal(id, name) {
       <div class="carousel-inner">
         <div v-for="(movie, index) in moviePopularList" :key="index"
           :class="index === 0 ? 'carousel-item active' : 'carousel-item'">
-          <!-- <img :src="getPosterImage(movie.poster_path)" class="d-block w-100" alt="..."
-            style="object-fit: contain;height: 800px;"> -->
           <router-link :to="`/movies/${movie.id}`"><img :src="getPosterImage(movie.poster_path)" class="w-100"
               alt="...." style="height: 1000px;"></router-link>
           <div class="carousel-caption d-md-block">
-            <h1 class="font_60">{{ movie.original_title }}</h1>
-            <h6 class="mt-3">
+            <h1 class="background-title animate-pop-in">{{ movie.original_title }}</h1>
+            <h6 class="mt-3 background-title animate-pop-in">
               <span class="col_red me-3" v-for="index in Math.round(movie.vote_average / 2)" :key="index">
                 <i class="fa fa-star"></i>
               </span>
               <span class="col_red me-3" v-for="index in Math.round(5 - (movie.vote_average / 2))" :key="index">
                 <i class="fa fa-star-o"></i>
               </span>
-              <p class="mt-3 text-truncate">{{ movie.release_date }}</p>
+              <p class="mt-3 text-truncate background-title animate-pop-in">{{ movie.release_date }}</p>
               <!-- <a class="bg_red p-2 pe-4 ps-4 ms-3 text-white d-inline-block" href="#">Action</a> -->
             </h6>
-            <p class="mt-3" style="width: 30%;display: inline-block;">{{ movie.overview }}</p>
-            <p class="mb-0">{{ formatNumber(movie.popularity) }} Views</p>
+            <p class="mt-3 background-title animate-pop-in" style="width: 30%;display: inline-block;">{{ movie.overview }}</p>
+            <p class="mb-0 background-title animate-pop-in">{{ formatNumber(movie.popularity) }} Views</p>          
             <router-link :to="`/movies/${movie.id}`">
-              <h6 class="mb-0"><a class="button" href="#"><i class="fa fa-play-circle align-middle me-1"></i> Watch
-                  Trailer</a></h6>
+              <h6 class="mb-0 background-title animate-pop-in"><a class="button" href="#"><i class="fa fa-play-circle align-middle me-1"></i> Watch
+                  Details</a></h6>
             </router-link>
           </div>
         </div>
@@ -163,10 +159,9 @@ async function getDataModal(id, name) {
       </button>
     </div>
   </section>
-
   <!-- Latest Movie -->
   <!-- <LatestMovies :items="nowPlayingList" /> -->
-  <section id="latest" class="pt-4 pb-5">
+  <section id="latest" class="pt-4 pb-5 bg_grey">
     <div class="container">
       <div class="row latest_1">
         <div class="col-md-6 col-6">
@@ -205,7 +200,7 @@ async function getDataModal(id, name) {
                       </div>
                     </div>
                   </div>
-                  <div class="latest_2ilast bg_grey p-3 clearfix" style="height: 174px;">
+                  <div class="latest_2ilast p-3 clearfix" style="height: 174px;">
                     <h5><a class="col_red" href="#">{{ movieNowplaying.original_title }}</a></h5>
                     <p class="mb-2 text-truncate">{{ movieNowplaying.overview }}</p>
                     <span class="col_red" v-for="index in Math.round(movieNowplaying.vote_average / 2)" :key="index">
@@ -320,7 +315,7 @@ async function getDataModal(id, name) {
                       <div class="popular_2i1lm2 position-absolute top-0 w-100 text-center clearfix">
                         <ul>
                           <li class="d-inline-block" data-bs-toggle="modal" data-bs-target="#productModal"
-                            @click="getDataModal(films.id, films.original_title)" replace><a href="#"><i
+                            @click="getDataModal(films.id)" replace><a href="#"><i
                                 class="fa fa-play col_red"></i></a>
                           </li>
                           <li class="d-inline-block">
@@ -407,7 +402,7 @@ async function getDataModal(id, name) {
   </section>
   <!--End TV Trending -->
   <!-- List drama -->
-  <section id="collection" class="pb-5 pt-4">
+  <section id="collection" class="pb-5 pt-4 bg_grey">
     <div class="container">
       <div class="row trend_1">
         <div class="col-md-6 col-6">
@@ -462,10 +457,6 @@ async function getDataModal(id, name) {
       </div>
     </div>
   </section>
-  <!-- Button trigger modal -->
-  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal">
-    Launch demo modal
-  </button>
   <!-- Modal -->
   <div class="modal fade bd-example-modal-lg" id="productModal" tabindex="-1" aria-labelledby="productModalLabel"
     aria-hidden="true">

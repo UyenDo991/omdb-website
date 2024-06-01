@@ -33,7 +33,17 @@ const router = createRouter({
       path: '/movie/search/:search',
       name: 'Search',
       component: () => import('../views/SearchViewFilms.vue')
-    }
+    },
+    {
+      path: '/auth/profile/:session_id',
+      name: 'ProfileView',
+      component: () => import('../views/ProfileView.vue')
+    },
+    {
+      path: '/about',
+      name: 'about',
+      component: () => import('../views/AboutView.vue')
+    },
   ]
 })
 

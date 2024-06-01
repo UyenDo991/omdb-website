@@ -1,6 +1,7 @@
 <script setup>
 import { ref, nextTick } from "vue";
 import { useRouter } from "vue-router";
+import { useAuthStore } from '@/stores/auth';
 // import axios from 'axios';
 // const inputSearch = ref("");
 const inputSearch = ref({
@@ -15,28 +16,33 @@ const onSearch = async () => {
   }
   // Lấy giá trị từ trường nhập
   const inputTitle = inputSearch.value.title.trim().toLowerCase();
-
   // Chuẩn hóa tiêu đề
   const normalizedTitle = inputTitle.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[đĐ]/g, 'd');
-
   // Format tiêu đề
   const formattedTitle = normalizedTitle.replace(/[\s-]+/g, '-');
-
   // Tạo đường dẫn đến trang tìm kiếm
   const res_link = `/movie/search/${formattedTitle}`;
-
   // Chờ cho các thao tác giao diện kết thúc trước khi điều hướng đến trang kết quả tìm kiếm
   await nextTick();
-
   // Sử dụng router để điều hướng 
   await router.push(res_link);
-
   // Chờ một lần nữa sau khi điều hướng
   await nextTick();
-
   // Sử dụng router để điều hướng đến trang kết quả tìm kiếm
   await router.push(res_link);
 }
+//Check Auth
+
+const authInfo = ref([]);
+const check_id = ref([]);
+authInfo.value = useAuthStore();
+check_id.value = authInfo.value.accountInfo;
+
+console.log("authInfo11111");
+console.log(authInfo.value.accountInfo);
+
+console.log("check_id ssss");
+console.log(check_id);
 </script>
 
 <template>
@@ -46,7 +52,7 @@ const onSearch = async () => {
         <div class="col-md-3">
           <div class="top_1l pt-1">
             <h3 class="mb-0"><router-link class="text-white" to="/"><i
-                  class="fa fa-video-camera col_red me-1"></i>Nhom9</router-link></h3>
+                  class="fa fa-video-camera col_red me-1"></i><span class="groupname">Nhóm 9</span></router-link></h3>
           </div>
         </div>
         <div class="col-md-5">
@@ -68,12 +74,8 @@ const onSearch = async () => {
         <div class="col-md-4">
           <div class="top_1r text-end">
             <ul class="social-network social-circle mb-0">
-              <li><router-link class="ilogin-item" to="/login">Log In</router-link></li>
-              <li><a href="#" class="icoRss" title="Rss"><i class="fa fa-instagram"></i></a></li>
-              <li><a href="#" class="icoFacebook" title="Facebook"><i class="fa fa-facebook"></i></a></li>
-              <li><a href="#" class="icoTwitter" title="Twitter"><i class="fa fa-twitter"></i></a></li>
-              <li><a href="#" class="icoGoogle" title="Google +"><i class="fa fa-youtube"></i></a></li>
-              <li><a href="#" class="icoLinkedin" title="Linkedin"><i class="fa fa-linkedin"></i></a></li>
+              <h6 class="mb-0" v-if="check_id === null"><a class="button" href="#"> <router-link class="ilogin-item" to="/login">Log In</router-link></a></h6>
+              <h6 class="mb-0" v-else><a class="button" href="#">Log Out</a></h6>
             </ul>
           </div>
         </div>

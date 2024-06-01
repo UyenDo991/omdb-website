@@ -35,13 +35,16 @@ export const useAuthStore = defineStore("auth", {
     async authenticate() {
       try {
         const result = await authenticateUser(this.requestToken);
-        if(result.success) {
-          // console.log("session_id:", session_id);
+        console.log(result);
+        if(result.success === true) {
+          console.log('Love JuJingYi');
+          console.log("session_id:", result.session_id);
           if(result.session_id) {
             const accountInfo = await getAccountInfo(result.session_id);
-            // console.log("accountInfo:", accountInfo);
+            console.log("accountInfo:", accountInfo);
             return {
-              ...result,
+              success: result.success, // Sử dụng cú pháp đúng để trả về một object
+              session_id: result.session_id,
               account_info: accountInfo
             }
           }
@@ -51,6 +54,13 @@ export const useAuthStore = defineStore("auth", {
       }
     },  
     saveAccountInfo(session_id, account_info) {
+      // Xóa data chỉ định
+      //localStorage.removeItem(session_id);
+      //Xóa toàn bộ data
+      //localStorage.clear(); 
+      localStorage.setItem(session_id, account_info);
+      console.log(session_id);
+      console.log(account_info);
       this.sessionID = session_id;
       this.accountInfo = account_info;
     }

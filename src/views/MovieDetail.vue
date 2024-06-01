@@ -13,7 +13,8 @@ const collectionFilmsList = ref([]);
 const getDetails = async (movie_id) => {
   //detailInfo
   detailInfo.value = await getMovieDetails(movie_id);
-
+  console.log('detailInfo');
+  console.log(detailInfo);
   //videoList
   const videoList = await getMovieVideos(movie_id);
   const trailers = videoList.results.filter(x => x.type === "Trailer");
@@ -92,7 +93,7 @@ watch(() => route.params.id, async (val) => {
     </div>
   </section> -->
   <section id="center" class="center_o pt-2 pb-2">
-    <div class="container-xl" v-if="detailInfo">
+    <div class="container-xl" v-if="detailInfo && detailInfo.id != null">
       <div class="row center_o1">
         <div class="col-md-9">
           <div class="center_o1l">
@@ -113,6 +114,9 @@ watch(() => route.params.id, async (val) => {
           </div>
         </div>
       </div>
+    </div>
+    <div v-else class="spinner">
+        <div class="blob blob-0"></div>
     </div>
   </section>
   <section id="blog" class="pt-4 pb-4 bg_grey">

@@ -2,7 +2,7 @@
 import { watch, ref } from "vue";
 import { getNowPlayling, getMovieUpcoming, getMovieTrendingList, getMovieGenres, getMovieDetails, getMovieSortByList } from "@/api/api";
 import { useRoute } from "vue-router";
-import { getPosterImage } from "@/utils/index";
+import { getPosterImage, formatNumber } from "@/utils/index";
 // import ListViewFilms from "@/components/ListViewFilms.vue";
 
 const route = useRoute();
@@ -129,10 +129,10 @@ watch(() => route.params.film_type, async (film_type) => {
                   <!-- button genres -->
                   <span style="font-size: 20px;color: lightgoldenrodyellow;">Sort by: </span>
                   <div class="btn-group" role="group" aria-label="Basic example">
-                    <button type="button" class="btn btn-outline-danger" value="original_title.desc"
-                      @click="onChangeSortBy">Title desc</button>
-                    <button type="button" class="btn btn-outline-danger" value="original_title.asc"
-                      @click="onChangeSortBy">Title asc</button>
+                    <button type="button" class="btn btn-outline-danger" value="popularity.desc"
+                      @click="onChangeSortBy">Popularity desc</button>
+                    <button type="button" class="btn btn-outline-danger" value="popularity.asc"
+                      @click="onChangeSortBy">Popularity asc</button>
                     <button type="button" class="btn btn-outline-danger" value="vote_average.desc"
                       @click="onChangeSortBy">Vote average desc</button>
                     <button type="button" class="btn btn-outline-danger" value="vote_average.asc"
@@ -191,7 +191,7 @@ watch(() => route.params.film_type, async (film_type) => {
                           < item.details.genres.length - 1 ? ', ' : '' }}</a>
                       </li>
                     </ul>
-                    <p class="mb-0">{{ item.popularity }} Views</p>
+                    <p class="mb-0">{{ formatNumber(item.popularity) }} Views</p>
                   </div>
                 </div>
               </div>

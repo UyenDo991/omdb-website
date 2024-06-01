@@ -3,7 +3,7 @@
 import { getSearchData } from "@/api/api";
 import { ref, watch } from "vue";
 import { useRoute } from "vue-router";
-import { getPosterDtl } from "@/utils/index";
+import { getPosterDtl, formatNumber } from "@/utils/index";
 const route = useRoute();
 
 const movieList = ref([]);
@@ -74,7 +74,7 @@ watch(() => route.params.search, async (val) => {
                     <span class="col_red" v-for="index in Math.round(item.vote_average / 2)" :key="index">
                       <i class="fa fa-star"></i>
                     </span>
-                    <p class="mb-0">{{ item.popularity }} Views</p>
+                    <p class="mb-0">{{ formatNumber(item.popularity) }} Views</p>
                   </div>
                 </div>
               </div>

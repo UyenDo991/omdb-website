@@ -147,19 +147,19 @@ export const getSearchData = async (inputSearch) => {
 
 /* Account */
 // Add to Favorite
-// export const addToFavorite = async (movie_id) => {
-//   try {
-//     const { _sessionID, _accountInfo } = useAuthStore();
-//     const result = await axios.post(`account/${_accountInfo.id}/favorite?session_id=${_sessionID}`, {
-//       "media_type": "movie",
-//       "media_id": 786892, // 786892 là example thôi, truyền movie_id vô
-//       "favorite": true
-//     })
-//     return result;
-//   } catch (error) {
-//     console.log('getSearchData-catch exception:', error.message)
-//   }
-// }
+export const addToFavorite = async (movie_id) => {
+  try {
+    const { _sessionID, _accountInfo } = useAuthStore();
+    const result = await axios.post(`account/${_accountInfo.id}/favorite?session_id=${_sessionID}`, {
+      "media_type": "movie",
+      "media_id": 786892, // 786892 là example thôi, truyền movie_id vô
+      "favorite": true
+    })
+    return result;
+  } catch (error) {
+    console.log('getSearchData-catch exception:', error.message)
+  }
+}
 // Get Favorites Movies
 export const getFavoriteMovies = async () => {
   try {
@@ -174,9 +174,9 @@ export const getFavoriteMovies = async () => {
 export const getMovieSortByList = async (genres_id, sort_by_type) => {
   try {
     const result = await axios.get(`discover/movie?with_genres=${genres_id}&sort_by=${sort_by_type}`);
-    return result; // Trả về dữ liệu từ phản hồi của axios, thay vì toàn bộ đối tượng response
+    return result; 
   } catch (error) {
     console.log('getMovieSortByList - catch exception:', error.message);
-    throw error; // Ném lỗi để các thành phần gọi hàm này có thể xử lý nó
+    throw error;
   }
 };

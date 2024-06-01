@@ -1,7 +1,7 @@
 <!-- toRefs : cập nhật props  -->
 <script setup>
 import { toRefs } from 'vue';
-import { getPosterImage } from "@/utils/index";
+import { getPosterImage, formatNumber } from "@/utils/index";
 const props = defineProps({
   items: Array
 });
@@ -50,7 +50,7 @@ const { items } = toRefs(props);
                     <span class="col_red" v-for="index in Math.round(movie.vote_average / 2)" :key="index">
                       <i class="fa fa-star"></i>
                     </span>
-                    <p class="mb-0">{{ movie.popularity }} Views</p>
+                    <p class="mb-0">{{ formatNumber(movie.popularity) }} Views</p>
                   </div>
                 </div>
               </div>

@@ -2,7 +2,7 @@
 <script setup>
 
 import { toRefs } from 'vue';
-import { getPosterImage } from "@/utils/index";
+import { getPosterImage, formatNumber } from "@/utils/index";
 const props = defineProps({
   items: Array,
   items_genres: Array,
@@ -80,7 +80,7 @@ const onChange = (event)=>{
                           < item.details.genres.length - 1 ? ', ' : '' }}</a>
                       </li>
                     </ul>
-                    <p class="mb-0">{{ item.popularity }} Views</p>
+                    <p class="mb-0">{{ formatNumber(item.popularity) }} Views</p>
                   </div>
                 </div>
               </div>
