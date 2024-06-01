@@ -1,14 +1,21 @@
 <script setup>
-import { ref, nextTick } from "vue";
-import { useRouter } from "vue-router";
+import { ref, nextTick, watch, computed, onBeforeMount, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
+
+import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/stores/auth';
-// import axios from 'axios';
-// const inputSearch = ref("");
+
+const { _accountInfo } = storeToRefs(useAuthStore());
+const { createRequest, clearSavedInfo, authenticate, saveAccountInfo } = useAuthStore();
+
 const inputSearch = ref({
-  title: "",
+  title: ""
 })
 const router = useRouter();
-console.log(router);
+const route = useRoute();
+
+const resLink = ref("");
+
 const onSearch = async () => {
   if (!inputSearch.value.title) {
     alert('Mời nhập !');
@@ -21,28 +28,60 @@ const onSearch = async () => {
   // Format tiêu đề
   const formattedTitle = normalizedTitle.replace(/[\s-]+/g, '-');
   // Tạo đường dẫn đến trang tìm kiếm
-  const res_link = `/movie/search/${formattedTitle}`;
+  resLink.value = `/movie/search/${formattedTitle}`;
   // Chờ cho các thao tác giao diện kết thúc trước khi điều hướng đến trang kết quả tìm kiếm
   await nextTick();
   // Sử dụng router để điều hướng 
-  await router.push(res_link);
+  await router.push(resLink.value);
   // Chờ một lần nữa sau khi điều hướng
   await nextTick();
   // Sử dụng router để điều hướng đến trang kết quả tìm kiếm
-  await router.push(res_link);
+  await router.push(resLink.value);
 }
-//Check Auth
 
-const authInfo = ref([]);
-const check_id = ref([]);
-authInfo.value = useAuthStore();
-check_id.value = authInfo.value.accountInfo;
+const requestLogIn = async () => {
+  try {
+    await createRequest();
+  } catch (error) {
+    console.log("requestLogIn-catch exception:", error.message);
+  }
+}
 
-console.log("authInfo11111");
-console.log(authInfo.value.accountInfo);
+const logIn = async (requestToken) => {
+  try {
+    const { success, session_id, account_info } = await authenticate(requestToken);
+    if (success) {
+      saveAccountInfo(session_id, account_info);
+      localStorage.setItem("sessionID", session_id);
+      localStorage.setItem("accountInfo", JSON.stringify(account_info));
+      localStorage.removeItem("requestToken");
+      router.push("/");
+    }
+  } catch (error) {
+    console.log("logIn-catch exception:", error.message);
+  }
+}
 
-console.log("check_id ssss");
-console.log(check_id);
+const logOut = async () => {
+  try {
+    clearSavedInfo();
+  } catch (error) {
+    console.log("logOut-catch exception:", error.message);
+  }
+}
+
+onBeforeMount(async () => {
+  const requestToken = localStorage.getItem("requestToken");
+  const sessionID = localStorage.getItem("sessionID");
+  const accountInfo = JSON.parse(localStorage.getItem("accountInfo"));
+  // console.log("onBeforeMount-requestToken-from Local Storage:", requestToken, sessionID, accountInfo);
+  if(requestToken) {
+    await logIn(requestToken);
+  }
+  if(sessionID && accountInfo) {
+    saveAccountInfo(sessionID, accountInfo)
+  }
+})
 </script>
 
 <template>
@@ -63,7 +102,7 @@ console.log(check_id);
                 <!-- <router-link :to="resLink">
                   <button class="btn btn text-white bg_red rounded-0 border-0" type="button"
                     @click="onSearch">Search</button></router-link> -->
-                <router-link :to="{ res_link }">
+                <router-link :to="resLink">
                   <button class="btn btn text-white bg_red rounded-0 border-0" type="button"
                     @click="onSearch">Search</button>
                 </router-link>
@@ -74,8 +113,8 @@ console.log(check_id);
         <div class="col-md-4">
           <div class="top_1r text-end">
             <ul class="social-network social-circle mb-0">
-              <h6 class="mb-0" v-if="check_id === null"><a class="button" href="#"> <router-link class="ilogin-item" to="/login">Log In</router-link></a></h6>
-              <h6 class="mb-0" v-else><a class="button" href="#">Log Out</a></h6>
+              <button class="btn btn text-white bg_red rounded-0 border-0" type="button" @click="requestLogIn" v-if="!_accountInfo">Log In</button>
+              <button class="btn btn text-white bg_red rounded-0 border-0" type="button" @click="logOut" v-else>Log Out</button>
             </ul>
           </div>
         </div>

@@ -50,8 +50,8 @@ app.mount('#app')
 window.onscroll = function() {myFunction()};
 
 var navbar_sticky = document.getElementById("navbar_sticky");
-console.log('navbar_sticky');
-console.log(navbar_sticky);
+// console.log('navbar_sticky');
+// console.log(navbar_sticky);
 var sticky = navbar_sticky.offsetTop;
 var navbar_height = document.querySelector('.navbar').offsetHeight;
 

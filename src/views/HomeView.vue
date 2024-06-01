@@ -17,7 +17,7 @@ const trailerClip = ref({});
 
 onMounted(async () => {
   const res = await getNowPlayling();
-  console.log(res);
+  // console.log(res);
   if (res && res.results.length) {
     const chunk = chunkArray(res.results, 4);
     if (chunk.length) {
@@ -61,7 +61,7 @@ onMounted(async () => {
     }
   }
   //console.log('----------movieList-------------');
-  console.log(movieList.value);
+  // console.log(movieList.value);
   //TV trending list
   const res_movie_trending = await getMovieTrendingList();
   //console.log(res_tv_trending);
@@ -109,7 +109,7 @@ async function fetchDataMovieList(genres_id) {
 //get data modal
 // getDataModal(films.id);
 async function getDataModal(id) {
-  console.log("films_id : " + id);
+  // console.log("films_id : " + id);
   const videoList = await getMovieVideos(id);
   const trailers = videoList.results.filter(x => x.type === "Trailer");
   trailerClip.value = trailers.length ? trailers[trailers.length - 1] : null;
@@ -467,12 +467,10 @@ async function getDataModal(id) {
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <v-card color="transparent">
-            <iframe width="800" height="480" :src="`https://www.youtube.com/embed/${trailerClip.key}`" frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
-            </iframe>
-          </v-card>
+          <iframe width="800" height="480" :src="`https://www.youtube.com/embed/${trailerClip.key}`" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+          </iframe>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

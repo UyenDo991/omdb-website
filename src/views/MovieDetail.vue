@@ -58,40 +58,6 @@ watch(() => route.params.id, async (val) => {
 </script>
 
 <template>
-  <!-- <v-container fluid>
-    <v-row dense align="center" justify="space-between">
-      <v-col cols="12">
-        <v-card color="transparent" v-if="detailInfo && trailerClip">
-          <iframe 
-            width="560" height="315" 
-            :src="`https://www.youtube.com/embed/${trailerClip.key}`" 
-            :title="detailInfo.title" 
-            frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-            referrerpolicy="strict-origin-when-cross-origin" 
-            allowfullscreen>
-          </iframe>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container> -->
-  <!-- <section id="center" class="center_o pt-2 pb-2">
-    <div class="container-xl">
-      <div class="row center_o1">
-        <div class="col-md-5">
-          <div class="center_o1l">
-            <h2 class="mb-0">Film Movie Detail</h2>
-          </div>
-        </div>
-        <div class="col-md-7">
-          <div class="center_o1r text-end">
-            <h6 class="mb-0 col_red"><a href="#">Home</a> <span class="me-2 ms-2 text-light"><i
-                  class="fa fa-caret-right align-middle"></i></span> Film Movie Detail</h6>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section> -->
   <section id="center" class="center_o pt-2 pb-2">
     <div class="container-xl" v-if="detailInfo && detailInfo.id != null">
       <div class="row center_o1">
@@ -128,13 +94,11 @@ watch(() => route.params.id, async (val) => {
               <div class="popular_2i1lm position-relative clearfix">
                 <div class="popular_2i1lm1 clearfix">
                   <div class="grid">
-                    <v-card color="transparent" v-if="detailInfo && trailerClip && personInfo">
-                      <iframe width="800" height="480" :src="`https://www.youtube.com/embed/${trailerClip.key}`"
-                        :title="detailInfo.title" frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
-                      </iframe>
-                    </v-card>
+                    <iframe width="800" height="480" :src="`https://www.youtube.com/embed/${trailerClip.key}`"
+                      :title="detailInfo.title" frameborder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+                    </iframe>
                   </div>
                 </div>
               </div>
