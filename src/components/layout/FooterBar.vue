@@ -13,10 +13,8 @@
               </h3>
               <p class="mt-3">We want to introduce you to the best movies in the world, experiencing a wide range of
                 emotions through each film!. </p>
-              <h6 class="fw-normal"><i class="fa fa-map-marker fs-5 align-middle col_red me-1"></i> 5311 Ceaver Sidge
-                Td.
-                Pakland, DE 13507</h6>
-              <h6 class="fw-normal mt-3"><i class="fa fa-envelope fs-5 align-middle col_red me-1"></i> info@gmail.com
+              <h6 class="fw-normal"><i class="fa fa-map-marker fs-5 align-middle col_red me-1"></i>53 Võ Văn Ngân, Linh Chiểu, Thành Phố Thủ Đức, Thành phố Hồ Chí Minh</h6>
+              <h6 class="fw-normal mt-3"><i class="fa fa-envelope fs-5 align-middle col_red me-1"></i> filmDULnhom9@gmail.com
               </h6>
               <h6 class="fw-normal mt-3 mb-0"><i class="fa fa-phone fs-5 align-middle col_red me-1"></i> +123 123 456
               </h6>

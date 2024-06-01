@@ -1,9 +1,10 @@
 <script setup>
-import { ref, nextTick, watch, computed, onBeforeMount, onMounted } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { ref, nextTick, onBeforeMount } from "vue";
+import { useRouter } from "vue-router";
 
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/stores/auth';
+import { getPosterImage } from '@/utils/index'
 
 import { useToast } from "vue-toastification";
 
@@ -16,8 +17,6 @@ const inputSearch = ref({
   title: ""
 })
 const router = useRouter();
-const route = useRoute();
-
 const resLink = ref("");
 
 const onSearch = async () => {
@@ -60,6 +59,8 @@ const logIn = async (requestToken) => {
       localStorage.setItem("sessionID", session_id);
       localStorage.setItem("accountInfo", JSON.stringify(account_info));
       localStorage.removeItem("requestToken");
+      console.log("account_info");
+      console.log(account_info);
       router.push("/");
     } else {
       toast.error("Log In Failed!")
@@ -127,10 +128,17 @@ onBeforeMount(async () => {
         </div>
         <div class="col-md-4">
           <div class="top_1r text-end">
-            <ul class="social-network social-circle mb-0">
+            <div class="social-network social-circle mb-0">
               <button class="btn btn text-white bg_red rounded-0 border-0" type="button" @click="requestLogIn" v-if="!_accountInfo">Log In</button>
-              <button class="btn btn text-white bg_red rounded-0 border-0" type="button" @click="logOut" v-else>Log Out</button>
-            </ul>
+              <div v-else>
+                <router-link :to="`/auth/profile`" >
+                  <a href="#" style="padding-right: 20px;">
+                    <img :src="getPosterImage(_accountInfo.avatar.tmdb.avatar_path)" alt="" title="" style="border-radius: 50%; width: 10%;"/>
+                  </a>
+                </router-link>
+                <button class="btn btn text-white bg_red rounded-0 border-0" type="button" @click="logOut">Log Out</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -1,36 +1,34 @@
 <script setup>
-import { onMounted, ref } from 'vue'
-import { storeToRefs } from 'pinia'
-import { useAuthStore } from '@/stores/auth'
-import { getPosterImage } from '@/utils/index'
-const { _accountInfo } = storeToRefs(useAuthStore())
-
-const authInfo = ref([])
+import { onMounted } from 'vue';
+import { storeToRefs } from 'pinia';
+import { useAuthStore } from '@/stores/auth';
+import { getPosterImage } from '@/utils/index';
+const { _accountInfo } = storeToRefs(useAuthStore());
 
 onMounted(() => {
-  const snowCanvas = document.querySelector('.snow-canvas')
-  const numSnowflakes = 50 // Số lượng hạt tuyết
+  const snowCanvas = document.querySelector('.snow-canvas');
+  const numSnowflakes = 50;
 
   for (let i = 0; i < numSnowflakes; i++) {
-    const snow = document.createElement('div')
-    snow.classList.add('snow')
-    snow.textContent = '❄'
+    const snow = document.createElement('div');
+    snow.classList.add('snow');
+    snow.textContent = '❄';
 
-    snow.style.left = getRandomIntInclusive(0, 95) + '%'
-    snow.style.fontSize = getRandomIntInclusive(5, 20) + 'px'
-    snow.style.opacity = getRandomIntInclusive(5, 10) * 0.1
-    snow.style.filter = `blur(${getRandomIntInclusive(0, 3)}px)`
+    snow.style.left = getRandomIntInclusive(0, 95) + '%';
+    snow.style.fontSize = getRandomIntInclusive(5, 20) + 'px';
+    snow.style.opacity = getRandomIntInclusive(5, 10) * 0.1;
+    snow.style.filter = `blur(${getRandomIntInclusive(0, 3)}px)`;
 
-    snow.style.animationDuration = `${getRandomIntInclusive(3, 10)}s, ${getRandomIntInclusive(1, 3)}s`
+    snow.style.animationDuration = `${getRandomIntInclusive(3, 10)}s, ${getRandomIntInclusive(1, 3)}s`;
 
-    snowCanvas.appendChild(snow)
+    snowCanvas.appendChild(snow);
   }
 })
 
 function getRandomIntInclusive(min, max) {
-  const minCeiled = Math.ceil(min)
-  const maxFloored = Math.floor(max)
-  return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled) // The maximum is inclusive and the minimum is inclusive
+  const minCeiled = Math.ceil(min);
+  const maxFloored = Math.floor(max);
+  return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
 }
 </script>
 <template>
@@ -50,7 +48,7 @@ function getRandomIntInclusive(min, max) {
               </a>
             </div>
             <div class="profile-name" v-if="_accountInfo">
-              <h2>{{ _accountInfo.username }}</h2>
+              <h2>{{ _accountInfo.name }}</h2>
             </div>
           </div>
         </div>

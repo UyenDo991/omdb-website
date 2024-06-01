@@ -30,28 +30,13 @@
               </ul>
             </li>
             <li class="nav-item">
-              <a class="nav-link">Services</a>
-            </li>
-            <li class="nav-item">
               <router-link :class="{ 'nav-link': true, 'active': $route.name === 'about' }" aria-current="page"
                 to="/about">About</router-link>
             </li>
             <li class="nav-item">
-              <a class="nav-link">Team</a>
+              <router-link :class="{ 'nav-link': true, 'active': $route.name === 'services' }" aria-current="page"
+                to="/services">Services</router-link>
             </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                Pages
-              </a>
-              <ul class="dropdown-menu drop_1" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item">About Us</a></li>
-                <li><a class="dropdown-item">Services</a></li>
-                <li><a class="dropdown-item">Team</a></li>
-                <li><a class="dropdown-item border-0">Contact</a></li>
-              </ul>
-            </li>
-
             <li class="nav-item">
               <a class="nav-link">Contact Us</a>
             </li>
