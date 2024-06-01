@@ -1,10 +1,12 @@
 import './assets/main.css'
 
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
+import { createApp } from 'vue';
+import { createPinia } from 'pinia';
+import * as Toast from "vue-toastification";
+import "vue-toastification/dist/index.css";
 import App from './App.vue'
 import router from './router'
-import axios from 'axios'
+import axios from 'axios';
 
 // Request interceptor
 axios.interceptors.request.use((config) => {
@@ -29,22 +31,34 @@ axios.interceptors.response.use(
     return Promise.reject(error)
   }
 )
-
-// Vuetify
-import 'vuetify/styles'
-import { createVuetify } from 'vuetify'
-import * as components from 'vuetify/components'
-import * as directives from 'vuetify/directives'
-
-const vuetify = createVuetify({
-  components,
-  directives
-})
 const pinia = createPinia()
-const app = createApp(App)
-app.use(router)
-app.use(vuetify)
-app.use(pinia)
+const app = createApp(App);
+const toastOptions = {
+  position: "top-center",
+  closeOnClick: true,
+  pauseOnFocusLoss: false,
+  pauseOnHover: false,
+  draggable: true,
+  draggablePercent: 0.6,
+  showCloseButtonOnHover: false,
+  hideProgressBar: true,
+  closeButton: "button",
+  icon: true,
+  rtl: false,
+  maxToasts: 5,
+  newestOnTop: true,
+  toastDefaults: {    
+    [Toast.TYPE.ERROR]: {
+      timeout: 6000
+    },
+    [Toast.TYPE.SUCCESS]: {
+      timeout: 3000
+    }    
+  }
+};
+app.use(Toast, toastOptions);
+app.use(router);
+app.use(pinia);
 app.mount('#app')
 //scroll menu
 window.onscroll = function() {myFunction()};

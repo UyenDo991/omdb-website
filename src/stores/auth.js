@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { authenticateUser, createRequestToken, getAccountInfo } from "@/api/api";
+import { authenticateUser, createRequestToken, getAccountInfo, deleteSession } from "@/api/api";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
@@ -15,13 +15,6 @@ export const useAuthStore = defineStore("auth", {
   },
 
   actions: {
-    clearSavedInfo() {
-      this.sessionID = null;
-      this.accountInfo = null;
-      localStorage.removeItem("requestToken");
-      localStorage.removeItem("sessionID");
-      localStorage.removeItem("accountInfo");
-    },
     async createRequest() {
       try {
         const { success, request_token, expires_at } = await createRequestToken();
@@ -54,6 +47,16 @@ export const useAuthStore = defineStore("auth", {
     saveAccountInfo(session_id, account_info) {
       this.sessionID = session_id;
       this.accountInfo = account_info;
-    }
+    },
+    async clearLogIn(sessionID) {
+      return await deleteSession(sessionID);
+    },
+    async clearSavedInfo() {
+      this.sessionID = null;
+      this.accountInfo = null;
+      localStorage.removeItem("requestToken");
+      localStorage.removeItem("sessionID");
+      localStorage.removeItem("accountInfo");
+    },
   }  
 })

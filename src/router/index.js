@@ -35,7 +35,7 @@ const router = createRouter({
       component: () => import('../views/SearchViewFilms.vue')
     },
     {
-      path: '/auth/profile/:session_id',
+      path: '/auth/profile',
       name: 'ProfileView',
       component: () => import('../views/ProfileView.vue')
     },

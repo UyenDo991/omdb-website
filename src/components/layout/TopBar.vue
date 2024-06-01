@@ -5,8 +5,12 @@ import { useRoute, useRouter } from "vue-router";
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/stores/auth';
 
-const { _accountInfo } = storeToRefs(useAuthStore());
-const { createRequest, clearSavedInfo, authenticate, saveAccountInfo } = useAuthStore();
+import { useToast } from "vue-toastification";
+
+const { _sessionID, _accountInfo } = storeToRefs(useAuthStore());
+const { createRequest, authenticate, saveAccountInfo, clearLogIn, clearSavedInfo } = useAuthStore();
+
+const toast = useToast();
 
 const inputSearch = ref({
   title: ""
@@ -51,11 +55,15 @@ const logIn = async (requestToken) => {
   try {
     const { success, session_id, account_info } = await authenticate(requestToken);
     if (success) {
+      toast.success("Log In Successful!")
       saveAccountInfo(session_id, account_info);
       localStorage.setItem("sessionID", session_id);
       localStorage.setItem("accountInfo", JSON.stringify(account_info));
       localStorage.removeItem("requestToken");
       router.push("/");
+    } else {
+      toast.error("Log In Failed!")
+      return;
     }
   } catch (error) {
     console.log("logIn-catch exception:", error.message);
@@ -64,7 +72,14 @@ const logIn = async (requestToken) => {
 
 const logOut = async () => {
   try {
-    clearSavedInfo();
+    const { success, status_message } = await clearLogIn(_sessionID.value);
+    if(success) {
+      toast.success("Log Out Successful!")
+      clearSavedInfo();
+      router.push("/")
+    } else {
+      toast.error(`Log Out Failed!\n${status_message}`)
+    }
   } catch (error) {
     console.log("logOut-catch exception:", error.message);
   }

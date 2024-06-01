@@ -31,6 +31,19 @@ export const getAccountInfo = async (sessionID) => {
   }
 }
 
+export const deleteSession = async (sessionID) => {
+  try {
+    const result = await axios.delete("authentication/session", {
+      params: {
+        session_id: sessionID
+      }
+    });
+    return result;
+  } catch (error) {
+    console.log("deleteSession-catch exception:", error.message); 
+  }
+}
+
 /* genre */
 export const getMovieGenres = async () => {
   try {

@@ -35,6 +35,5 @@ npm run lint
 ```
 # Document:
 1. Vue: https://vuejs.org/guide/essentials/application.html
-2. Vuetify: https://vuetifyjs.com/en/getting-started/installation/#installation
 3. MDI Icon: https://pictogrammers.com/library/mdi/
 4. Vue Router: https://router.vuejs.org/
