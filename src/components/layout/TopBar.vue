@@ -17,6 +17,7 @@ const inputSearch = ref({
   title: ""
 })
 const router = useRouter();
+console.log(router);
 const resLink = ref("");
 
 const onSearch = async () => {
@@ -59,9 +60,11 @@ const logIn = async (requestToken) => {
       localStorage.setItem("sessionID", session_id);
       localStorage.setItem("accountInfo", JSON.stringify(account_info));
       localStorage.removeItem("requestToken");
-      console.log("account_info");
-      console.log(account_info);
-      router.push("/");
+      //console.log("account_info");
+      //console.log(account_info);
+      // Sử dụng router để điều hướng 
+      // window.location.reload();
+      router.push('/auth/profile');
     } else {
       toast.error("Log In Failed!")
       return;
@@ -77,7 +80,8 @@ const logOut = async () => {
     if(success) {
       toast.success("Log Out Successful!")
       clearSavedInfo();
-      router.push("/")
+      router.push('/');
+      window.location.reload();
     } else {
       toast.error(`Log Out Failed!\n${status_message}`)
     }
@@ -101,7 +105,7 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <section id="top">
+  <section id="top" class="block">
     <div class="container">
       <div class="row top_1">
         <div class="col-md-3">

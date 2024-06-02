@@ -38,7 +38,8 @@
                 to="/services">Services</router-link>
             </li>
             <li class="nav-item">
-              <a class="nav-link">Contact Us</a>
+              <router-link :class="{ 'nav-link': true, 'active': $route.name === 'contactus' }" aria-current="page"
+                to="/contactus">Contact Us</router-link>
             </li>
           </ul>
         </div>

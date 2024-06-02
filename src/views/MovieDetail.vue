@@ -9,6 +9,10 @@ const detailInfo = ref({});
 const trailerClip = ref({});
 const personInfo = ref({});
 const collectionFilmsList = ref([]);
+// Thay đổi vị trí cuộn của body và element html về đầu trang 
+document.body.scrollTop = 0; 
+document.documentElement.scrollTop = 0; 
+
 
 const getDetails = async (movie_id) => {
   //detailInfo

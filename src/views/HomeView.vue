@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from "vue";
-import { getNowPlayling, getMovieUpcoming, getMovieGenres, getMoviePopular, getMovieTrendingList, getMovieGenresList, getCollectionFilmsList, getMovieVideos } from "@/api/api";
+import { getNowPlayling, getMovieUpcoming, getMovieGenres, getMoviePopular, getMovieTrendingList, getMovieGenresList, getCollectionFilmsList, getMovieVideos, addToFavorite, getFavoriteMovies, delToFavorite } from "@/api/api";
 // import { useRouter } from "vue-router";
 import { chunkArray } from "@/utils/index";
 import { getPosterImage, formatNumber } from "@/utils/index";
@@ -13,9 +13,11 @@ const movieList = ref([]);
 const movieTrendingList = ref([]);
 const collectionFilmsList = ref([]);
 const trailerClip = ref({});
+const movieFavoriteList = ref({});
 
 
 onMounted(async () => {
+  
   const res = await getNowPlayling();
   // console.log(res);
   if (res && res.results.length) {
@@ -116,6 +118,55 @@ async function getDataModal(id) {
   //console.log('trailerClip');
   //console.log(trailerClip.value);
 }
+//Check đăng nhập tài khoản
+const accountInfo = JSON.parse(localStorage.getItem("accountInfo"));
+if(accountInfo){
+  getShowMovieFavList();
+}
+const result = ref({});
+//Add-Del movie favorite
+async function getFavorite(movie_id) {
+  if (accountInfo) {
+    try {
+      const _check = await isFavorite(movie_id);
+      console.log('_check:', _check);
+      if (_check) {
+        result.value = await delToFavorite(movie_id);
+        console.log("delToFavorite-result:", result.value);
+      } else {
+        result.value = await addToFavorite(movie_id);
+        console.log("addToFavorite-result:", result.value);
+      }
+      if (result.value.success) {
+        console.log(result.value.status_message);
+        getShowMovieFavList();
+      }
+    } catch (error) {
+      console.error("Error in getFavorite:", error);
+    }
+  } else {
+    alert('You need to log in to add favorites!')
+  }
+}
+var check_heart = "";
+//kiểm tra movie đã có trong danh sách yêu thích 
+async function isFavorite(id) {
+  try {
+    const fav = movieFavoriteList.value.filter(x => x.id === id);
+    check_heart = fav.length > 0 ? 'true' : 'fasle';
+    return fav.length > 0;
+  } catch (error) {
+    console.error("Error in isFavorite:", error);
+    return false;
+  }
+}
+//Hàm hiển thị danh sách list movie favorite
+async function getShowMovieFavList() {
+    const favMovieList = await getFavoriteMovies();
+    movieFavoriteList.value = favMovieList.results;
+    //console.log("movieFavoriteList:", movieFavoriteList);
+}
+
 //Goi hàm
 </script>
 <template>
@@ -199,6 +250,15 @@ async function getDataModal(id) {
                         </figure>
                       </div>
                     </div>
+                    <div class="latest_2im2 position-absolute top-0 text-center clearfix">
+                      <ul>
+                        <li class="d-inline-block" @click.prevent="getFavorite(movieNowplaying.id)" replace>
+                            <a href="#" :class="isFavorite(movieNowplaying.id)">
+                                <i class="col_red fa" :class="check_heart === 'true' ? 'fa-heart' : 'fa-heart-o'"></i>
+                            </a>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                   <div class="latest_2ilast p-3 clearfix" style="height: 174px;">
                     <h5><a class="col_red" href="#">{{ movieNowplaying.original_title }}</a></h5>
@@ -257,12 +317,24 @@ async function getDataModal(id) {
                         </figure>
                       </div>
                     </div>
+                    <div class="trend_2im2 position-absolute top-0 text-center clearfix">
+                      <ul>
+                        <li class="d-inline-block" @click.prevent="getFavorite(movieUpcoming.id)" replace>
+                            <a href="#" :class="isFavorite(movieUpcoming.id)">
+                                <i class="col_red fa" :class="check_heart === 'true' ? 'fa-heart' : 'fa-heart-o'"></i>
+                            </a>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                   <div class="trend_2ilast bg_grey p-3 clearfix">
                     <h5><a class="col_red" href="#">{{ movieUpcoming.original_title }}</a></h5>
                     <p class="mb-2 text-truncate">{{ movieUpcoming.overview }}</p>
                     <span class="col_red" v-for="index in Math.round(movieUpcoming.vote_average / 2)" :key="index">
                       <i class="fa fa-star"></i>
+                    </span>
+                    <span class="col_red" v-for="index in Math.round(5 - (movieUpcoming.vote_average / 2))" :key="index">
+                      <i class="fa fa-star-o"></i>
                     </span>
                     <p class="mb-0">{{ formatNumber(movieUpcoming.popularity) }} Views</p>
                   </div>
@@ -321,7 +393,11 @@ async function getDataModal(id) {
                           <li class="d-inline-block">
                             <router-link :to="`/movies/${films.id}`"><i class="fa fa-search col_red"></i></router-link>
                           </li>
-                          <li class="d-inline-block"><a href="#"><i class="fa fa-heart-o col_red"></i></a></li>
+                          <li class="d-inline-block" @click.prevent="getFavorite(films.id)" replace>
+                              <a href="#" :class="isFavorite(films.id)">
+                                  <i class="col_red fa" :class="check_heart === 'true' ? 'fa-heart' : 'fa-heart-o'"></i>
+                              </a>
+                          </li>
                         </ul>
                       </div>
                     </div>
@@ -467,7 +543,7 @@ async function getDataModal(id) {
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <iframe width="800" height="480" :src="`https://www.youtube.com/embed/${trailerClip.key}`" frameborder="0"
+          <iframe width="770" height="480" :src="`https://www.youtube.com/embed/${trailerClip.key}`" frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
           </iframe>

@@ -42,7 +42,7 @@ watch(() => route.params.search, async (val) => {
 </script>
 <template>
 
-  <section id="upcome" class="pt-4 pb-5">
+  <section id="search" class="pt-4 pb-5">
     <div class="container">
       <div class="row trend_1">
         <div class="col-md-6 col-6">
