@@ -131,16 +131,24 @@ onBeforeMount(async () => {
           </div>
         </div>
         <div class="col-md-4">
-          <div class="top_1r text-end">
-            <div class="social-network social-circle mb-0">
+          <div class="text-end">
+            <div class="mb-0">
               <button class="btn btn text-white bg_red rounded-0 border-0" type="button" @click="requestLogIn" v-if="!_accountInfo">Log In</button>
-              <div v-else>
-                <router-link :to="`/auth/profile`" >
+              <div class="avt-dropdown" v-else>
+                <router-link :to="`/auth/profile`">
                   <a href="#" style="padding-right: 20px;">
                     <img :src="getPosterImage(_accountInfo.avatar.tmdb.avatar_path)" alt="" title="" style="border-radius: 50%; width: 10%;"/>
                   </a>
                 </router-link>
-                <button class="btn btn text-white bg_red rounded-0 border-0" type="button" @click="logOut">Log Out</button>
+                <ul class="avt-dropdown-menu">
+                  <li>
+                    <router-link :to="`/auth/profile`">
+                      <a href="#"> Profile
+                      </a>
+                    </router-link>
+                  </li>
+                  <li @click="logOut"><a href="#">Log Out</a></li>
+                </ul>
               </div>
             </div>
           </div>
