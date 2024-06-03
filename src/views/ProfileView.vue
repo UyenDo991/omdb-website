@@ -3,15 +3,15 @@ import { onMounted, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/stores/auth';
 import { formatNumber, getPosterImage } from '@/utils/index';
-import { getFavoriteMovies } from '@/api/api';
+import { delToFavorite, getFavoriteMovies } from '@/api/api';
 const { _accountInfo } = storeToRefs(useAuthStore());
 const movieFavoriteList = ref({});
-  //Load more
-  let page = 1;
-  const count_row = 4;
-  let perPage = 0;
-  let total_count = 0;
-onMounted(async() =>  {
+//Load more
+let page = 1;
+const count_row = 4;
+let perPage = 0;
+let total_count = 0;
+onMounted(async () => {
   const snowCanvas = document.querySelector('.snow-canvas');
   const numSnowflakes = 50;
 
@@ -29,27 +29,46 @@ onMounted(async() =>  {
 
     snowCanvas.appendChild(snow);
   }
-  //load list
-  const favMovieList = await getFavoriteMovies();
-  movieFavoriteList.value = favMovieList.results;
-
-  perPage = count_row;
-  await getLoadMoreData(movieFavoriteList.value, perPage);
+  getDataFav();
   //Goi Loadmore
 
 })
+
+const favMovieList = ref({}); // Khai báo ref cho biến res
+async function getDataFav() {
+  //load list
+  favMovieList.value = await getFavoriteMovies();
+
+  perPage = count_row;
+  await getLoadMoreData(favMovieList.value.results, perPage);
+}
 const onLoadMore = async () => {
-    page++;
-    perPage = ((page - 1) * 4) + count_row;
-    await getLoadMoreData(movieFavoriteList.value, perPage);
-  }
+  page++;
+  perPage = ((page - 1) * 4) + count_row;
+  await getLoadMoreData(favMovieList.value.results, perPage);
+}
 async function getLoadMoreData(data, perPage) {
-  if (data.length > 0) {
+  console.log(data);
+  if (data.length >= 0) {
+    console.log(perPage);
     total_count = data.length - perPage;
     movieFavoriteList.value = data.slice(0, perPage);
   }
 }
-
+const result = ref({});
+async function getDelFavorite(id) {
+  if (id) {
+    try {
+      result.value = await delToFavorite(id);
+      getDataFav();
+      // console.log("delToFavorite-result:", result.value);
+    } catch (error) {
+      console.error("Error in getFavorite:", error);
+    }
+  } else {
+    alert('No data found!')
+  }
+}
 function getRandomIntInclusive(min, max) {
   const minCeiled = Math.ceil(min);
   const maxFloored = Math.floor(max);
@@ -69,27 +88,18 @@ function getRandomIntInclusive(min, max) {
               </div>
             </div>
             <div class="background-img">
-              <div class="box">
+              <div class="avt-box">
                 <span></span>
                 <span></span>
                 <span></span>
                 <span></span>
-                <!-- <div class="content">
-                  <h2>My animated Border </h2>
-                </div> -->
                 <div class="profile_avt" v-if="_accountInfo?.avatar?.tmdb?.avatar_path">
                   <a href="#">
                     <img :src="getPosterImage(_accountInfo.avatar.tmdb.avatar_path)" alt="" title="" />
                   </a>
                 </div>
-                
               </div>
             </div>
-            <!-- <div class="profile-img" v-if="_accountInfo?.avatar?.tmdb?.avatar_path">
-              <a href="#">
-                <img :src="getPosterImage(_accountInfo.avatar.tmdb.avatar_path)" alt="" title="" />
-              </a>
-            </div> -->
             <div class="profile-name" v-if="_accountInfo">
               <h2>{{ _accountInfo.name }}</h2>
             </div>
@@ -103,7 +113,8 @@ function getRandomIntInclusive(min, max) {
       <div class="row trend_1">
         <div class="col-md-6 col-6">
           <div class="trend_1l">
-            <h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i><span class="col_red"> You have ({{ movieFavoriteList.length > 0 ? movieFavoriteList.length : 0 }}) favorite movies
+            <h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i><span class="col_red"> You have
+                ({{ movieFavoriteList.length > 0 ? movieFavoriteList.length : 0 }}) favorite movies
               </span></h4>
           </div>
         </div>
@@ -114,23 +125,20 @@ function getRandomIntInclusive(min, max) {
             <div class="carousel-item active">
               <div class="trend_2i row">
                 <div v-for="item in movieFavoriteList" :key="item.id" class="col-md-3 col-6 mb-3">
-                  <div class="trend_2im clearfix position-relative">
-                    <div class="trend_2im1 clearfix">
-                      <div class="grid">
-                        <figure class="effect-jazz mb-0">
-                          <router-link :to="`/movies/${item.id}`"><img :src="getPosterImage(item.poster_path)"
-                              class="w-100" alt="..." style="height: 450px;"></router-link>
-                        </figure>
-                      </div>
+                  <div class="pr-img-fav-box">
+                    <img :src="getPosterImage(item.poster_path)" class="pro-img" alt="...">
+                    <div class="pr-img-fav-box-content">
+                      <h5 class="pr-img-fav-box-title">{{ item.original_title }}</h5>
+                      <ul class="icon">
+                        <li><router-link :to="`/movies/${item.id}`"><a href="#"><i
+                                class="fa fa-search"></i></a></router-link></li>
+                        <li @click="getDelFavorite(item.id)">
+                          <a href="#">
+                            <i class="fa fa-heart col_red"></i>
+                          </a>
+                        </li>
+                      </ul>
                     </div>
-                  </div>
-                  <div class="trend_2ilast bg_grey p-3 clearfix" style="height: 250px">
-                    <h5><a class="col_red" href="#">{{ item.original_title }}</a></h5>
-                    <p class="mb-2 text-truncate">{{ item.overview }}</p>
-                    <span class="col_red" v-for="index in Math.round(item.vote_average / 2)" :key="index">
-                      <i class="fa fa-star"></i>
-                    </span>
-                    <p class="mb-0">{{ formatNumber(item.popularity) }} Views</p>
                   </div>
                 </div>
               </div>

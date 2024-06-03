@@ -219,8 +219,11 @@ async function getShowMovieFavList() {
       <div class="row latest_1">
         <div class="col-md-6 col-6">
           <div class="latest_1l">
-            <h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i> Latest <span
-                class="col_red">Movies</span></h4>
+            <h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i> <svg width="80%"
+                height="50px">
+                <text x="25%" y="60%" text-anchor="middle"> Fimls Movies </text>
+              </svg>
+            </h4>
           </div>
         </div>
         <div class="col-md-6 col-6">
@@ -289,7 +292,8 @@ async function getShowMovieFavList() {
             <h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i> <svg width="80%"
                 height="50px">
                 <text x="30%" y="60%" text-anchor="middle"> Fimls Upcoming </text>
-              </svg></h4>
+              </svg>
+            </h4>
           </div>
         </div>
         <div class="col-md-6 col-6">
@@ -358,8 +362,11 @@ async function getShowMovieFavList() {
       <div class="row trend_1">
         <div class="col-md-12">
           <div class="trend_1l">
-            <h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i> <span class="col_red">Films
-                Categories</span></h4>
+            <h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i> <svg width="80%"
+                height="50px">
+                <text x="15%" y="60%" text-anchor="middle"> Films Categories </text>
+              </svg>
+            </h4>
           </div>
         </div>
       </div>
@@ -435,8 +442,11 @@ async function getShowMovieFavList() {
       <div class="row trend_1">
         <div class="col-md-6 col-6">
           <div class="trend_1l">
-            <h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i><span class="col_red">Movie
-                Trending</span> List</h4>
+            <h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i> <svg width="80%"
+                height="50px">
+                <text x="30%" y="60%" text-anchor="middle"> Movies Trending </text>
+              </svg>
+            </h4>
           </div>
         </div>
         <div class="col-md-6 col-6">
@@ -487,8 +497,11 @@ async function getShowMovieFavList() {
       <div class="row trend_1">
         <div class="col-md-6 col-6">
           <div class="trend_1l">
-            <h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i> Movie <span
-                class="col_red">Harry Potter Collection</span></h4>
+            <h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i> <svg width="80%"
+                height="50px">
+                <text x="30%" y="60%" text-anchor="middle"> Movies Harry Potter Collection </text>
+              </svg>
+            </h4>
           </div>
         </div>
         <!-- <div class="col-md-6 col-6">

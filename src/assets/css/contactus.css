@@ -60,8 +60,7 @@
     font-weight: 500;
     /* color: black; */
 }
-p, span{
-    
+.contactusbox-content p, .contactusbox-content span{
     animation: colorBackground 5s infinite;
 }
 .contactusbox .contactusbox-content{

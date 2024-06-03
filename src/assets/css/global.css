@@ -62,12 +62,10 @@ figure.effect-jazz img {
     opacity 0.35s,
     transform 0.35s;
 }
-
 figure.effect-jazz:hover img {
   -webkit-transform: scale3d(1.05, 1.05, 1);
   transform: scale3d(1.05, 1.05, 1);
 }
-
 .col_red {
   color: #de1002;
 }
