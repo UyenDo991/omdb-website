@@ -17,7 +17,7 @@ const movieFavoriteList = ref({});
 
 
 onMounted(async () => {
-  
+
   const res = await getNowPlayling();
   // console.log(res);
   if (res && res.results.length) {
@@ -120,7 +120,7 @@ async function getDataModal(id) {
 }
 //Check đăng nhập tài khoản
 const accountInfo = JSON.parse(localStorage.getItem("accountInfo"));
-if(accountInfo){
+if (accountInfo) {
   getShowMovieFavList();
 }
 const result = ref({});
@@ -162,9 +162,9 @@ async function isFavorite(id) {
 }
 //Hàm hiển thị danh sách list movie favorite
 async function getShowMovieFavList() {
-    const favMovieList = await getFavoriteMovies();
-    movieFavoriteList.value = favMovieList.results;
-    //console.log("movieFavoriteList:", movieFavoriteList);
+  const favMovieList = await getFavoriteMovies();
+  movieFavoriteList.value = favMovieList.results;
+  //console.log("movieFavoriteList:", movieFavoriteList);
 }
 
 //Goi hàm
@@ -189,10 +189,12 @@ async function getShowMovieFavList() {
               <p class="mt-3 text-truncate background-title animate-pop-in">{{ movie.release_date }}</p>
               <!-- <a class="bg_red p-2 pe-4 ps-4 ms-3 text-white d-inline-block" href="#">Action</a> -->
             </h6>
-            <p class="mt-3 background-title animate-pop-in" style="width: 30%;display: inline-block;">{{ movie.overview }}</p>
-            <p class="mb-0 background-title animate-pop-in">{{ formatNumber(movie.popularity) }} Views</p>          
+            <p class="mt-3 background-title animate-pop-in" style="width: 30%;display: inline-block;">{{ movie.overview
+              }}</p>
+            <p class="mb-0 background-title animate-pop-in">{{ formatNumber(movie.popularity) }} Views</p>
             <router-link :to="`/movies/${movie.id}`">
-              <h6 class="mb-0 background-title animate-pop-in"><a class="button" href="#"><i class="fa fa-play-circle align-middle me-1"></i> Watch
+              <h6 class="mb-0 background-title animate-pop-in"><a class="button" href="#"><i
+                    class="fa fa-play-circle align-middle me-1"></i> Watch
                   Details</a></h6>
             </router-link>
           </div>
@@ -253,9 +255,9 @@ async function getShowMovieFavList() {
                     <div class="latest_2im2 position-absolute top-0 text-center clearfix">
                       <ul>
                         <li class="d-inline-block" @click.prevent="getFavorite(movieNowplaying.id)" replace>
-                            <a href="#" :class="isFavorite(movieNowplaying.id)">
-                                <i class="col_red fa" :class="check_heart === 'true' ? 'fa-heart' : 'fa-heart-o'"></i>
-                            </a>
+                          <a href="#" :class="isFavorite(movieNowplaying.id)">
+                            <i class="col_red fa" :class="check_heart === 'true' ? 'fa-heart' : 'fa-heart-o'"></i>
+                          </a>
                         </li>
                       </ul>
                     </div>
@@ -284,8 +286,10 @@ async function getShowMovieFavList() {
       <div class="row trend_1">
         <div class="col-md-6 col-6">
           <div class="trend_1l">
-            <h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i> Films <span
-                class="col_red">Upcoming</span></h4>
+            <h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i> <svg width="80%"
+                height="50px">
+                <text x="30%" y="60%" text-anchor="middle"> Fimls Upcoming </text>
+              </svg></h4>
           </div>
         </div>
         <div class="col-md-6 col-6">
@@ -320,9 +324,9 @@ async function getShowMovieFavList() {
                     <div class="trend_2im2 position-absolute top-0 text-center clearfix">
                       <ul>
                         <li class="d-inline-block" @click.prevent="getFavorite(movieUpcoming.id)" replace>
-                            <a href="#" :class="isFavorite(movieUpcoming.id)">
-                                <i class="col_red fa" :class="check_heart === 'true' ? 'fa-heart' : 'fa-heart-o'"></i>
-                            </a>
+                          <a href="#" :class="isFavorite(movieUpcoming.id)">
+                            <i class="col_red fa" :class="check_heart === 'true' ? 'fa-heart' : 'fa-heart-o'"></i>
+                          </a>
                         </li>
                       </ul>
                     </div>
@@ -333,7 +337,8 @@ async function getShowMovieFavList() {
                     <span class="col_red" v-for="index in Math.round(movieUpcoming.vote_average / 2)" :key="index">
                       <i class="fa fa-star"></i>
                     </span>
-                    <span class="col_red" v-for="index in Math.round(5 - (movieUpcoming.vote_average / 2))" :key="index">
+                    <span class="col_red" v-for="index in Math.round(5 - (movieUpcoming.vote_average / 2))"
+                      :key="index">
                       <i class="fa fa-star-o"></i>
                     </span>
                     <p class="mb-0">{{ formatNumber(movieUpcoming.popularity) }} Views</p>
@@ -387,16 +392,15 @@ async function getShowMovieFavList() {
                       <div class="popular_2i1lm2 position-absolute top-0 w-100 text-center clearfix">
                         <ul>
                           <li class="d-inline-block" data-bs-toggle="modal" data-bs-target="#productModal"
-                            @click="getDataModal(films.id)" replace><a href="#"><i
-                                class="fa fa-play col_red"></i></a>
+                            @click="getDataModal(films.id)" replace><a href="#"><i class="fa fa-play col_red"></i></a>
                           </li>
                           <li class="d-inline-block">
                             <router-link :to="`/movies/${films.id}`"><i class="fa fa-search col_red"></i></router-link>
                           </li>
                           <li class="d-inline-block" @click.prevent="getFavorite(films.id)" replace>
-                              <a href="#" :class="isFavorite(films.id)">
-                                  <i class="col_red fa" :class="check_heart === 'true' ? 'fa-heart' : 'fa-heart-o'"></i>
-                              </a>
+                            <a href="#" :class="isFavorite(films.id)">
+                              <i class="col_red fa" :class="check_heart === 'true' ? 'fa-heart' : 'fa-heart-o'"></i>
+                            </a>
                           </li>
                         </ul>
                       </div>
