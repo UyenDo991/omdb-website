@@ -181,9 +181,10 @@ watch(() => route.params.film_type, async (film_type) => {
                   <div class="trend_2ilast bg_grey p-3 clearfix" style="height: 250px">
                     <h5><a class="col_red" href="#">{{ item.original_title }}</a></h5>
                     <p class="mb-2 text-truncate">{{ item.overview }}</p>
-                    <span class="col_red" v-for="index in Math.round(item.vote_average / 2)" :key="index">
+                    <!-- <span class="col_red" v-for="index in Math.round(item.vote_average / 2)" :key="index">
                       <i class="fa fa-star"></i>
-                    </span>
+                    </span> -->
+                    <p class="mb-2 text-truncate">Imdb Rating: {{ item.vote_average }} / 10</p>
                     <ul>
                       <span>Genres :</span>
                       <li class="d-inline-block me-1">

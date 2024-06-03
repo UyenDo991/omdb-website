@@ -1,8 +1,8 @@
 <template>
-    <section id="about_pg" class="mt-50 bg-black">
-    <div class="about_pgm">
+    <section id="services_pg" class="mt-50 bg-black">
+    <div class="services_pgm">
       <div class="container-xl">
-        <div class="row about_pg1">
+        <div class="row services_pg1">
           <div class="col-md-12">
             <h2 class="text-center"><span class="col_red"> Our Services</span><br></h2>
             <h5>Discover the Magic of Cinema</h5>

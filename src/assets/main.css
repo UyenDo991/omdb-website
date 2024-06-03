@@ -41,6 +41,7 @@ a,
 @import "./css/index.css";
 @import "./css/profile.css";
 @import "./css/contactus.css";
+@import "./css/services.css";
 
 .scrollbox {
   overflow: auto !important;
