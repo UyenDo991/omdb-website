@@ -4,7 +4,7 @@ import { useRouter } from "vue-router";
 
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/stores/auth';
-import { getPosterImage } from '@/utils/index'
+import { getPosterImage, Slug } from '@/utils/index'
 
 import { useToast } from "vue-toastification";
 
@@ -25,14 +25,11 @@ const onSearch = async () => {
     alert('Mời nhập !');
     return;
   }
-  // Lấy giá trị từ trường nhập
-  const inputTitle = inputSearch.value.title.trim().toLowerCase();
-  // Chuẩn hóa tiêu đề
-  const normalizedTitle = inputTitle.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[đĐ]/g, 'd');
-  // Format tiêu đề
-  const formattedTitle = normalizedTitle.replace(/[\s-]+/g, '-');
+  // // Lấy giá trị từ trường nhập
+  const title = Slug(inputSearch.value.title);
+
   // Tạo đường dẫn đến trang tìm kiếm
-  resLink.value = `/movie/search/${formattedTitle}`;
+  resLink.value = `/movie/search/${title}`;
   // Chờ cho các thao tác giao diện kết thúc trước khi điều hướng đến trang kết quả tìm kiếm
   await nextTick();
   // Sử dụng router để điều hướng 
@@ -77,7 +74,7 @@ const logIn = async (requestToken) => {
 const logOut = async () => {
   try {
     const { success, status_message } = await clearLogIn(_sessionID.value);
-    if(success) {
+    if (success) {
       toast.success("Log Out Successful!")
       clearSavedInfo();
       router.push('/');
@@ -95,10 +92,10 @@ onBeforeMount(async () => {
   const sessionID = localStorage.getItem("sessionID");
   const accountInfo = JSON.parse(localStorage.getItem("accountInfo"));
   // console.log("onBeforeMount-requestToken-from Local Storage:", requestToken, sessionID, accountInfo);
-  if(requestToken) {
+  if (requestToken) {
     await logIn(requestToken);
   }
-  if(sessionID && accountInfo) {
+  if (sessionID && accountInfo) {
     saveAccountInfo(sessionID, accountInfo)
   }
 })
@@ -110,8 +107,8 @@ onBeforeMount(async () => {
       <div class="row top_1">
         <div class="col-md-3">
           <div class="top_1l pt-1">
-            <h3 class="mb-0"><router-link class="text-white" to="/"><i
-                  class="fa fa-video-camera col_red me-1"></i><span class="groupname">Nhóm 9</span></router-link></h3>
+            <h3 class="mb-0"><router-link class="text-white" to="/"><i class="fa fa-video-camera col_red me-1"></i><span
+                  class="groupname">Nhóm 9</span></router-link></h3>
           </div>
         </div>
         <div class="col-md-5">
@@ -133,11 +130,13 @@ onBeforeMount(async () => {
         <div class="col-md-4">
           <div class="text-end">
             <div class="mb-0">
-              <button class="btn btn text-white bg_red rounded-0 border-0" type="button" @click="requestLogIn" v-if="!_accountInfo">Log In</button>
+              <button class="btn btn text-white bg_red rounded-0 border-0" type="button" @click="requestLogIn"
+                v-if="!_accountInfo">Log In</button>
               <div class="avt-dropdown" v-else>
                 <router-link :to="`/auth/profile`">
                   <a href="#" style="padding-right: 20px;">
-                    <img :src="getPosterImage(_accountInfo.avatar.tmdb.avatar_path)" alt="" title="" style="border-radius: 50%; width: 10%;"/>
+                    <img :src="getPosterImage(_accountInfo.avatar.tmdb.avatar_path)" alt="" title=""
+                      style="border-radius: 50%; width: 10%;" />
                   </a>
                 </router-link>
                 <ul class="avt-dropdown-menu">

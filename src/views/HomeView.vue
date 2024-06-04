@@ -1,10 +1,10 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { getNowPlayling, getMovieUpcoming, getMovieGenres, getMoviePopular, getMovieTrendingList, getMovieGenresList, getCollectionFilmsList, getMovieVideos, addToFavorite, getFavoriteMovies, delToFavorite } from "@/api/api";
-// import { useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import { chunkArray } from "@/utils/index";
-import { getPosterImage, formatNumber } from "@/utils/index";
-// const router = useRouter();
+import { getPosterImage, formatNumber, Slug } from "@/utils/index";
+const router = useRouter();
 
 const nowPlayingList = ref([]);
 const movieUpcomingList = ref([]);
@@ -109,15 +109,21 @@ async function fetchDataMovieList(genres_id) {
   }
 }
 //get data modal
-// getDataModal(films.id);
-async function getDataModal(id) {
+// getDataModal(films.id, films.original_title);
+const baseUrl = window.location.href;
+async function getDataModal(id, title_name) {
   // console.log("films_id : " + id);
   const videoList = await getMovieVideos(id);
   const trailers = videoList.results.filter(x => x.type === "Trailer");
   trailerClip.value = trailers.length ? trailers[trailers.length - 1] : null;
-  //console.log('trailerClip');
-  //console.log(trailerClip.value);
+  const title = Slug(title_name);
+  //push link
+  history.pushState("", "", title);
 }
+async function getDataModalClose() {
+  history.pushState("", "", baseUrl);
+}
+
 //Check đăng nhập tài khoản
 const accountInfo = JSON.parse(localStorage.getItem("accountInfo"));
 if (accountInfo) {
@@ -152,9 +158,12 @@ var check_heart = "";
 //kiểm tra movie đã có trong danh sách yêu thích 
 async function isFavorite(id) {
   try {
-    const fav = movieFavoriteList.value.filter(x => x.id === id);
-    check_heart = fav.length > 0 ? 'true' : 'fasle';
-    return fav.length > 0;
+    if (id) {
+      const fav = movieFavoriteList.value.filter(x => x.id === id);
+      check_heart = fav.length > 0 ? 'true' : 'fasle';
+      return fav.length > 0;
+    }
+
   } catch (error) {
     console.error("Error in isFavorite:", error);
     return false;
@@ -399,7 +408,8 @@ async function getShowMovieFavList() {
                       <div class="popular_2i1lm2 position-absolute top-0 w-100 text-center clearfix">
                         <ul>
                           <li class="d-inline-block" data-bs-toggle="modal" data-bs-target="#productModal"
-                            @click="getDataModal(films.id)" replace><a href="#"><i class="fa fa-play col_red"></i></a>
+                            @click="getDataModal(films.id, films.original_title)" replace><a href="#"><i
+                                class="fa fa-play col_red"></i></a>
                           </li>
                           <li class="d-inline-block">
                             <router-link :to="`/movies/${films.id}`"><i class="fa fa-search col_red"></i></router-link>
@@ -557,7 +567,8 @@ async function getShowMovieFavList() {
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="productModalLabel" style="color: black;">{{ trailerClip.name }}</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+            @click="getDataModalClose()"></button>
         </div>
         <div class="modal-body">
           <iframe width="770" height="480" :src="`https://www.youtube.com/embed/${trailerClip.key}`" frameborder="0"
@@ -566,7 +577,8 @@ async function getShowMovieFavList() {
           </iframe>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="getDataModalClose()"
+            replace>Close</button>
         </div>
       </div>
     </div>

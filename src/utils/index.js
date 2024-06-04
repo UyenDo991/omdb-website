@@ -18,3 +18,12 @@ export const formatNumber = (number) => {
   // Sử dụng hàm toLocaleString() để định dạng số
   return number.toLocaleString()
 }
+//Hàm slug
+export const Slug = (str) => {
+  // Sử dụng hàm toLocaleString() để định dạng số
+  return String(str)
+  .normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[đĐ]/g, 'd') //Xóa dấu
+  .trim().toLowerCase() //Cắt khoảng trắng đầu, cuối và chuyển chữ thường
+  .replace(/[^a-z0-9\s-]/g, '') //Xóa ký tự đặc biệt
+  .replace(/[\s-]+/g, '-') //Thay khoảng trắng bằng dấu -, ko cho 2 -- liên tục 
+}
