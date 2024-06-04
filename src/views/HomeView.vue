@@ -118,7 +118,7 @@ async function getDataModal(id, title_name) {
   trailerClip.value = trailers.length ? trailers[trailers.length - 1] : null;
   const title = Slug(title_name);
   //push link
-  history.pushState("", "", title);
+  history.pushState({ movie_id: id }, "", title);
 }
 async function getDataModalClose() {
   history.pushState("", "", baseUrl);

@@ -368,7 +368,7 @@
   opacity: 1;
   visibility: visible;
   top: 100%;
-  left: 25%;
+  left: 70%;
   width: 50%;
   /* -webkit-transition: all .5s, background, 2s .5s linear; */
   transition: all .5s, background 2s .5s linear;
