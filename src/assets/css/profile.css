@@ -327,7 +327,7 @@
   line-height: 50px;
   position: relative;
   /* width: 200px; */
-  text-align: center;
+  /* text-align: center; */
   text-decoration: none;
   z-index: 1;
   transform: perspective(1000px);
